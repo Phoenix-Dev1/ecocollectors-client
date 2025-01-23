@@ -1,0 +1,375 @@
+.Map {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  position: relative; /* Add position relative to the container */
+}
+
+/* Search box */
+.searchBox {
+  display: flex;
+  z-index: 2;
+  width: 348px;
+  height: 38px;
+  position: relative;
+  padding: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 1.1rem;
+  /* Location on map */
+  margin-top: 90px;
+  margin-left: 10px;
+}
+
+.searchBox input {
+  display: flex;
+  width: 280px;
+  border-radius: 24px;
+  text-align: center;
+}
+
+.searchBox input:focus {
+  display: flex;
+  outline: none;
+  border-radius: 24px;
+  text-align: center;
+}
+
+.rangeInputContainer {
+  padding-left: 20px;
+  z-index: 2;
+  width: 348px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+.rangeTextContainer {
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  margin: 6px;
+  border-radius: 10px;
+  padding: 4px;
+  display: flex;
+  direction: row;
+  align-items: center;
+  z-index: 2;
+}
+
+.rangeInputContainer input[type='range'] {
+  width: 250px;
+  height: 15px;
+  z-index: 2;
+}
+
+.rangeInputContainer p {
+  border-radius: 10px;
+  z-index: 2;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Search box */
+
+/* Filter by bin type */
+.filters {
+  display: inline-grid;
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 2;
+  position: absolute;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  padding: 8px;
+  margin: 10px;
+  right: auto;
+  left: 200px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer; /* Add cursor pointer */
+  font-size: 1.6rem;
+}
+
+.filters :hover {
+  color: #007bff;
+}
+
+.filterWindow {
+  position: absolute;
+  top: 65px;
+  right: auto;
+  left: 200px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  border-radius: 5px;
+  z-index: 2;
+}
+
+/* Filter options */
+.markerTypeList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.markerTypeList li {
+  cursor: pointer;
+  padding: 5px 0;
+  margin-right: 2px;
+}
+
+/* Style the selected item */
+.markerTypeList .selected {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.closeFilterWindow {
+  position: absolute;
+  top: -10px;
+  right: auto;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: #be1717;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Filter by bin type */
+
+/* Add recycling request */
+
+.add {
+  display: flex;
+  font-size: 1.6rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 2;
+  position: absolute;
+  background-color: white;
+  padding: 9px;
+  margin-top: 9px;
+  right: auto;
+  left: 310px;
+  border-radius: 50%;
+  cursor: pointer; /* Add cursor pointer */
+}
+
+.add :hover {
+  color: #007bff;
+}
+
+.addForm {
+  position: absolute;
+  top: 70px;
+  right: auto;
+  left: 300px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  border-radius: 5px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeAddWindow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -10px;
+  right: 220px;
+  width: 20px;
+  height: 20px;
+  background-color: #be1717;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Add recycling request */
+
+.mapContainer {
+  height: 100vh;
+  width: 100%;
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 1;
+  position: relative;
+}
+
+.placesContainer {
+  width: 400px;
+  border: solid 4px red;
+  z-index: 0;
+}
+
+/**************** Loader ****************/
+.loaderWrapper {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100; /* Above the buttons, beneath the header/navbar  */
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242f3f;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ring {
+  width: 200px;
+  height: 200px;
+  border: 12px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ring:nth-child(1) {
+  border-bottom-color: #e74c3c;
+  animation-name: rotate1;
+}
+
+.ring:nth-child(2) {
+  border-right-color: #3498db;
+  animation-name: rotate2;
+}
+
+.ring:nth-child(3) {
+  border-top-color: #2ecc71;
+  animation-name: rotate3;
+}
+
+.ring:nth-child(4) {
+  border-left-color: #f39c12;
+  animation-name: rotate4;
+}
+
+.ring:nth-child(5) {
+  border-bottom-color: #9b59b6;
+  animation-name: rotate5;
+}
+
+.loading {
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 24px;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation-name: textBlink;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rotate1 {
+  0% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(360deg);
+  }
+  50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes rotate2 {
+  0% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(-360deg);
+  }
+  50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes rotate3 {
+  0% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(360deg);
+  }
+  50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes rotate4 {
+  0% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(-360deg);
+  }
+  50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes rotate5 {
+  0% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(360deg);
+  }
+  50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes textBlink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

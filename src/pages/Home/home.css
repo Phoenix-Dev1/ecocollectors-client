@@ -1,0 +1,13 @@
+.unique-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  animation: scaleText 2s ease-in-out infinite alternate;
+}
+
+@keyframes scaleText {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}

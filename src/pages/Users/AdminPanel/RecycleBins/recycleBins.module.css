@@ -1,0 +1,9 @@
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+.app {
+  height: 45vh;
+  width: 100vw;
+}
