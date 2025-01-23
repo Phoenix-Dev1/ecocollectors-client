@@ -1,5 +1,5 @@
-import React from 'react';
-import smallLogo from '../../img/sm-logo.png';
+import React from "react";
+import smallLogo from "../../img/sm-logo.png";
 
 const Footer = () => {
   return (
@@ -34,14 +34,14 @@ const Footer = () => {
             </li>
             <li>
               <a href="/contact-us" className="hover:underline">
-                Contact Us
+                Contact Me
               </a>
             </li>
           </ul>
         </div>
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2023{' '}
+          © 2023{" "}
           <a href="/" className="hover:underline">
             Bar Kaziro & Liran Barzilai
           </a>
