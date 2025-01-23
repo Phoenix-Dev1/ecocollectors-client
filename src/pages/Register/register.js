@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { validateForm } from './formValidation'; // Import the validation functions
-import axios from 'axios';
-import smallLogo from '../../img/sm-logo.png';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { validateForm } from "./formValidation"; // Import the validation functions
+import axios from "axios";
+import smallLogo from "../../img/sm-logo.png";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function SignupForm() {
   const [inputs, setInputs] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    city: '',
-    address: '',
-    phone: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    city: "",
+    address: "",
+    phone: "",
   });
 
   const [err, setError] = useState(null);
@@ -37,8 +37,8 @@ function SignupForm() {
       return;
     } else {
       try {
-        await axios.post('/auth/register', inputs);
-        navigate('/login');
+        await axios.post(`${process.env.REACT_APP_URL}/auth/register`, inputs);
+        navigate("/login");
       } catch (err) {
         setError(err.response.data);
       }
@@ -165,7 +165,7 @@ function SignupForm() {
               className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
               id="password"
               name="password"
-              type={showPassword ? 'text' : 'password'} // Toggle password visibility
+              type={showPassword ? "text" : "password"} // Toggle password visibility
               required
               placeholder="••••••••"
               aria-label="Password"
@@ -195,7 +195,7 @@ function SignupForm() {
               className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
               id="confirm_password"
               name="confirm_password"
-              type={showConfirmPassword ? 'text' : 'password'} // Toggle confirm password visibility
+              type={showConfirmPassword ? "text" : "password"} // Toggle confirm password visibility
               required
               placeholder="••••••••"
               aria-label="Confirm Password"

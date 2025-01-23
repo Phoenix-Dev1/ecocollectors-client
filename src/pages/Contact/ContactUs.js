@@ -1,14 +1,14 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { AuthContext } from '../../context/authContext';
+import React, { useRef, useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../../context/authContext";
 
 const ContactUs = () => {
   const form = useRef();
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false); // State to track email sending
 
   useEffect(() => {
@@ -27,21 +27,24 @@ const ContactUs = () => {
     try {
       setIsSending(true);
 
-      const emailResponse = await axios.post('/user/sendEmail', {
-        email: form.current.email.value,
-        subject: form.current.subject.value,
-        message: form.current.message.value,
-      });
+      const emailResponse = await axios.post(
+        `${process.env.REACT_APP_URL}/user/sendEmail`,
+        {
+          email: form.current.email.value,
+          subject: form.current.subject.value,
+          message: form.current.message.value,
+        }
+      );
 
       setMessage(emailResponse.data.message);
       console.log(message);
 
       setTimeout(() => {
-        window.alert('Message sent successfully!'); // Display confirmation alert
+        window.alert("Message sent successfully!"); // Display confirmation alert
         if (form.current) {
           form.current.reset();
         }
-        navigate('/');
+        navigate("/");
       }, 1000);
     } catch (error) {
       console.log(error);
@@ -120,7 +123,7 @@ const ContactUs = () => {
             disabled={isSending}
             className="text-sm font-medium leading-6 text-gray-900 rounded-lg shadow-md focus:outline-none w-full h-12 transition-colors duration-150 ease-in-out bg-gray-700  dark:text-white hover:bg-gray-600 hover:text-primary-500"
           >
-            {isSending ? 'Sending...' : 'Send Message'}
+            {isSending ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

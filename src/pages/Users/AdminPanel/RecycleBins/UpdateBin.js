@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
   StandaloneSearchBox,
   useLoadScript,
-} from '@react-google-maps/api';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import classes from './bins.module.css';
+} from "@react-google-maps/api";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import classes from "./bins.module.css";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const UpdateBin = () => {
@@ -20,10 +20,10 @@ const UpdateBin = () => {
   const [updatedData, setUpdatedData] = useState({});
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [serverError, setServerError] = useState('');
-  const [emptyFieldsError, setEmptyFieldsError] = useState('');
+  const [serverError, setServerError] = useState("");
+  const [emptyFieldsError, setEmptyFieldsError] = useState("");
   const [typeError, setTypeError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const inputReference = useRef(); // Ref for StandaloneSearchBox
   const navigate = useNavigate();
@@ -54,34 +54,37 @@ const UpdateBin = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const confirmed = window.confirm(
-      'Are you sure you want to update this bin?'
+      "Are you sure you want to update this bin?"
     );
     if (confirmed) {
       if (!updatedData.address || !updatedData.type) {
-        setEmptyFieldsError('Address and Type fields are required');
+        setEmptyFieldsError("Address and Type fields are required");
         return;
       }
 
-      if (updatedData.type === 'Please Select a type') {
+      if (updatedData.type === "Please Select a type") {
         setTypeError(true);
         return;
       }
 
       try {
-        await axios.put(`/admin/bins/${binData.id}`, updatedData);
+        await axios.put(
+          `${process.env.REACT_APP_URL}/admin/bins/${binData.id}`,
+          updatedData
+        );
         setBinData((prevData) => ({ ...prevData, ...updatedData }));
         setShowSuccessMessage(true); // Show success message
-        setEmptyFieldsError(''); // Clear empty fields error
+        setEmptyFieldsError(""); // Clear empty fields error
         setTypeError(false); // Clear type error
-        setErrorMessage(''); // Clear error message
+        setErrorMessage(""); // Clear error message
 
         // Display a success message alert
-        alert('Bin updated successfully!');
+        alert("Bin updated successfully!");
 
-        navigate('/admin/bins');
+        navigate("/admin/bins");
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          setErrorMessage('A bin with this address and type already exists');
+          setErrorMessage("A bin with this address and type already exists");
         } else if (
           error.response &&
           error.response.data &&
@@ -98,8 +101,10 @@ const UpdateBin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const binId = window.location.href.split('/').pop();
-        const response = await axios.get(`/admin/bins/${binId}`);
+        const binId = window.location.href.split("/").pop();
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/admin/bins/${binId}`
+        );
         setBinData(response.data);
         setCoordinates({ lat: response.data.lat, lng: response.data.lng });
         setUpdatedData(response.data); // Initialize updatedData with bin data
@@ -127,9 +132,9 @@ const UpdateBin = () => {
   return (
     <div className="flex flex-col items-center">
       <p className="text-lg font-semibold">Update Bin {binData.id}</p>
-      <div className="mr-4" style={{ height: '400px', width: '100%' }}>
+      <div className="mr-4" style={{ height: "400px", width: "100%" }}>
         <GoogleMap
-          mapContainerStyle={{ height: '100%', width: '100%' }}
+          mapContainerStyle={{ height: "100%", width: "100%" }}
           center={coordinates}
           zoom={13}
         >
@@ -153,7 +158,7 @@ const UpdateBin = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="address"
                 id="address"
-                value={updatedData.address || ''}
+                value={updatedData.address || ""}
                 onChange={handleInputChange}
               />
             </StandaloneSearchBox>
@@ -167,7 +172,7 @@ const UpdateBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="city"
               name="city"
-              value={updatedData.city || ''}
+              value={updatedData.city || ""}
               onChange={handleInputChange}
               readOnly
             />
@@ -181,7 +186,7 @@ const UpdateBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="lat"
               name="lat"
-              value={updatedData.lat || ''}
+              value={updatedData.lat || ""}
               onChange={handleInputChange}
               readOnly
             />
@@ -195,7 +200,7 @@ const UpdateBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="lng"
               name="lng"
-              value={updatedData.lng || ''}
+              value={updatedData.lng || ""}
               onChange={handleInputChange}
               readOnly
             />
@@ -208,7 +213,7 @@ const UpdateBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="type"
               name="type"
-              value={updatedData.type || ''}
+              value={updatedData.type || ""}
               onChange={handleInputChange}
             >
               <option value="Please Select a type">Please Select a type</option>
@@ -229,7 +234,7 @@ const UpdateBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="last_modified"
               name="last_modified"
-              value={binData.last_modified || ''}
+              value={binData.last_modified || ""}
               readOnly
             />
           </div>

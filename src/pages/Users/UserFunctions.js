@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Fetch all user Requests
 export async function fetchUserRequests(id) {
   //console.log(id);
   try {
-    const res = await axios.get(`/dashboardUser/${id}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/dashboardUser/${id}`
+    );
     //console.log(res.data);
     return res.data;
   } catch (err) {
@@ -17,7 +19,9 @@ export async function fetchUserRequests(id) {
 export async function fetchRecyclerDetails(id) {
   //console.log(id);
   try {
-    const res = await axios.get(`/dashboardRecycler/${id}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/dashboardRecycler/${id}`
+    );
     //console.log(res.data);
     return res.data;
   } catch (err) {
@@ -28,13 +32,16 @@ export async function fetchRecyclerDetails(id) {
 
 // accept recycler arrival - changing status to 5
 export async function acceptRequest(requestId) {
-  const confirmed = window.confirm('Are you sure you want to accept?');
+  const confirmed = window.confirm("Are you sure you want to accept?");
   if (!confirmed) {
     return null; // Request not confirmed, return null or handle accordingly
   }
 
   try {
-    const res = await axios.put(`/dashboardUser/${requestId}`, { status: 5 });
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
+      { status: 5 }
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -45,14 +52,17 @@ export async function acceptRequest(requestId) {
 // Decline Recycler pickup request
 export async function declineRequest(requestId) {
   const confirmed = window.confirm(
-    'Are you sure you want to cancel pickup/decline?'
+    "Are you sure you want to cancel pickup/decline?"
   );
   if (!confirmed) {
     return null; // Request not confirmed, return null or handle accordingly
   }
 
   try {
-    const res = await axios.put(`/dashboardUser/${requestId}`, { status: 1 });
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
+      { status: 1 }
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -62,12 +72,15 @@ export async function declineRequest(requestId) {
 
 // Canceling a request BUT keeping it in the db
 export async function cancelRequest(requestId) {
-  const confirmed = window.confirm('Are you sure you want to cancel?');
+  const confirmed = window.confirm("Are you sure you want to cancel?");
   if (!confirmed) {
     return null; // Request not confirmed, return null or handle accordingly
   }
   try {
-    const res = await axios.put(`/dashboardUser/${requestId}`, { status: 4 });
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
+      { status: 4 }
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -78,17 +91,20 @@ export async function cancelRequest(requestId) {
 // Accepting and closing request
 export async function acceptAndCloseRequest(requestId, newBottlesNumber) {
   const confirmed = window.confirm(
-    'Are you sure you want to accept and close this request?'
+    "Are you sure you want to accept and close this request?"
   );
   if (!confirmed) {
     return null; // Request not confirmed
   }
 
   try {
-    const res = await axios.put(`/dashboardUser/${requestId}`, {
-      status: 3,
-      newBottlesNumber: newBottlesNumber, // Pass the new bottles number
-    });
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
+      {
+        status: 3,
+        newBottlesNumber: newBottlesNumber, // Pass the new bottles number
+      }
+    );
     return res.data;
   } catch (err) {
     console.log(err);

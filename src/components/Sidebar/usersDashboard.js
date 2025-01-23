@@ -1,31 +1,31 @@
-import React, { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/authContext';
+import React, { useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 const Dashboard = () => {
   const { currentUser } = useContext(AuthContext);
-  const [userRole, setUserRole] = useState('');
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     // Fetch the user's role from the jwt(using Node method)
     axios
-      .get('/user/role')
+      .get(`${process.env.REACT_APP_URL}/user/role`)
       .then((response) => {
         setUserRole(response.data.role);
       })
       .catch((error) => {
-        console.log('Role undefined - Contact support');
+        console.log("Role undefined - Contact support");
       });
   }, []);
 
   const handleWelcome = () => {
-    if (currentUser.role === 1) return '/user/welcomeAdmin';
+    if (currentUser.role === 1) return "/user/welcomeAdmin";
     else if (currentUser.role === 2 || currentUser.role === 5)
-      return '/user/welcomeUser';
-    else if (currentUser.role === 3) return '/user/welcomeRecycler';
-    else if (currentUser.role === 4) return '/user/welcomeManager';
-    else return '/';
+      return "/user/welcomeUser";
+    else if (currentUser.role === 3) return "/user/welcomeRecycler";
+    else if (currentUser.role === 4) return "/user/welcomeManager";
+    else return "/";
   };
 
   if (!currentUser) {
@@ -39,7 +39,7 @@ const Dashboard = () => {
         <aside className="bg-gray-900 w-64 p-6  flex flex-col justify-between">
           <h1 className="text-3xl font-semibold text-white">
             <Link to={handleWelcome()}>
-              Eco-<span className="text-blue-500">Dashboard</span>{' '}
+              Eco-<span className="text-blue-500">Dashboard</span>{" "}
             </Link>
           </h1>
           <p className="text-slate-500 text-sm mb-8">

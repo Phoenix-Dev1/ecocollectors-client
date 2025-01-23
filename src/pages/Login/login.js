@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/authContext';
-import smallLogo from '../../img/sm-logo.png';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import smallLogo from "../../img/sm-logo.png";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function SignInForm() {
   const [inputs, setInputs] = useState({
-    email: 'barkaziro@gmail.com',
-    password: '1234',
+    email: "barkaziro@gmail.com",
+    password: "1234",
   });
 
   const [err, setError] = useState(null);
@@ -26,25 +26,29 @@ function SignInForm() {
   };
 
   const handleWelcome = (userRole) => {
-    if (userRole === 1) navigate('/user/welcomeAdmin');
-    else if (userRole === 2 || userRole === 5) navigate('/user/welcomeUser');
-    else if (userRole === 3) navigate('/user/welcomeRecycler');
-    else if (userRole === 4) navigate('/user/welcomeManager');
-    else navigate('/');
+    if (userRole === 1)
+      navigate(`${process.env.REACT_APP_URL}/user/welcomeAdmin`);
+    else if (userRole === 2 || userRole === 5)
+      navigate(`${process.env.REACT_APP_URL}/user/welcomeUser`);
+    else if (userRole === 3)
+      navigate(`${process.env.REACT_APP_URL}/user/welcomeRecycler`);
+    else if (userRole === 4)
+      navigate(`${process.env.REACT_APP_URL}/user/welcomeManager`);
+    else navigate("/");
   };
 
   const handleLoginErrors = (error) => {
     if (error.response?.status === 404) {
-      setError('User not found. Please check your email.');
+      setError("User not found. Please check your email.");
     } else if (error.response?.status === 401) {
       const errorMessage = error.response?.data?.error;
-      if (errorMessage === 'Account is inactive. Login is not permitted.') {
-        setError('Account is inactive. Please contact support.');
+      if (errorMessage === "Account is inactive. Login is not permitted.") {
+        setError("Account is inactive. Please contact support.");
       } else {
-        setError('Invalid email or password. Please try again.');
+        setError("Invalid email or password. Please try again.");
       }
     } else {
-      setError('An error occurred. Please try again later.');
+      setError("An error occurred. Please try again later.");
     }
   };
 
@@ -90,7 +94,7 @@ function SignInForm() {
                 <div className="relative">
                   <input
                     onChange={handleChange}
-                    type={showPassword ? 'text' : 'password'} // Toggle input type based on visibility state
+                    type={showPassword ? "text" : "password"} // Toggle input type based on visibility state
                     name="password"
                     id="password"
                     placeholder="Please enter your password"

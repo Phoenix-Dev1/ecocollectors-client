@@ -1,22 +1,22 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { validateForm } from './recyclerFormValidation';
-import axios from 'axios';
-import * as moment from 'moment';
-import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { AuthContext } from '../../context/authContext';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { validateForm } from "./recyclerFormValidation";
+import axios from "axios";
+import * as moment from "moment";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+import { AuthContext } from "../../context/authContext";
 
 const RecyclerRegister = () => {
   const [err, setError] = useState(null);
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
   const [inputs, setInputs] = useState({
-    join_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    message: '',
+    join_date: moment().format("YYYY-MM-DD HH:mm:ss"),
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
 
   // Update inputs when currentUser changes (when fetching data from local storage)
@@ -51,9 +51,12 @@ const RecyclerRegister = () => {
       return;
     } else {
       try {
-        await axios.post('/recyclers/recyclerRegister', inputsWithUserId);
-        window.alert('Request sent successfully!');
-        navigate('/');
+        await axios.post(
+          `${process.env.REACT_APP_URL}/recyclers/recyclerRegister`,
+          inputsWithUserId
+        );
+        window.alert("Request sent successfully!");
+        navigate("/");
       } catch (err) {
         setError(err.response.data);
       }
@@ -62,7 +65,7 @@ const RecyclerRegister = () => {
 
   // Opens a link on click
   const handleIconClick = (url) => {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   return (
@@ -70,22 +73,22 @@ const RecyclerRegister = () => {
       <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
         <div className="snap-start bg-gray-800 p-2 min-h-fit flex font-extrabold text-center items-center justify-center text-4xl text-white">
           <p className="w-8/12 text-center">
-            {' '}
+            {" "}
             Join Eco Collectors As A Recycler!
           </p>
         </div>
         <div className="snap-start p-2 bg-gray-800 min-h-fit flex font-extrabold text-center items-center justify-center text-2xl text-white mt-5 mb-5">
           <FaFacebookF
             className="mr-5 cursor-pointer"
-            onClick={() => handleIconClick('https://www.facebook.com')}
+            onClick={() => handleIconClick("https://www.facebook.com")}
           />
           <FaTwitter
             className="mr-5 cursor-pointer"
-            onClick={() => handleIconClick('https://www.twitter.com')}
+            onClick={() => handleIconClick("https://www.twitter.com")}
           />
           <FaInstagram
             className="cursor-pointer"
-            onClick={() => handleIconClick('https://www.instagram.com')}
+            onClick={() => handleIconClick("https://www.instagram.com")}
           />
         </div>
         <div className="p-3 bg-gray-800 min-h-fit flex items-center justify-center text-8xl w-96 ml-auto mr-auto">
@@ -97,7 +100,7 @@ const RecyclerRegister = () => {
                   type="text"
                   name="first_name"
                   id="first_name"
-                  value={inputs.first_name || ''}
+                  value={inputs.first_name || ""}
                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -115,7 +118,7 @@ const RecyclerRegister = () => {
                   type="text"
                   name="last_name"
                   id="last_name"
-                  value={inputs.last_name || ''}
+                  value={inputs.last_name || ""}
                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -134,7 +137,7 @@ const RecyclerRegister = () => {
                 type="email"
                 name="email"
                 id="email"
-                value={inputs.email || ''}
+                value={inputs.email || ""}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
@@ -152,7 +155,7 @@ const RecyclerRegister = () => {
                 type="tel"
                 name="phone"
                 id="phone"
-                value={inputs.phone || ''}
+                value={inputs.phone || ""}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required

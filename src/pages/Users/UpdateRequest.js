@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
   StandaloneSearchBox,
   useLoadScript,
-} from '@react-google-maps/api';
-import axios from 'axios';
-import { validateInputs } from '../Users/RequestUtils';
-import classes from './UpdateRequest.module.css';
+} from "@react-google-maps/api";
+import axios from "axios";
+import { validateInputs } from "../Users/RequestUtils";
+import classes from "./UpdateRequest.module.css";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 
@@ -68,7 +68,7 @@ const UpdateRequest = () => {
 
     if (validatedInput.isValid) {
       const confirmed = window.confirm(
-        'Are you sure you want to update this request?'
+        "Are you sure you want to update this request?"
       );
       if (confirmed) {
         try {
@@ -78,17 +78,20 @@ const UpdateRequest = () => {
 
           // Compare time objects
           if (fromTimeObj >= toTimeObj) {
-            setErrorMessage('Please select a valid time range.');
+            setErrorMessage("Please select a valid time range.");
             return;
           }
 
           const requestId = getRequestIdFromURL();
-          await axios.put(`/requests/userUpdate/${requestId}`, updatedData);
+          await axios.put(
+            `${process.env.REACT_APP_URL}/requests/userUpdate/${requestId}`,
+            updatedData
+          );
           setShowSuccessMessage(true);
           setErrorMessage(false);
           setTimeout(() => {
             setShowSuccessMessage(false);
-            window.location.href = '/user/pending-requests';
+            window.location.href = "/user/pending-requests";
           }, 3000);
         } catch (error) {
           console.log(error);
@@ -101,14 +104,16 @@ const UpdateRequest = () => {
 
   const getRequestIdFromURL = () => {
     const urlSearchParams = new URLSearchParams(window.location.search);
-    return urlSearchParams.get('Id');
+    return urlSearchParams.get("Id");
   };
 
   useEffect(() => {
     const fetchRequestData = async () => {
       try {
         const requestId = getRequestIdFromURL();
-        const response = await axios.get(`/requests/${requestId}`); // Adjust the endpoint URL
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/requests/${requestId}`
+        ); // Adjust the endpoint URL
         setRequestData(response.data);
         setUpdatedData(response.data);
         setCoordinates({
@@ -141,9 +146,9 @@ const UpdateRequest = () => {
   return (
     <div className="flex flex-col items-center">
       <p className="text-lg font-semibold">Update Request</p>
-      <div className="mr-4" style={{ height: '400px', width: '100%' }}>
+      <div className="mr-4" style={{ height: "400px", width: "100%" }}>
         <GoogleMap
-          mapContainerStyle={{ height: '100%', width: '100%' }}
+          mapContainerStyle={{ height: "100%", width: "100%" }}
           center={coordinates}
           zoom={15}
         >
@@ -166,7 +171,7 @@ const UpdateRequest = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="req_address"
                 id="req_address"
-                value={updatedData.req_address || ''}
+                value={updatedData.req_address || ""}
                 onChange={handleInputChange}
               />
             </StandaloneSearchBox>
@@ -181,7 +186,7 @@ const UpdateRequest = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="phone_number"
               name="phone_number"
-              value={updatedData.phone_number || ''}
+              value={updatedData.phone_number || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -195,7 +200,7 @@ const UpdateRequest = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="bottles_number"
               name="bottles_number"
-              value={updatedData.bottles_number || ''}
+              value={updatedData.bottles_number || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -209,7 +214,7 @@ const UpdateRequest = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="full_name"
               name="full_name"
-              value={updatedData.full_name || ''}
+              value={updatedData.full_name || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -223,7 +228,7 @@ const UpdateRequest = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="from_hour"
                 name="from_hour"
-                value={updatedData.from_hour || ''}
+                value={updatedData.from_hour || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -236,7 +241,7 @@ const UpdateRequest = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="to_hour"
                 name="to_hour"
-                value={updatedData.to_hour || ''}
+                value={updatedData.to_hour || ""}
                 onChange={handleInputChange}
               />
             </div>

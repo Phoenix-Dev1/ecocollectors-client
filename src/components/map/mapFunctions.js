@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Fetching Markers from DB
 export async function fetchActiveMarkers(type) {
   try {
-    const res = await axios.get(`/markers${type}`);
+    const res = await axios.get(`${process.env.REACT_APP_URL}/markers${type}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -14,7 +14,7 @@ export async function fetchActiveMarkers(type) {
 // Fetching Requests from DB
 export async function fetchRequests(type) {
   try {
-    const res = await axios.get(`/requests${type}`);
+    const res = await axios.get(`${process.env.REACT_APP_URL}/requests${type}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -30,13 +30,13 @@ export function showAddress(setSelectedMarker, address) {
 // Navigation through Google Maps(Moblie)
 export function openGoogleMaps(lat, lng) {
   const url = `https://www.google.com/maps/dir/?api=1&origin=current+location&destination=${lat},${lng}`;
-  window.open(url, 'noopener noreferrer');
+  window.open(url, "noopener noreferrer");
 }
 
 // format the date to DD/MM/YYYY from SQL Date format
 export function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB');
+  return date.toLocaleDateString("en-GB");
 }
 
 // Validating the request details
@@ -90,37 +90,37 @@ export function formatTime(datetime) {
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, "0")}`;
 
   return formattedTime;
 }
 
 // Recycle Bins Render properties
 export const typeDescriptions = {
-  blue: 'Newspapers, magazines, cardboard',
-  carton: 'Cartons packaging',
-  'electronic-waste': 'Batteries, phones, electronic devices',
-  orange: 'Plastic packaging, plastic bags',
-  purple: 'Glass bottles, jars, glass containers',
-  textile: 'Clothes, shirts, pants, fabrics',
+  blue: "Newspapers, magazines, cardboard",
+  carton: "Cartons packaging",
+  "electronic-waste": "Batteries, phones, electronic devices",
+  orange: "Plastic packaging, plastic bags",
+  purple: "Glass bottles, jars, glass containers",
+  textile: "Clothes, shirts, pants, fabrics",
 };
 
 export const typeColors = {
-  blue: 'text-blue-500',
-  carton: 'text-yellow-800',
-  'electronic-waste': 'text-red-500',
-  orange: 'text-orange-500',
-  purple: 'text-purple-500',
-  textile: 'text-lime-600',
+  blue: "text-blue-500",
+  carton: "text-yellow-800",
+  "electronic-waste": "text-red-500",
+  orange: "text-orange-500",
+  purple: "text-purple-500",
+  textile: "text-lime-600",
 };
 
 export const binTypes = [
-  'blue',
-  'carton',
-  'electronic-waste',
-  'orange',
-  'purple',
-  'textile',
+  "blue",
+  "carton",
+  "electronic-waste",
+  "orange",
+  "purple",
+  "textile",
 ];

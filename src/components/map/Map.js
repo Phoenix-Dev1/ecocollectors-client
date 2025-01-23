@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   GoogleMap,
   MarkerF,
   InfoWindowF,
   useLoadScript,
   StandaloneSearchBox,
-} from '@react-google-maps/api';
-import axios from 'axios';
-import * as moment from 'moment';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import classes from './map.module.css';
+} from "@react-google-maps/api";
+import axios from "axios";
+import * as moment from "moment";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import classes from "./map.module.css";
 import {
   fetchActiveMarkers,
   showAddress,
@@ -21,16 +21,16 @@ import {
   formatTime,
   typeDescriptions,
   typeColors,
-} from './mapFunctions';
-import FilterWindow from './FilterWindow';
-import AddWindow from './AddWindow';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/authContext';
-import { VscFilter } from 'react-icons/vsc';
+} from "./mapFunctions";
+import FilterWindow from "./FilterWindow";
+import AddWindow from "./AddWindow";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import { VscFilter } from "react-icons/vsc";
 //import { GiRecycle } from 'react-icons/gi';
-import { FaPlus } from 'react-icons/fa'; // Import the plus icon
-import { validateInputs } from './InputValidation';
-import * as geolib from 'geolib';
+import { FaPlus } from "react-icons/fa"; // Import the plus icon
+import { validateInputs } from "./InputValidation";
+import * as geolib from "geolib";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const Map = () => {
@@ -40,16 +40,16 @@ const Map = () => {
   const navigate = useNavigate();
   const form = useRef();
   const initialName = currentUser
-    ? currentUser.first_name + ' ' + currentUser.last_name
-    : '';
-  const [bottlesNumber, setBottlesNumber] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [reqLat, setReqLat] = useState('');
-  const [reqLng, setReqLng] = useState('');
-  const [reqAddress, setReqAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [fromTime, setFromTime] = useState('');
-  const [toTime, setToTime] = useState('');
+    ? currentUser.first_name + " " + currentUser.last_name
+    : "";
+  const [bottlesNumber, setBottlesNumber] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [reqLat, setReqLat] = useState("");
+  const [reqLng, setReqLng] = useState("");
+  const [reqAddress, setReqAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
   const [mapZoom, setMapZoom] = useState(12); // Initial zoom level
 
   // errors handling
@@ -70,10 +70,10 @@ const Map = () => {
     e.preventDefault();
 
     // If fullName is empty(unchanged), use initialName
-    const submittedFullName = fullName.trim() === '' ? initialName : fullName;
+    const submittedFullName = fullName.trim() === "" ? initialName : fullName;
     // If fullName is empty(unchanged), use phone number from currentUser
     const submittedPhoneNumber =
-      phoneNumber.trim() === '' ? currentUser?.phone : phoneNumber;
+      phoneNumber.trim() === "" ? currentUser?.phone : phoneNumber;
 
     if (currentUser) {
       const validation = validateInputs({
@@ -89,7 +89,7 @@ const Map = () => {
 
       if (validation.isValid) {
         try {
-          await axios.post(`/requests/add`, {
+          await axios.post(`${process.env.REACT_APP_URL}/requests/add`, {
             fullName: submittedFullName, // Use the updated fullName
             reqLat,
             reqLng,
@@ -98,23 +98,23 @@ const Map = () => {
             bottlesNumber,
             fromTime,
             toTime,
-            reqDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+            reqDate: moment().format("YYYY-MM-DD HH:mm:ss"),
           });
           toggleAddWindow();
-          navigate('/map');
+          navigate("/map");
           // Clear the form fields after successful submission
-          setFullName('');
-          setReqLat('');
-          setReqLng('');
-          setReqAddress('');
-          setPhoneNumber('');
-          setBottlesNumber('');
-          setFromTime('');
-          setToTime('');
+          setFullName("");
+          setReqLat("");
+          setReqLng("");
+          setReqAddress("");
+          setPhoneNumber("");
+          setBottlesNumber("");
+          setFromTime("");
+          setToTime("");
           setError(null);
           setMarkerWithIdA(null);
           // Show an alert for successful submission
-          window.alert('Request added successfully!');
+          window.alert("Request added successfully!");
         } catch (err) {
           console.log(err);
         }
@@ -123,7 +123,7 @@ const Map = () => {
       }
     } else {
       // User is not logged in, so redirect to login page
-      navigate('/login');
+      navigate("/login");
     }
   };
 
@@ -195,10 +195,10 @@ const Map = () => {
   const searchReference = useRef();
   const [searchLat, setSearchLat] = useState(0);
   const [searchLng, setSearchLng] = useState(0);
-  const [searchAddress, setSearchAddress] = useState('');
+  const [searchAddress, setSearchAddress] = useState("");
   const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [searchPerformed, setSearchPerformed] = useState(false);
-  const [selectedMarkerType, setSelectedMarkerType] = useState('');
+  const [selectedMarkerType, setSelectedMarkerType] = useState("");
   const [searchRadius, setSearchRadius] = useState(5000); // Default search radius in meters
   const [searchClicked, setSearchClicked] = useState(false);
 
@@ -211,7 +211,7 @@ const Map = () => {
     setSearchClicked(false);
     setFilteredMarkers(markers);
     setSearchRadius(5000);
-    setSearchAddress('');
+    setSearchAddress("");
   };
 
   // updating filtered markers based on range selection
@@ -243,9 +243,9 @@ const Map = () => {
       setSearchAddress(place.formatted_address);
       setSearchLat(place.geometry.location.lat());
       setSearchLng(place.geometry.location.lng());
-      console.log('searchLat: ' + place.geometry.location.lat());
-      console.log('searchLng: ' + place.geometry.location.lng());
-      console.log('searchAddress: ' + searchAddress);
+      console.log("searchLat: " + place.geometry.location.lat());
+      console.log("searchLng: " + place.geometry.location.lng());
+      console.log("searchAddress: " + searchAddress);
     }
   };
 
@@ -294,12 +294,12 @@ const Map = () => {
 
   // Filter markers based on selectedMarkerType
   const filteredMarkersByType =
-    selectedMarkerType !== ''
+    selectedMarkerType !== ""
       ? markers.filter((marker) => marker.type === selectedMarkerType)
       : markers;
 
   const filteredFilteredMarkersByType =
-    selectedMarkerType !== ''
+    selectedMarkerType !== ""
       ? filteredMarkers.filter((marker) => marker.type === selectedMarkerType)
       : filteredMarkers;
 
@@ -315,10 +315,10 @@ const Map = () => {
 
     // Create a new marker
     const newMarker = new window.google.maps.Marker({
-      id: 'A',
+      id: "A",
       lat: lat,
       lng: lng,
-      type: 'addMarker',
+      type: "addMarker",
     });
 
     // Set the marker with id 'A' - unique
@@ -345,7 +345,7 @@ const Map = () => {
       //toggleAddWindow();
       setShowAddWindow(true);
     } catch (error) {
-      console.error('Error fetching address:', error);
+      console.error("Error fetching address:", error);
     }
   };
 
@@ -479,7 +479,7 @@ const Map = () => {
                         <InfoWindowF
                           onCloseClick={() => setSelectedMarker(null)}
                           disableAutoClose={true}
-                          style={{ background: 'blue' }}
+                          style={{ background: "blue" }}
                         >
                           <div className="pl-5 text-center">
                             <h1 className="text-xl font-bold mb-2 text-right">
@@ -527,7 +527,7 @@ const Map = () => {
                         <InfoWindowF
                           onCloseClick={() => setSelectedMarker(null)}
                           disableAutoClose={true}
-                          style={{ background: 'blue' }}
+                          style={{ background: "blue" }}
                         >
                           <div className="pl-5 text-center">
                             <h1 className="text-xl font-bold mb-2 text-right">

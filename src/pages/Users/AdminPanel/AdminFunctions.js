@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Users
 export async function fetchAllUsers() {
   try {
-    const res = await axios.get(`/admin/users`);
+    const res = await axios.get(`${process.env.REACT_APP_URL}/admin/users`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -13,12 +13,15 @@ export async function fetchAllUsers() {
 
 export const toggleUserActivation = async (userID, newStatus) => {
   try {
-    const res = await axios.put(`/admin/users/${userID}`, {
-      active: newStatus,
-    });
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/admin/users/${userID}`,
+      {
+        active: newStatus,
+      }
+    );
     return res.data;
   } catch (error) {
-    console.error('Error toggling user activation:', error);
+    console.error("Error toggling user activation:", error);
     throw error;
   }
 };
@@ -26,9 +29,12 @@ export const toggleUserActivation = async (userID, newStatus) => {
 // Recyclers Managers
 export async function fetchJoinRequests(statusFilter = null) {
   try {
-    const response = await axios.get('/admin/join-requests', {
-      params: { status: statusFilter }, // Pass the status filter to the API
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL}/admin/join-requests`,
+      {
+        params: { status: statusFilter }, // Pass the status filter to the API
+      }
+    );
     return response.data;
   } catch (err) {
     console.error(err);
@@ -38,10 +44,13 @@ export async function fetchJoinRequests(statusFilter = null) {
 
 export async function updateJoinRequestStatus(joinID, newStatus, userID) {
   try {
-    const res = await axios.put(`/admin/join-requests/${joinID}`, {
-      status: newStatus,
-      userID: userID, // Pass user ID in the request body
-    }); // Replace with the actual API endpoint for updating join request status
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/admin/join-requests/${joinID}`,
+      {
+        status: newStatus,
+        userID: userID, // Pass user ID in the request body
+      }
+    ); // Replace with the actual API endpoint for updating join request status
     return res.data;
   } catch (err) {
     console.error(err);
@@ -52,9 +61,12 @@ export async function updateJoinRequestStatus(joinID, newStatus, userID) {
 // Recycle Requests
 export async function fetchAllRequests(statusFilter = null) {
   try {
-    const response = await axios.get('/admin/all-requests', {
-      params: { status: statusFilter }, // Pass the status filter to the API
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL}/admin/all-requests`,
+      {
+        params: { status: statusFilter }, // Pass the status filter to the API
+      }
+    );
     return response.data;
   } catch (err) {
     console.error(err);
@@ -64,9 +76,12 @@ export async function fetchAllRequests(statusFilter = null) {
 
 export async function updateRequestStatus(requestId, newStatus) {
   try {
-    const response = await axios.put(`/admin/requests/${requestId}`, {
-      status: newStatus,
-    });
+    const response = await axios.put(
+      `${process.env.REACT_APP_URL}/admin/requests/${requestId}`,
+      {
+        status: newStatus,
+      }
+    );
     return response.data;
   } catch (err) {
     console.error(err);
@@ -77,11 +92,14 @@ export async function updateRequestStatus(requestId, newStatus) {
 // Search requests By UserId
 export async function searchRequestsByUserId(searchTerm) {
   try {
-    const response = await axios.get('/admin/search-requests', {
-      params: {
-        searchTerm,
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL}/admin/search-requests`,
+      {
+        params: {
+          searchTerm,
+        },
+      }
+    );
 
     // Check if results are empty and return an empty array
     if (response.data.length === 0) {
@@ -97,9 +115,9 @@ export async function searchRequestsByUserId(searchTerm) {
 
 // Define a mapping of status numbers to their meanings
 export const statusMeanings = {
-  1: 'Awaits Recycler',
-  2: 'Awaits Approval',
-  3: 'Completed',
-  4: 'Canceled',
-  5: 'Awaits Pickup',
+  1: "Awaits Recycler",
+  2: "Awaits Approval",
+  3: "Completed",
+  4: "Canceled",
+  5: "Awaits Pickup",
 };

@@ -1,15 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
   StandaloneSearchBox,
   useLoadScript,
-} from '@react-google-maps/api';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import classes from './bins.module.css';
+} from "@react-google-maps/api";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import classes from "./bins.module.css";
 
-const libraries = ['places'];
+const libraries = ["places"];
 
 const AddNewBin = () => {
   const navigate = useNavigate();
@@ -19,11 +19,11 @@ const AddNewBin = () => {
   });
 
   const [newBinData, setNewBinData] = useState({
-    address: '',
-    city: '',
-    lat: '',
-    lng: '',
-    type: '', // Default bin type
+    address: "",
+    city: "",
+    lat: "",
+    lng: "",
+    type: "", // Default bin type
   });
 
   const [coordinates, setCoordinates] = useState({
@@ -35,7 +35,7 @@ const AddNewBin = () => {
   const [typeError, setTypeError] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -68,20 +68,20 @@ const AddNewBin = () => {
       return;
     }
 
-    if (!newBinData.type || newBinData.type === 'Please Select a type') {
+    if (!newBinData.type || newBinData.type === "Please Select a type") {
       setTypeError(true);
       return;
     }
 
     try {
-      await axios.post('/admin/bins', newBinData);
+      await axios.post(`${process.env.REACT_APP_URL}/admin/bins`, newBinData);
       setShowSuccessMessage(true); // Show success message
       setTypeError(false);
       setAddressError(false);
       setServerError(false);
       // Wait for a moment and then redirect
       setTimeout(() => {
-        navigate('/admin/bins');
+        navigate("/admin/bins");
       }, 3000); // Redirect after 3 seconds (adjust as needed)
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
@@ -112,9 +112,9 @@ const AddNewBin = () => {
   return (
     <div className="flex flex-col items-center">
       <p className="text-lg font-semibold">Add New Bin</p>
-      <div className="mr-4" style={{ height: '400px', width: '100%' }}>
+      <div className="mr-4" style={{ height: "400px", width: "100%" }}>
         <GoogleMap
-          mapContainerStyle={{ height: '100%', width: '100%' }}
+          mapContainerStyle={{ height: "100%", width: "100%" }}
           center={coordinates}
           zoom={15}
         >
@@ -138,7 +138,7 @@ const AddNewBin = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="address"
                 id="address"
-                value={newBinData.address || ''}
+                value={newBinData.address || ""}
                 onChange={handleInputChange}
               />
             </StandaloneSearchBox>
@@ -152,7 +152,7 @@ const AddNewBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="city"
               name="city"
-              value={newBinData.city || ''}
+              value={newBinData.city || ""}
               onChange={handleInputChange}
               readOnly
             />
@@ -165,7 +165,7 @@ const AddNewBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="type"
               name="type"
-              value={newBinData.type || ''}
+              value={newBinData.type || ""}
               onChange={handleInputChange}
             >
               <option value="Please Select a type">Please Select a type</option>
@@ -186,7 +186,7 @@ const AddNewBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="lat"
               name="lat"
-              value={newBinData.lat || ''}
+              value={newBinData.lat || ""}
               onChange={handleInputChange}
               readOnly
             />
@@ -200,7 +200,7 @@ const AddNewBin = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="lng"
               name="lng"
-              value={newBinData.lng || ''}
+              value={newBinData.lng || ""}
               onChange={handleInputChange}
               readOnly
             />

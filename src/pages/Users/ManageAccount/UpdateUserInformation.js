@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { validateInfo } from './ValidateInfo';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../context/authContext';
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { validateInfo } from "./ValidateInfo";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/authContext";
 
 export default function UpdateUserInformation() {
   const form = useRef();
@@ -10,12 +10,12 @@ export default function UpdateUserInformation() {
 
   // Initialize the texts state with empty values
   const [texts, setTexts] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    city: '',
-    address: '',
-    phone: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    city: "",
+    address: "",
+    phone: "",
   });
 
   const [isDataFetched, setDataFetched] = useState(false);
@@ -27,7 +27,9 @@ export default function UpdateUserInformation() {
     // Fetch user information from the server using the GET method
     const fetchUserInformation = async () => {
       try {
-        const response = await axios.get('/user/info');
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/user/info`
+        );
         const userData = response.data;
         setTexts({
           first_name: userData.first_name,
@@ -39,7 +41,7 @@ export default function UpdateUserInformation() {
         });
         setDataFetched(true);
       } catch (error) {
-        setError('Error fetching user information');
+        setError("Error fetching user information");
         console.log(isDataFetched);
       }
     };
@@ -61,7 +63,10 @@ export default function UpdateUserInformation() {
       return;
     } else {
       try {
-        const response = await axios.put('/user/update', texts);
+        const response = await axios.put(
+          `${process.env.REACT_APP_URL}/user/update`,
+          texts
+        );
         console.log(response);
 
         // Update the currentUser state with the new user data
@@ -76,9 +81,9 @@ export default function UpdateUserInformation() {
         };
 
         // Update the 'user' data in localStorage
-        localStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.setItem("user", JSON.stringify(updatedUser));
 
-        navigate('/user/welcome');
+        navigate("/user/welcome");
       } catch (err) {
         setError(err.response.data);
       }
@@ -87,18 +92,18 @@ export default function UpdateUserInformation() {
 
   const handleDeactivateAccount = async () => {
     const confirmDeactivation = window.confirm(
-      'Are you sure you want to deactivate your account? This action is irreversible.'
+      "Are you sure you want to deactivate your account? This action is irreversible."
     );
 
     if (confirmDeactivation) {
       try {
-        await axios.post('/user/deactivate');
+        await axios.post(`${process.env.REACT_APP_URL}/user/deactivate`);
         setDeactivated(true); // Update local state to reflect deactivation
         // Log out the user from the system after deactivation
         await logout();
-        navigate('/');
+        navigate("/");
       } catch (error) {
-        setError('Error deactivating account');
+        setError("Error deactivating account");
         console.log(error);
       }
     }

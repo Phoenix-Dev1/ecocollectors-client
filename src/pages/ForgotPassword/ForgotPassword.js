@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import smallLogo from '../../img/sm-logo.png';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import smallLogo from "../../img/sm-logo.png";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [deactivateMessage, setDeactivateMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [deactivateMessage, setDeactivateMessage] = useState("");
   const [isResetting, setIsResetting] = useState(false); // State to track reset in progress
   const navigate = useNavigate();
 
@@ -26,27 +26,33 @@ const ForgotPassword = () => {
       setIsResetting(true); // Set reset in progress
 
       // Check if the account is active (not deactivated)
-      const response = await axios.get('/auth/checkActivation', {
-        params: { email },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL}/auth/checkActivation`,
+        {
+          params: { email },
+        }
+      );
 
       if (!response.data.active) {
         setDeactivateMessage(
-          'Account is deactivated. Password reset is not allowed.'
+          "Account is deactivated. Password reset is not allowed."
         );
         return;
       }
 
       // Proceed with password reset logic
-      const resetResponse = await axios.post('/auth/forgotPassword', { email });
+      const resetResponse = await axios.post(
+        `${process.env.REACT_APP_URL}/auth/forgotPassword`,
+        { email }
+      );
       setMessage(resetResponse.data.message);
 
       setTimeout(() => {
-        setMessage('');
-        navigate('/login');
+        setMessage("");
+        navigate("/login");
       }, 2000); // Wait for 2 seconds and navigate to the login page
     } catch (error) {
-      setMessage('Failed to reset password. Please try again later.');
+      setMessage("Failed to reset password. Please try again later.");
     } finally {
       setIsResetting(false); // Reset reset in progress after request completion
     }
@@ -97,7 +103,7 @@ const ForgotPassword = () => {
                 disabled={isResetting} // Disable the button when reset is in progress
                 className="text-sm font-medium leading-6 text-gray-900 rounded-lg shadow-md focus:outline-none w-full h-12 transition-colors duration-150 ease-in-out bg-gray-700  dark:text-white hover:bg-gray-600 hover:text-primary-500"
               >
-                {isResetting ? 'Resetting...' : 'Reset Password'}
+                {isResetting ? "Resetting..." : "Reset Password"}
               </button>
               <div className="flex items-center justify-center">
                 <a

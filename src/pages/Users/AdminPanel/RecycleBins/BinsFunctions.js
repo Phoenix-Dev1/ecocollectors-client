@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Utils
 // Function to capitalize the first letter of a string
@@ -9,9 +9,12 @@ export const capitalizeFirstLetter = (string) => {
 // Recycle Bins
 export async function fetchAllRecycleBins(typeFilter = null) {
   try {
-    const res = await axios.get(`/admin/recycleBins`, {
-      params: { type: typeFilter }, // Pass the type filter to the API
-    });
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/admin/recycleBins`,
+      {
+        params: { type: typeFilter }, // Pass the type filter to the API
+      }
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -22,9 +25,11 @@ export async function fetchAllRecycleBins(typeFilter = null) {
 // Deactivate bin
 export async function deactivateBin(binId) {
   try {
-    await axios.put(`/admin/deactivateBin/${binId}`);
+    await axios.put(
+      `${process.env.REACT_APP_URL}/admin/deactivateBin/${binId}`
+    );
   } catch (error) {
-    console.error('Error deactivating bin:', error);
+    console.error("Error deactivating bin:", error);
     throw error;
   }
 }
@@ -32,9 +37,9 @@ export async function deactivateBin(binId) {
 // Activate bin
 export const activateBin = async (binId) => {
   try {
-    await axios.put(`/admin/activateBin/${binId}`);
+    await axios.put(`${process.env.REACT_APP_URL}/admin/activateBin/${binId}`);
   } catch (error) {
-    console.error('Error activating bin:', error);
+    console.error("Error activating bin:", error);
     throw error;
   }
 };

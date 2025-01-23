@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Fetching Request details from DB
 export async function fetchRequestById(id) {
   //console.log(id);
   try {
-    const res = await axios.get(`/requests/recycle/${id}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/requests/recycle/${id}`
+    );
     //console.log(res.data);
     return res.data;
   } catch (err) {
@@ -17,7 +19,7 @@ export async function fetchRequestById(id) {
 export async function updateRequestById(id) {
   //console.log(id);
   try {
-    const res = await axios.put(`/requests/${id}`);
+    const res = await axios.put(`${process.env.REACT_APP_URL}/requests/${id}`);
     //console.log(res.data);
     return res.data;
   } catch (err) {
@@ -43,9 +45,9 @@ export function formatTime(datetime) {
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, "0")}`;
 
   return formattedTime;
 }

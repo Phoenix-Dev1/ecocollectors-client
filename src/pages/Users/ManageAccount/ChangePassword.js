@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import validatePassword from './validatePassword';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import validatePassword from "./validatePassword";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function ChangePassword() {
   const [passwords, setPasswords] = useState({
-    old_password: '',
-    new_password: '',
-    confirm_password: '',
+    old_password: "",
+    new_password: "",
+    confirm_password: "",
   });
 
   const [err, setError] = useState(null);
@@ -36,30 +36,30 @@ export default function ChangePassword() {
 
     // Check if new password and confirm password match
     if (new_password !== confirm_password) {
-      setError('New password and confirm password do not match');
+      setError("New password and confirm password do not match");
       return;
     }
 
     // Perform password validation checks using the validatePassword function
     const passwordErrors = validatePassword(new_password);
     if (passwordErrors.length > 0) {
-      setError(passwordErrors.join('\n'));
+      setError(passwordErrors.join("\n"));
       return;
     } else {
-      setError(''); // Clear the error if password is valid
+      setError(""); // Clear the error if password is valid
     }
 
     try {
-      await axios.put('/user/change-password', {
+      await axios.put(`${process.env.REACT_APP_URL}/user/change-password`, {
         old_password,
         new_password,
       });
 
       // Show a success alert to the user
-      alert('Password changed successfully!');
+      alert("Password changed successfully!");
 
       // Redirect to the user page
-      navigate('/');
+      navigate("/");
     } catch (err) {
       setError(err.response.data);
     }
@@ -84,7 +84,7 @@ export default function ChangePassword() {
               className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white pr-10"
               id="old_password"
               name="old_password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               aria-label="Old Password"
             />
             <button
@@ -109,7 +109,7 @@ export default function ChangePassword() {
               className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
               id="new_password"
               name="new_password"
-              type={showNewPassword ? 'text' : 'password'}
+              type={showNewPassword ? "text" : "password"}
               aria-label="New Password"
             />
             <button
@@ -137,7 +137,7 @@ export default function ChangePassword() {
               className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
               id="confirm_password"
               name="confirm_password"
-              type={showNewPassword ? 'text' : 'password'}
+              type={showNewPassword ? "text" : "password"}
               aria-label="Confirm Password"
             />
           </div>
