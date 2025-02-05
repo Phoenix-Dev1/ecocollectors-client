@@ -14,7 +14,8 @@ const WelcomeRecycler = () => {
     const fetchRecyclerData = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeRecycler`
+          `${process.env.REACT_APP_URL}/user/welcomeRecycler`,
+          { withCredentials: true }
         );
         setTotalRequestsPickedUp(res.data.totalRequestsPickedUp);
         setTotalRecycledBottles(res.data.totalRecycledBottles);

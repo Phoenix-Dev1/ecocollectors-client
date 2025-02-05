@@ -14,7 +14,8 @@ const WelcomeAdmin = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeAdmin`
+          `${process.env.REACT_APP_URL}/user/welcomeAdmin`,
+          { withCredentials: true }
         );
         setTotalRequests(res.data.totalRequests);
         setTotalRecycledBottles(res.data.totalRecycledBottles);

@@ -16,7 +16,8 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_URL}/auth/login`,
-        inputs
+        inputs,
+        { withCredentials: true } // Ensure cookies are sent
       );
       setCurrentUser(res.data);
       return res.data.role; // Return the user role

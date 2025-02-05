@@ -74,15 +74,19 @@ const AddNewBin = () => {
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_URL}/admin/bins`, newBinData);
-      setShowSuccessMessage(true); // Show success message
+      await axios.post(
+        `${process.env.REACT_APP_URL}/admin/bins`,
+        newBinData,
+        { withCredentials: true } // ✅ Ensures the token is sent with the request
+      );
+      setShowSuccessMessage(true);
       setTypeError(false);
       setAddressError(false);
-      setServerError(false);
-      // Wait for a moment and then redirect
+      setServerError("");
+
       setTimeout(() => {
         navigate("/admin/bins");
-      }, 3000); // Redirect after 3 seconds (adjust as needed)
+      }, 3000);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         setServerError(error.response.data.error);

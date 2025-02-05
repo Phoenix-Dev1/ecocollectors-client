@@ -13,6 +13,7 @@ export async function fetchAllRecycleBins(typeFilter = null) {
       `${process.env.REACT_APP_URL}/admin/recycleBins`,
       {
         params: { type: typeFilter }, // Pass the type filter to the API
+        withCredentials: true, // ✅ Ensure JWT is sent
       }
     );
     return res.data;
@@ -26,7 +27,9 @@ export async function fetchAllRecycleBins(typeFilter = null) {
 export async function deactivateBin(binId) {
   try {
     await axios.put(
-      `${process.env.REACT_APP_URL}/admin/deactivateBin/${binId}`
+      `${process.env.REACT_APP_URL}/admin/deactivateBin/${binId}`,
+      {}, // ✅ Must include an empty body for PUT requests
+      { withCredentials: true } // ✅ Ensure JWT is sent
     );
   } catch (error) {
     console.error("Error deactivating bin:", error);
@@ -37,7 +40,11 @@ export async function deactivateBin(binId) {
 // Activate bin
 export const activateBin = async (binId) => {
   try {
-    await axios.put(`${process.env.REACT_APP_URL}/admin/activateBin/${binId}`);
+    await axios.put(
+      `${process.env.REACT_APP_URL}/admin/activateBin/${binId}`,
+      {}, // Empty object for the request body
+      { withCredentials: true } // ✅ Ensures authentication token is sent
+    );
   } catch (error) {
     console.error("Error activating bin:", error);
     throw error;

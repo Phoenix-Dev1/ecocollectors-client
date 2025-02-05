@@ -3,7 +3,9 @@ import axios from "axios";
 // Users
 export async function fetchAllUsers() {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_URL}/admin/users`);
+    const res = await axios.get(`${process.env.REACT_APP_URL}/admin/users`, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (err) {
     console.log(err);
@@ -15,9 +17,8 @@ export const toggleUserActivation = async (userID, newStatus) => {
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/admin/users/${userID}`,
-      {
-        active: newStatus,
-      }
+      { active: newStatus },
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -32,7 +33,8 @@ export async function fetchJoinRequests(statusFilter = null) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/admin/join-requests`,
       {
-        params: { status: statusFilter }, // Pass the status filter to the API
+        params: { status: statusFilter },
+        withCredentials: true,
       }
     );
     return response.data;
@@ -48,9 +50,10 @@ export async function updateJoinRequestStatus(joinID, newStatus, userID) {
       `${process.env.REACT_APP_URL}/admin/join-requests/${joinID}`,
       {
         status: newStatus,
-        userID: userID, // Pass user ID in the request body
-      }
-    ); // Replace with the actual API endpoint for updating join request status
+        userID: userID,
+      },
+      { withCredentials: true }
+    );
     return res.data;
   } catch (err) {
     console.error(err);
@@ -64,7 +67,8 @@ export async function fetchAllRequests(statusFilter = null) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/admin/all-requests`,
       {
-        params: { status: statusFilter }, // Pass the status filter to the API
+        params: { status: statusFilter },
+        withCredentials: true,
       }
     );
     return response.data;
@@ -80,7 +84,8 @@ export async function updateRequestStatus(requestId, newStatus) {
       `${process.env.REACT_APP_URL}/admin/requests/${requestId}`,
       {
         status: newStatus,
-      }
+      },
+      { withCredentials: true } // ✅ Ensure credentials are sent
     );
     return response.data;
   } catch (err) {
@@ -95,13 +100,11 @@ export async function searchRequestsByUserId(searchTerm) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/admin/search-requests`,
       {
-        params: {
-          searchTerm,
-        },
+        params: { searchTerm },
+        withCredentials: true, // ✅ Add credentials
       }
     );
 
-    // Check if results are empty and return an empty array
     if (response.data.length === 0) {
       return [];
     }

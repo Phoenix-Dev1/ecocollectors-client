@@ -7,15 +7,20 @@ const Dashboard = () => {
   const { currentUser } = useContext(AuthContext);
   const [userRole, setUserRole] = useState("");
 
+  //console.log(currentUser);
+
   useEffect(() => {
-    // Fetch the user's role from the jwt(using Node method)
     axios
-      .get(`${process.env.REACT_APP_URL}/user/role`)
+      .get(`${process.env.REACT_APP_URL}/user/role`, { withCredentials: true })
       .then((response) => {
+        // console.log("Role response:", response.data);
         setUserRole(response.data.role);
       })
       .catch((error) => {
-        console.log("Role undefined - Contact support");
+        console.error(
+          "Error fetching user role:",
+          error.response ? error.response.data : error
+        );
       });
   }, []);
 
