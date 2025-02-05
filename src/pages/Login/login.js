@@ -26,14 +26,10 @@ function SignInForm() {
   };
 
   const handleWelcome = (userRole) => {
-    if (userRole === 1)
-      navigate(`${process.env.REACT_APP_URL}/user/welcomeAdmin`);
-    else if (userRole === 2 || userRole === 5)
-      navigate(`${process.env.REACT_APP_URL}/user/welcomeUser`);
-    else if (userRole === 3)
-      navigate(`${process.env.REACT_APP_URL}/user/welcomeRecycler`);
-    else if (userRole === 4)
-      navigate(`${process.env.REACT_APP_URL}/user/welcomeManager`);
+    if (userRole === 1) navigate("/user/welcomeAdmin");
+    else if (userRole === 2 || userRole === 5) navigate("/user/welcomeUser");
+    else if (userRole === 3) navigate("/user/welcomeRecycler");
+    else if (userRole === 4) navigate("/user/welcomeManager");
     else navigate("/");
   };
 
