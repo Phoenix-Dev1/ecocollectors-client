@@ -1,6 +1,6 @@
-import React from 'react';
-import { StandaloneSearchBox } from '@react-google-maps/api';
-import { AiOutlineClose } from 'react-icons/ai';
+import React from "react";
+import { StandaloneSearchBox } from "@react-google-maps/api";
+import { AiOutlineClose } from "react-icons/ai";
 
 const AddWindow = ({
   fullName,
@@ -38,7 +38,7 @@ const AddWindow = ({
             value={fullName || initialName} // Use fullName or initialName as the value
             onChange={(e) => setFullName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder={!currentUser ? 'Enter your full name' : initialName}
+            placeholder={!currentUser ? "Enter your full name" : initialName}
             required
           />
         </div>
@@ -87,7 +87,7 @@ const AddWindow = ({
             placeholder="Enter your number"
             id="phoneNumber"
             name="phoneNumber"
-            value={phoneNumber || currentUser?.phone || ''} // Set initial value
+            value={phoneNumber || currentUser?.phone || ""} // Set initial value
             type="tel"
             required
           />

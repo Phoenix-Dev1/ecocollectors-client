@@ -1,5 +1,5 @@
-import React from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
+import React from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
 const FilterWindow = ({
   selectedMarkerType,
@@ -11,57 +11,57 @@ const FilterWindow = ({
     <div className={classes.filterWindow}>
       <ul className={classes.markerTypeList}>
         <li
-          className={selectedMarkerType === '' ? classes.selected : ''}
-          onClick={() => handleMarkerTypeChange({ target: { value: '' } })}
+          className={selectedMarkerType === "" ? classes.selected : ""}
+          onClick={() => handleMarkerTypeChange({ target: { value: "" } })}
         >
           All
         </li>
         <li
-          className={selectedMarkerType === 'blue' ? classes.selected : ''}
-          onClick={() => handleMarkerTypeChange({ target: { value: 'blue' } })}
+          className={selectedMarkerType === "blue" ? classes.selected : ""}
+          onClick={() => handleMarkerTypeChange({ target: { value: "blue" } })}
         >
           Blue
         </li>
         <li
-          className={selectedMarkerType === 'carton' ? classes.selected : ''}
+          className={selectedMarkerType === "carton" ? classes.selected : ""}
           onClick={() =>
-            handleMarkerTypeChange({ target: { value: 'carton' } })
+            handleMarkerTypeChange({ target: { value: "carton" } })
           }
         >
           Carton
         </li>
         <li
           className={
-            selectedMarkerType === 'electronic-waste' ? classes.selected : ''
+            selectedMarkerType === "electronic-waste" ? classes.selected : ""
           }
           onClick={() =>
             handleMarkerTypeChange({
-              target: { value: 'electronic-waste' },
+              target: { value: "electronic-waste" },
             })
           }
         >
           Electronic Waste
         </li>
         <li
-          className={selectedMarkerType === 'orange' ? classes.selected : ''}
+          className={selectedMarkerType === "orange" ? classes.selected : ""}
           onClick={() =>
-            handleMarkerTypeChange({ target: { value: 'orange' } })
+            handleMarkerTypeChange({ target: { value: "orange" } })
           }
         >
           Orange
         </li>
         <li
-          className={selectedMarkerType === 'purple' ? classes.selected : ''}
+          className={selectedMarkerType === "purple" ? classes.selected : ""}
           onClick={() =>
-            handleMarkerTypeChange({ target: { value: 'purple' } })
+            handleMarkerTypeChange({ target: { value: "purple" } })
           }
         >
           Purple
         </li>
         <li
-          className={selectedMarkerType === 'textile' ? classes.selected : ''}
+          className={selectedMarkerType === "textile" ? classes.selected : ""}
           onClick={() =>
-            handleMarkerTypeChange({ target: { value: 'textile' } })
+            handleMarkerTypeChange({ target: { value: "textile" } })
           }
         >
           Textile
