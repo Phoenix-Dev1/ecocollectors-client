@@ -10,18 +10,22 @@ const Dashboard = () => {
   //console.log(currentUser);
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_URL}/user/role`, { withCredentials: true })
-      .then((response) => {
-        // console.log("Role response:", response.data);
+    const fetchUserRole = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/user/role`,
+          { withCredentials: true } // ✅ Ensures authentication
+        );
         setUserRole(response.data.role);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(
           "Error fetching user role:",
-          error.response ? error.response.data : error
+          error.response?.data || error.message || "Unknown error"
         );
-      });
+      }
+    };
+
+    fetchUserRole();
   }, []);
 
   const handleWelcome = () => {

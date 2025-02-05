@@ -2,30 +2,31 @@ import axios from "axios";
 
 // Fetch all user Requests
 export async function fetchUserRequests(id) {
-  //console.log(id);
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_URL}/dashboardUser/${id}`
+      `${process.env.REACT_APP_URL}/dashboardUser/${id}`,
+      { withCredentials: true } // ✅ Ensures authentication
     );
-    //console.log(res.data);
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error fetching user requests:", err.response?.data || err);
     return null;
   }
 }
 
 // Fetch Recycler info based on request id
 export async function fetchRecyclerDetails(id) {
-  //console.log(id);
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_URL}/dashboardRecycler/${id}`
+      `${process.env.REACT_APP_URL}/dashboardRecycler/${id}`,
+      { withCredentials: true } // ✅ Ensures authentication
     );
-    //console.log(res.data);
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error(
+      "Error fetching recycler details:",
+      err.response?.data || err
+    );
     return null;
   }
 }
@@ -33,18 +34,17 @@ export async function fetchRecyclerDetails(id) {
 // accept recycler arrival - changing status to 5
 export async function acceptRequest(requestId) {
   const confirmed = window.confirm("Are you sure you want to accept?");
-  if (!confirmed) {
-    return null; // Request not confirmed, return null or handle accordingly
-  }
+  if (!confirmed) return null;
 
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 5 }
+      { status: 5 },
+      { withCredentials: true } // ✅ Ensures authentication
     );
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error accepting request:", err.response?.data || err);
     return null;
   }
 }
@@ -54,18 +54,17 @@ export async function declineRequest(requestId) {
   const confirmed = window.confirm(
     "Are you sure you want to cancel pickup/decline?"
   );
-  if (!confirmed) {
-    return null; // Request not confirmed, return null or handle accordingly
-  }
+  if (!confirmed) return null;
 
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 1 }
+      { status: 1 },
+      { withCredentials: true } // ✅ Ensures authentication
     );
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error declining request:", err.response?.data || err);
     return null;
   }
 }
@@ -73,17 +72,17 @@ export async function declineRequest(requestId) {
 // Canceling a request BUT keeping it in the db
 export async function cancelRequest(requestId) {
   const confirmed = window.confirm("Are you sure you want to cancel?");
-  if (!confirmed) {
-    return null; // Request not confirmed, return null or handle accordingly
-  }
+  if (!confirmed) return null;
+
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 4 }
+      { status: 4 },
+      { withCredentials: true } // ✅ Ensures authentication
     );
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error canceling request:", err.response?.data || err);
     return null;
   }
 }
@@ -93,21 +92,17 @@ export async function acceptAndCloseRequest(requestId, newBottlesNumber) {
   const confirmed = window.confirm(
     "Are you sure you want to accept and close this request?"
   );
-  if (!confirmed) {
-    return null; // Request not confirmed
-  }
+  if (!confirmed) return null;
 
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      {
-        status: 3,
-        newBottlesNumber: newBottlesNumber, // Pass the new bottles number
-      }
+      { status: 3, newBottlesNumber },
+      { withCredentials: true } // ✅ Ensures authentication
     );
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error closing request:", err.response?.data || err);
     return null;
   }
 }

@@ -3,7 +3,10 @@ import axios from "axios";
 // Fetching Markers from DB
 export async function fetchActiveMarkers(type) {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_URL}/markers${type}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/markers${type}`,
+      { withCredentials: true } // ✅ Ensures authentication
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -14,7 +17,10 @@ export async function fetchActiveMarkers(type) {
 // Fetching Requests from DB
 export async function fetchRequests(type) {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_URL}/requests${type}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_URL}/requests${type}`,
+      { withCredentials: true } // ✅ Ensures authentication
+    );
     return res.data;
   } catch (err) {
     console.log(err);

@@ -71,13 +71,13 @@ const Map = () => {
 
     // If fullName is empty(unchanged), use initialName
     const submittedFullName = fullName.trim() === "" ? initialName : fullName;
-    // If fullName is empty(unchanged), use phone number from currentUser
+    // If phoneNumber is empty(unchanged), use phone number from currentUser
     const submittedPhoneNumber =
       phoneNumber.trim() === "" ? currentUser?.phone : phoneNumber;
 
     if (currentUser) {
       const validation = validateInputs({
-        fullName: submittedFullName, // Use the updated fullName
+        fullName: submittedFullName,
         reqLat,
         reqLng,
         reqAddress,
@@ -89,20 +89,26 @@ const Map = () => {
 
       if (validation.isValid) {
         try {
-          await axios.post(`${process.env.REACT_APP_URL}/requests/add`, {
-            fullName: submittedFullName, // Use the updated fullName
-            reqLat,
-            reqLng,
-            reqAddress,
-            phoneNumber: submittedPhoneNumber,
-            bottlesNumber,
-            fromTime,
-            toTime,
-            reqDate: moment().format("YYYY-MM-DD HH:mm:ss"),
-          });
+          await axios.post(
+            `${process.env.REACT_APP_URL}/requests/add`,
+            {
+              fullName: submittedFullName,
+              reqLat,
+              reqLng,
+              reqAddress,
+              phoneNumber: submittedPhoneNumber,
+              bottlesNumber,
+              fromTime,
+              toTime,
+              reqDate: moment().format("YYYY-MM-DD HH:mm:ss"),
+            },
+            { withCredentials: true } // ✅ Ensures authentication
+          );
+
           toggleAddWindow();
           navigate("/map");
-          // Clear the form fields after successful submission
+
+          // Clear form fields after successful submission
           setFullName("");
           setReqLat("");
           setReqLng("");
@@ -113,10 +119,12 @@ const Map = () => {
           setToTime("");
           setError(null);
           setMarkerWithIdA(null);
+
           // Show an alert for successful submission
           window.alert("Request added successfully!");
         } catch (err) {
-          console.log(err);
+          console.error("Error submitting request:", err);
+          setError("Failed to add request. Please try again.");
         }
       } else {
         setError(validation.message);

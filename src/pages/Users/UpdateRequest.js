@@ -72,11 +72,10 @@ const UpdateRequest = () => {
       );
       if (confirmed) {
         try {
-          // Convert time strings to time objects for comparison
+          // Validate time range
           const fromTimeObj = new Date(`1970-01-01T${updatedData.from_hour}`);
           const toTimeObj = new Date(`1970-01-01T${updatedData.to_hour}`);
 
-          // Compare time objects
           if (fromTimeObj >= toTimeObj) {
             setErrorMessage("Please select a valid time range.");
             return;
@@ -85,16 +84,22 @@ const UpdateRequest = () => {
           const requestId = getRequestIdFromURL();
           await axios.put(
             `${process.env.REACT_APP_URL}/requests/userUpdate/${requestId}`,
-            updatedData
+            updatedData,
+            { withCredentials: true } // ✅ Ensures authentication
           );
+
           setShowSuccessMessage(true);
-          setErrorMessage(false);
+          setErrorMessage(null);
           setTimeout(() => {
             setShowSuccessMessage(false);
             window.location.href = "/user/pending-requests";
           }, 3000);
         } catch (error) {
-          console.log(error);
+          console.error(
+            "Error updating request:",
+            error.response?.data || error
+          );
+          setErrorMessage("Failed to update request. Please try again.");
         }
       }
     } else {
@@ -112,8 +117,10 @@ const UpdateRequest = () => {
       try {
         const requestId = getRequestIdFromURL();
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/requests/${requestId}`
-        ); // Adjust the endpoint URL
+          `${process.env.REACT_APP_URL}/requests/${requestId}`,
+          { withCredentials: true } // ✅ Ensures authentication
+        );
+
         setRequestData(response.data);
         setUpdatedData(response.data);
         setCoordinates({
@@ -122,8 +129,11 @@ const UpdateRequest = () => {
         });
         setRequestStatus(response.data.status);
       } catch (error) {
-        console.log(error);
-        console.log(requestData);
+        console.error(
+          "Error fetching request data:",
+          error.response?.data || error
+        );
+        setErrorMessage("Failed to load request data.");
       }
     };
 

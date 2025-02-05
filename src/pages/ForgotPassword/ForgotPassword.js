@@ -18,8 +18,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if (isResetting) {
-      // If reset is already in progress, exit
-      return;
+      return; // Prevent multiple submissions
     }
 
     try {
@@ -30,6 +29,7 @@ const ForgotPassword = () => {
         `${process.env.REACT_APP_URL}/auth/checkActivation`,
         {
           params: { email },
+          withCredentials: true, // ✅ Ensures authentication
         }
       );
 
@@ -43,18 +43,21 @@ const ForgotPassword = () => {
       // Proceed with password reset logic
       const resetResponse = await axios.post(
         `${process.env.REACT_APP_URL}/auth/forgotPassword`,
-        { email }
+        { email },
+        { withCredentials: true } // ✅ Ensures authentication
       );
+
       setMessage(resetResponse.data.message);
 
       setTimeout(() => {
         setMessage("");
         navigate("/login");
-      }, 2000); // Wait for 2 seconds and navigate to the login page
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
+      console.error("Error resetting password:", error.response?.data || error);
       setMessage("Failed to reset password. Please try again later.");
     } finally {
-      setIsResetting(false); // Reset reset in progress after request completion
+      setIsResetting(false); // Reset state
     }
   };
 

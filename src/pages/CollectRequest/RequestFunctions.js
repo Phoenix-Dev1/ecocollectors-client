@@ -2,28 +2,29 @@ import axios from "axios";
 
 // Fetching Request details from DB
 export async function fetchRequestById(id) {
-  //console.log(id);
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_URL}/requests/recycle/${id}`
+      `${process.env.REACT_APP_URL}/requests/recycle/${id}`,
+      { withCredentials: true } // ✅ Ensures authentication
     );
-    //console.log(res.data);
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error fetching request by ID:", err.response?.data || err);
     return null;
   }
 }
 
 // Updating the request Status
 export async function updateRequestById(id) {
-  //console.log(id);
   try {
-    const res = await axios.put(`${process.env.REACT_APP_URL}/requests/${id}`);
-    //console.log(res.data);
+    const res = await axios.put(
+      `${process.env.REACT_APP_URL}/requests/${id}`,
+      {}, // ✅ Include an empty object for the request body
+      { withCredentials: true } // ✅ Ensures authentication
+    );
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Error updating request by ID:", err.response?.data || err);
     return null;
   }
 }
