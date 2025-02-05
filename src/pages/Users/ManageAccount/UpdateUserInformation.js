@@ -24,11 +24,11 @@ export default function UpdateUserInformation() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user information from the server using the GET method
     const fetchUserInformation = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/user/info`
+          `${process.env.REACT_APP_URL}/user/info`,
+          { withCredentials: true } // Ensure cookies are included
         );
         const userData = response.data;
         setTexts({
@@ -42,12 +42,12 @@ export default function UpdateUserInformation() {
         setDataFetched(true);
       } catch (error) {
         setError("Error fetching user information");
-        console.log(isDataFetched);
+        console.error(error);
       }
     };
 
     fetchUserInformation();
-  }, [isDataFetched]);
+  }, []); // Run only on component mount
 
   const handleChange = (e) => {
     setTexts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,35 +58,35 @@ export default function UpdateUserInformation() {
     e.preventDefault();
 
     const isValid = validateInfo(texts, setError);
+    if (!isValid) return;
 
-    if (!isValid) {
-      return;
-    } else {
-      try {
-        const response = await axios.put(
-          `${process.env.REACT_APP_URL}/user/update`,
-          texts
-        );
-        console.log(response);
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_URL}/user/update`,
+        texts,
+        { withCredentials: true } // Ensure credentials (cookies) are sent
+      );
 
-        // Update the currentUser state with the new user data
-        const updatedUser = {
-          ...currentUser,
-          first_name: texts.first_name,
-          last_name: texts.last_name,
-          email: texts.email,
-          city: texts.city,
-          address: texts.address,
-          phone: texts.phone,
-        };
+      console.log(response);
 
-        // Update the 'user' data in localStorage
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+      // Update currentUser state with the new user data
+      const updatedUser = {
+        ...currentUser,
+        first_name: texts.first_name,
+        last_name: texts.last_name,
+        email: texts.email,
+        city: texts.city,
+        address: texts.address,
+        phone: texts.phone,
+      };
 
-        navigate("/user/welcome");
-      } catch (err) {
-        setError(err.response.data);
-      }
+      // Save updated user in localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      navigate("/user/welcome");
+    } catch (err) {
+      setError(err.response?.data || "Error updating user information");
+      console.error(err);
     }
   };
 
@@ -95,17 +95,21 @@ export default function UpdateUserInformation() {
       "Are you sure you want to deactivate your account? This action is irreversible."
     );
 
-    if (confirmDeactivation) {
-      try {
-        await axios.post(`${process.env.REACT_APP_URL}/user/deactivate`);
-        setDeactivated(true); // Update local state to reflect deactivation
-        // Log out the user from the system after deactivation
-        await logout();
-        navigate("/");
-      } catch (error) {
-        setError("Error deactivating account");
-        console.log(error);
-      }
+    if (!confirmDeactivation) return;
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_URL}/user/deactivate`,
+        {}, // Empty body
+        { withCredentials: true } // Ensure credentials (cookies) are sent
+      );
+
+      setDeactivated(true); // Update local state
+      await logout();
+      navigate("/");
+    } catch (error) {
+      setError("Error deactivating account");
+      console.error(error);
     }
   };
 

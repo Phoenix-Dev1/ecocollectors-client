@@ -40,7 +40,7 @@ export default function ChangePassword() {
       return;
     }
 
-    // Perform password validation checks using the validatePassword function
+    // Perform password validation checks
     const passwordErrors = validatePassword(new_password);
     if (passwordErrors.length > 0) {
       setError(passwordErrors.join("\n"));
@@ -50,18 +50,20 @@ export default function ChangePassword() {
     }
 
     try {
-      await axios.put(`${process.env.REACT_APP_URL}/user/change-password`, {
-        old_password,
-        new_password,
-      });
+      await axios.put(
+        `${process.env.REACT_APP_URL}/user/change-password`,
+        { old_password, new_password },
+        { withCredentials: true } // ✅ Fix: Ensure credentials (cookies) are sent
+      );
 
-      // Show a success alert to the user
+      // Show success alert
       alert("Password changed successfully!");
 
-      // Redirect to the user page
+      // Redirect to homepage
       navigate("/");
     } catch (err) {
-      setError(err.response.data);
+      setError(err.response?.data || "Error changing password"); // ✅ Fix: Prevent crash if err.response is undefined
+      console.error("Error changing password:", err);
     }
   };
 

@@ -4,7 +4,8 @@ import axios from "axios";
 export async function fetchAllRecyclers() {
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_URL}/manager/recyclers`
+      `${process.env.REACT_APP_URL}/manager/recyclers`,
+      { withCredentials: true } // ✅ Fix: Ensure credentials (cookies) are sent
     );
     return res.data;
   } catch (err) {
@@ -17,9 +18,8 @@ export const toggleRecyclerActivation = async (userID, newStatus) => {
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/manager/recyclers/${userID}`,
-      {
-        active: newStatus,
-      }
+      { active: newStatus },
+      { withCredentials: true } // ✅ Fix: Include credentials
     );
     return res.data;
   } catch (error) {
@@ -34,7 +34,8 @@ export async function fetchRecyclerJoinRequests(statusFilter = null) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/manager/join-requests`,
       {
-        params: { status: statusFilter }, // Pass the status filter to the API
+        params: { status: statusFilter },
+        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
     return response.data;
@@ -52,11 +53,9 @@ export async function updateRecyclerJoinRequestStatus(
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_URL}/manager/join-requests/${joinID}`,
-      {
-        status: newStatus,
-        userID: userID, // Pass user ID in the request body
-      }
-    ); // Replace with the actual API endpoint for updating join request status
+      { status: newStatus, userID: userID },
+      { withCredentials: true } // ✅ Fix: Include credentials
+    );
     return res.data;
   } catch (err) {
     console.error(err);
@@ -70,7 +69,8 @@ export async function fetchAllRequests(statusFilter = null) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/manager/all-requests`,
       {
-        params: { status: statusFilter }, // Pass the status filter to the API
+        params: { status: statusFilter },
+        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
     return response.data;
@@ -84,9 +84,8 @@ export async function updateRequestStatus(requestId, newStatus) {
   try {
     const response = await axios.put(
       `${process.env.REACT_APP_URL}/manager/requests/${requestId}`,
-      {
-        status: newStatus,
-      }
+      { status: newStatus },
+      { withCredentials: true } // ✅ Fix: Include credentials
     );
     return response.data;
   } catch (err) {
@@ -101,9 +100,8 @@ export async function searchRequestsByUserId(searchTerm) {
     const response = await axios.get(
       `${process.env.REACT_APP_URL}/manager/search-requests`,
       {
-        params: {
-          searchTerm,
-        },
+        params: { searchTerm },
+        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
 
@@ -119,6 +117,7 @@ export async function searchRequestsByUserId(searchTerm) {
   }
 }
 
+// Status meanings mapping
 export const statusMeanings = {
   1: "Awaits Recycler",
   2: "Awaits Approval",
