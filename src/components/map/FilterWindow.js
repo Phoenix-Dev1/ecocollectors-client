@@ -17,6 +17,14 @@ const FilterWindow = ({
           All
         </li>
         <li
+          className={selectedMarkerType === "request" ? classes.selected : ""}
+          onClick={() =>
+            handleMarkerTypeChange({ target: { value: "request" } })
+          }
+        >
+          Recycle Requests
+        </li>
+        <li
           className={selectedMarkerType === "blue" ? classes.selected : ""}
           onClick={() => handleMarkerTypeChange({ target: { value: "blue" } })}
         >
