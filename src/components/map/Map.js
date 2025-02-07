@@ -12,11 +12,10 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import classes from "./map.module.css";
 import {
-  fetchActiveMarkers,
+  fetchRequests,
   showAddress,
   openGoogleMaps,
   formatDate,
-  fetchRequests,
   formatDateTime,
   formatTime,
   typeDescriptions,
@@ -31,6 +30,8 @@ import { VscFilter } from "react-icons/vsc";
 import { FaPlus } from "react-icons/fa"; // Import the plus icon
 import { validateInputs } from "./InputValidation";
 import * as geolib from "geolib";
+import { useQuery } from "@tanstack/react-query";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const Map = () => {
@@ -142,7 +143,6 @@ const Map = () => {
   });
 
   // States for Markers and Requests
-  const [markers, setMarkers] = useState([]);
   const [requests, setRequests] = useState([]);
 
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -151,19 +151,6 @@ const Map = () => {
 
   // Fetching by DB row type
   const type = useLocation().search;
-
-  // Bins
-  useEffect(() => {
-    const fetchMarkersData = async () => {
-      try {
-        const data = await fetchActiveMarkers(type);
-        setMarkers(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchMarkersData();
-  }, [type]);
 
   // Requests
   useEffect(() => {
@@ -300,17 +287,6 @@ const Map = () => {
     setSelectedMarkerType(e.target.value);
   };
 
-  // Filter markers based on selectedMarkerType
-  const filteredMarkersByType =
-    selectedMarkerType !== ""
-      ? markers.filter((marker) => marker.type === selectedMarkerType)
-      : markers;
-
-  const filteredFilteredMarkersByType =
-    selectedMarkerType !== ""
-      ? filteredMarkers.filter((marker) => marker.type === selectedMarkerType)
-      : filteredMarkers;
-
   /***** Right click solution  *****/
 
   // Create a state variable for the marker with id 0
@@ -356,6 +332,39 @@ const Map = () => {
       console.error("Error fetching address:", error);
     }
   };
+
+  // NEW NEW NEW
+  // Bins
+  const fetchActiveMarkers = async ({ queryKey }) => {
+    const [, type] = queryKey; // Extract type from queryKey
+    const res = await axios.get(`${process.env.REACT_APP_URL}/markers${type}`);
+    return res.data;
+  };
+
+  const {
+    data: markers = [],
+    isLoading: markersLoading,
+    isPending: markersPending,
+    error: markersError,
+  } = useQuery({
+    queryKey: ["markers", type],
+    queryFn: fetchActiveMarkers,
+    staleTime: 60000, // Cache for 60 seconds
+  });
+
+  if (markersPending || markersLoading) return <LoadingPage />;
+  if (markersError) return <h4>{markersError.message}</h4>;
+
+  // Filter markers based on selectedMarkerType
+  const filteredMarkersByType =
+    selectedMarkerType !== ""
+      ? markers.filter((marker) => marker.type === selectedMarkerType)
+      : markers;
+
+  const filteredFilteredMarkersByType =
+    selectedMarkerType !== ""
+      ? filteredMarkers.filter((marker) => marker.type === selectedMarkerType)
+      : filteredMarkers;
 
   return (
     <div className={classes.Map}>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Fetching Markers from DB
+// Fetching Markers from DB - NO LONGER IN USE
 export async function fetchActiveMarkers(type) {
   try {
     const res = await axios.get(
