@@ -41,70 +41,62 @@ import AcceptedRequests from "./pages/Users/RecyclerPanel/AcceptedRequests";
 import CompletedRequests from "./pages/Users/RecyclerPanel/CompletedRequests";
 import "./index.css";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
-
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/collect" element={<CollectRequest />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/password-recovery" element={<ForgotPassword />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/manager-join" element={<RecyclersManagerRegister />} />
-          <Route path="/user/*" element={<UserLayout />}>
-            <Route path="welcomeAdmin" element={<WelcomeAdmin />} />
-            <Route path="welcomeUser" element={<WelcomeUser />} />
-            <Route path="welcomeRecycler" element={<WelcomeRecycler />} />
-            <Route path="welcomeManager" element={<WelcomeManager />} />
-            <Route
-              path="update-user-info"
-              element={<UpdateUserInformation />}
-            />
-            <Route path="change-password" element={<ChangePassword />} />
-            <Route path="update-request" element={<UpdateRequest />} />
-            <Route path="cancelled-requests" element={<Cancelled />} />
-            <Route path="completed-requests" element={<Completed />} />
-            <Route path="pending-requests" element={<Pending />} />
-          </Route>
-          <Route path="/admin/*" element={<UserLayout />}>
-            <Route path="user-management" element={<UserManagement />} />
-            <Route path="join-requests" element={<JoinRequests />} />
-            <Route path="requests" element={<AllRequests />} />
-            <Route path="bins" element={<RecycleBins />} />
-            <Route path="update-bin/*" element={<UpdateBin />} />
-            <Route path="add-bin" element={<AddNewBin />} />
-          </Route>
-          <Route path="/manager/*" element={<UserLayout />}>
-            <Route path="join-requests" element={<RecyclersJoinRequests />} />
-            <Route
-              path="recyclers-management"
-              element={<RecyclersManagement />}
-            />
-            <Route path="regional-requests" element={<RegionalRequests />} />
-          </Route>
-          <Route path="/recycler/*" element={<UserLayout />}>
-            <Route
-              path="regional-requests"
-              element={<RegionalRecyclerRequests />}
-            />
-            <Route path="accepted-requests" element={<AcceptedRequests />} />
-            <Route path="completed-requests" element={<CompletedRequests />} />
-          </Route>
-          <Route path="/terms" element={<TermsAndConditions />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/map/*" element={<Map />} />
-          <Route path="/join" element={<RecyclerRegister />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </Router>
-    </QueryClientProvider>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/collect" element={<CollectRequest />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/password-recovery" element={<ForgotPassword />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/manager-join" element={<RecyclersManagerRegister />} />
+        <Route path="/user/*" element={<UserLayout />}>
+          <Route path="welcomeAdmin" element={<WelcomeAdmin />} />
+          <Route path="welcomeUser" element={<WelcomeUser />} />
+          <Route path="welcomeRecycler" element={<WelcomeRecycler />} />
+          <Route path="welcomeManager" element={<WelcomeManager />} />
+          <Route path="update-user-info" element={<UpdateUserInformation />} />
+          <Route path="change-password" element={<ChangePassword />} />
+          <Route path="update-request" element={<UpdateRequest />} />
+          <Route path="cancelled-requests" element={<Cancelled />} />
+          <Route path="completed-requests" element={<Completed />} />
+          <Route path="pending-requests" element={<Pending />} />
+        </Route>
+        <Route path="/admin/*" element={<UserLayout />}>
+          <Route path="user-management" element={<UserManagement />} />
+          <Route path="join-requests" element={<JoinRequests />} />
+          <Route path="requests" element={<AllRequests />} />
+          <Route path="bins" element={<RecycleBins />} />
+          <Route path="update-bin/*" element={<UpdateBin />} />
+          <Route path="add-bin" element={<AddNewBin />} />
+        </Route>
+        <Route path="/manager/*" element={<UserLayout />}>
+          <Route path="join-requests" element={<RecyclersJoinRequests />} />
+          <Route
+            path="recyclers-management"
+            element={<RecyclersManagement />}
+          />
+          <Route path="regional-requests" element={<RegionalRequests />} />
+        </Route>
+        <Route path="/recycler/*" element={<UserLayout />}>
+          <Route
+            path="regional-requests"
+            element={<RegionalRecyclerRequests />}
+          />
+          <Route path="accepted-requests" element={<AcceptedRequests />} />
+          <Route path="completed-requests" element={<CompletedRequests />} />
+        </Route>
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/map/*" element={<Map />} />
+        <Route path="/join" element={<RecyclerRegister />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }

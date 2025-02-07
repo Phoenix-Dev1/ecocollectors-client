@@ -70,6 +70,7 @@ const UpdateBin = () => {
       try {
         await axios.put(
           `${process.env.REACT_APP_URL}/admin/bins/${binData.id}`,
+          { withCredentials: true },
           updatedData
         );
         setBinData((prevData) => ({ ...prevData, ...updatedData }));
@@ -103,7 +104,8 @@ const UpdateBin = () => {
       try {
         const binId = window.location.href.split("/").pop();
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/admin/bins/${binId}`
+          `${process.env.REACT_APP_URL}/admin/bins/${binId}`,
+          { withCredentials: true }
         );
         setBinData(response.data);
         setCoordinates({ lat: response.data.lat, lng: response.data.lng });
