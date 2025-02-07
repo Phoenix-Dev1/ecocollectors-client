@@ -53,48 +53,54 @@ const UpdateBin = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // Confirm update action
     const confirmed = window.confirm(
       "Are you sure you want to update this bin?"
     );
-    if (confirmed) {
-      if (!updatedData.address || !updatedData.type) {
-        setEmptyFieldsError("Address and Type fields are required");
-        return;
-      }
+    if (!confirmed) return;
 
-      if (updatedData.type === "Please Select a type") {
-        setTypeError(true);
-        return;
-      }
+    // Validate required fields
+    if (!updatedData.address || !updatedData.type) {
+      setEmptyFieldsError("Address and Type fields are required.");
+      return;
+    }
 
-      try {
-        await axios.put(
-          `${process.env.REACT_APP_URL}/admin/bins/${binData.id}`,
-          { withCredentials: true },
-          updatedData
-        );
-        setBinData((prevData) => ({ ...prevData, ...updatedData }));
-        setShowSuccessMessage(true); // Show success message
-        setEmptyFieldsError(""); // Clear empty fields error
-        setTypeError(false); // Clear type error
-        setErrorMessage(""); // Clear error message
+    if (updatedData.type === "Please Select a type") {
+      setTypeError(true);
+      return;
+    }
 
-        // Display a success message alert
-        alert("Bin updated successfully!");
+    try {
+      // Send update request to the server
+      await axios.put(
+        `${process.env.REACT_APP_URL}/admin/bins/${binData.id}`,
+        updatedData, // Data payload
+        { withCredentials: true } // Ensures cookies are sent with the request
+      );
 
-        navigate("/admin/bins");
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          setErrorMessage("A bin with this address and type already exists");
-        } else if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
+      // Update state with new bin data
+      setBinData((prevData) => ({ ...prevData, ...updatedData }));
+
+      // Display success message
+      setShowSuccessMessage(true);
+      setEmptyFieldsError(""); // Clear empty fields error
+      setTypeError(false); // Clear type error
+      setErrorMessage(""); // Clear error message
+      alert("Bin updated successfully!");
+
+      navigate("/admin/bins"); // Redirect after update
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          setErrorMessage("A bin with this address and type already exists.");
+        } else if (error.response.data?.error) {
           setServerError(error.response.data.error);
         } else {
-          console.log(error);
+          setErrorMessage("An error occurred. Please try again.");
         }
+      } else {
+        console.error("Update failed:", error);
       }
     }
   };
