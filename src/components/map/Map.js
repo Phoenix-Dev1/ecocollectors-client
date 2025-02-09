@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import classes from "./map.module.css";
 import {
-  fetchRequests,
   showAddress,
   openGoogleMaps,
   formatDate,
@@ -32,6 +31,7 @@ import { validateInputs } from "./InputValidation";
 import * as geolib from "geolib";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import { debounce } from "lodash";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const Map = () => {
@@ -107,6 +107,7 @@ const Map = () => {
           );
 
           toggleAddWindow();
+          refetchRequests();
           navigate("/map");
 
           // Clear form fields after successful submission
@@ -119,7 +120,7 @@ const Map = () => {
           setFromTime("");
           setToTime("");
           setError(null);
-          setMarkerWithIdA(null);
+          setMarkerWithIdA(0);
 
           // Show an alert for successful submission
           window.alert("Request added successfully!");
@@ -140,10 +141,8 @@ const Map = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: libraries,
+    loading: "async",
   });
-
-  // States for Markers and Requests
-  const [requests, setRequests] = useState([]);
 
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [showFilterWindow, setShowFilterWindow] = useState(false); // track filter window visibility
@@ -151,19 +150,6 @@ const Map = () => {
 
   // Fetching by DB row type
   const type = useLocation().search;
-
-  // Requests
-  useEffect(() => {
-    const loadRequestsData = async () => {
-      try {
-        const data = await fetchRequests(type);
-        setRequests(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    loadRequestsData();
-  }, [type, requests]); // MUST Add 'requests' as a dependency
 
   // Center the Map At Haifa Port
   const [center, setCenter] = useState({ lat: 32.79413, lng: 34.98828 }); // Initial center coordinates
@@ -197,6 +183,7 @@ const Map = () => {
   const [searchRadius, setSearchRadius] = useState(5000); // Default search radius in meters
   const [searchClicked, setSearchClicked] = useState(false);
 
+  console.log(searchAddress);
   // Range search
   const handleSearchRadiusChange = (e) => {
     setSearchRadius(parseInt(e.target.value)); // Parse the input value as an integer
@@ -238,9 +225,9 @@ const Map = () => {
       setSearchAddress(place.formatted_address);
       setSearchLat(place.geometry.location.lat());
       setSearchLng(place.geometry.location.lng());
-      console.log("searchLat: " + place.geometry.location.lat());
-      console.log("searchLng: " + place.geometry.location.lng());
-      console.log("searchAddress: " + searchAddress);
+      // console.log("searchLat: " + place.geometry.location.lat());
+      // console.log("searchLng: " + place.geometry.location.lng());
+      // console.log("searchAddress: " + searchAddress);
     }
   };
 
@@ -250,8 +237,9 @@ const Map = () => {
       { latitude: lat1, longitude: lng1 },
       { latitude: lat2, longitude: lng2 }
     );
-    if (distance <= 5000) console.log(distance);
-    return distance;
+    if (distance <= 5000)
+      // console.log(distance);
+      return distance;
   };
 
   function filterMarkers() {
@@ -290,7 +278,7 @@ const Map = () => {
   /***** Right click solution  *****/
 
   // Create a state variable for the marker with id 0
-  const [markerWithIdA, setMarkerWithIdA] = useState(null);
+  const [markerWithIdA, setMarkerWithIdA] = useState(0);
 
   const handleRightClick = async (event) => {
     const latLng = event.latLng;
@@ -319,7 +307,7 @@ const Map = () => {
       );
 
       // Extract the formatted address from the response
-      console.table(response.data.results);
+      // console.table(response.data.results);
       const address = response.data.results[0]?.formatted_address;
 
       // Set the address in the state
@@ -334,7 +322,25 @@ const Map = () => {
   };
 
   // NEW NEW NEW
-  // Bins
+  // Fetch Requests
+  const fetchRequests = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_URL}/requests`, {
+      withCredentials: true,
+    });
+    return res.data;
+  };
+
+  const fetchRequestsDebounced = debounce(fetchRequests, 1000);
+
+  const { data: requests = [], refetch: refetchRequests } = useQuery({
+    queryKey: ["requests"],
+    queryFn: fetchRequestsDebounced,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  // Fetch Bins
   const fetchActiveMarkers = async ({ queryKey }) => {
     const [, type] = queryKey; // Extract type from queryKey
     const res = await axios.get(`${process.env.REACT_APP_URL}/markers${type}`);
@@ -365,6 +371,8 @@ const Map = () => {
     selectedMarkerType !== ""
       ? filteredMarkers.filter((marker) => marker.type === selectedMarkerType)
       : filteredMarkers;
+
+  // console.log(requests);
 
   return (
     <div className={classes.Map}>
@@ -480,60 +488,63 @@ const Map = () => {
             </div>
           )}
           {searchPerformed
-            ? filteredFilteredMarkersByType.map(
-                ({ id, lat, lng, type, address, last_modified }) => {
-                  const markerClicked = selectedMarker === address;
-                  return (
-                    <MarkerF
-                      key={id}
-                      position={{ lat, lng }}
-                      icon={{
-                        url: require(`../../img/icons/${type}.png`),
-                      }}
-                      onClick={() => handleShowAddress(address)}
-                    >
-                      {markerClicked && (
-                        <InfoWindowF
-                          onCloseClick={() => setSelectedMarker(null)}
-                          disableAutoClose={true}
-                          style={{ background: "blue" }}
-                        >
-                          <div className="pl-5 text-center">
-                            <h1 className="text-xl font-bold mb-2 text-right">
-                              {address}
-                            </h1>
-                            <p
-                              className={`mb-2 text-center font-semibold ${typeColors[type]}`}
-                            >
-                              {typeDescriptions[type]}
-                            </p>
-                            <div className="text-center">
-                              <h2 className="mb-2 text-center">
-                                Last updated: {formatDate(last_modified)}
-                              </h2>
-                            </div>
-                            <div className="text-center">
-                              <button
-                                className="bg-white hover:bg-blue-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
-                                onClick={() => handleOpenGoogleMaps(lat, lng)}
+            ? Array.isArray(filteredFilteredMarkersByType)
+              ? filteredFilteredMarkersByType.map(
+                  ({ id, lat, lng, type, address, last_modified }, index) => {
+                    const markerClicked = selectedMarker === address;
+                    return (
+                      <MarkerF
+                        key={`marker-${id || `${lat}-${lng}-${index}`}`} // Ensure unique key
+                        position={{ lat, lng }}
+                        icon={{
+                          url: require(`../../img/icons/${type}.png`),
+                        }}
+                        onClick={() => handleShowAddress(address)}
+                      >
+                        {markerClicked && (
+                          <InfoWindowF
+                            onCloseClick={() => setSelectedMarker(null)}
+                            disableAutoClose={true}
+                            style={{ background: "blue" }}
+                          >
+                            <div className="pl-5 text-center">
+                              <h1 className="text-xl font-bold mb-2 text-right">
+                                {address}
+                              </h1>
+                              <p
+                                className={`mb-2 text-center font-semibold ${typeColors[type]}`}
                               >
-                                Navigate
-                              </button>
+                                {typeDescriptions[type]}
+                              </p>
+                              <div className="text-center">
+                                <h2 className="mb-2 text-center">
+                                  Last updated: {formatDate(last_modified)}
+                                </h2>
+                              </div>
+                              <div className="text-center">
+                                <button
+                                  className="bg-white hover:bg-blue-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                                  onClick={() => handleOpenGoogleMaps(lat, lng)}
+                                >
+                                  Navigate
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        </InfoWindowF>
-                      )}
-                    </MarkerF>
-                  );
-                }
-              )
-            : filteredMarkersByType.map(
-                ({ id, lat, lng, type, address, last_modified }) => {
+                          </InfoWindowF>
+                        )}
+                      </MarkerF>
+                    );
+                  }
+                )
+              : null
+            : Array.isArray(filteredMarkersByType)
+            ? filteredMarkersByType.map(
+                ({ id, lat, lng, type, address, last_modified }, index) => {
                   const markerClicked = selectedMarker === address;
                   const isAdmin = currentUser?.role === 1;
                   return (
                     <MarkerF
-                      key={id}
+                      key={`marker-${id || `${lat}-${lng}-${index}`}`} // Ensure unique key
                       position={{ lat, lng }}
                       icon={{
                         url: require(`../../img/icons/${type}.png`),
@@ -582,107 +593,113 @@ const Map = () => {
                     </MarkerF>
                   );
                 }
-              )}
-          {requests.map((request) => {
-            const {
-              request_id,
-              req_lat,
-              req_lng,
-              req_address,
-              bottles_number,
-              from_hour,
-              to_hour,
-              request_date,
-              status,
-              type,
-              user_id,
-            } = request;
+              )
+            : null}
+          {Array.isArray(requests) && requests.length > 0
+            ? requests.map((request) => {
+                const {
+                  request_id,
+                  req_lat,
+                  req_lng,
+                  req_address,
+                  bottles_number,
+                  from_hour,
+                  to_hour,
+                  request_date,
+                  status,
+                  type,
+                  user_id,
+                } = request;
 
-            const markerClicked = selectedMarker === req_address;
+                const markerClicked = selectedMarker === req_address;
+                const isCurrentUser =
+                  currentUser?.ID === user_id || currentUser?.role === 1;
 
-            const isCurrentUser =
-              currentUser?.ID === user_id || currentUser?.role === 1;
-
-            return (
-              <MarkerF
-                key={request_id}
-                position={{ lat: req_lat, lng: req_lng }}
-                icon={{
-                  url: require(`../../img/icons/${type}.png`),
-                }}
-                onClick={() => handleShowAddress(req_address)}
-              >
-                {markerClicked && (
-                  <InfoWindowF
-                    onCloseClick={() => setSelectedMarker(null)}
-                    disableAutoClose={true}
+                return (
+                  <MarkerF
+                    key={request_id}
+                    position={{ lat: req_lat, lng: req_lng }}
+                    icon={{
+                      url: require(`../../img/icons/${type}.png`),
+                    }}
+                    onClick={() => handleShowAddress(req_address)}
                   >
-                    <div className="pl-5">
-                      <h1 className="text-xl font-bold mb-2">{req_address}</h1>
-                      <div className="mb-4">
-                        <div className="flex items-center mb-1">
-                          <span className="font-semibold mr-1">Bottles:</span>
-                          <span>{bottles_number}</span>
+                    {markerClicked && (
+                      <InfoWindowF
+                        onCloseClick={() => setSelectedMarker(null)}
+                        disableAutoClose={true}
+                      >
+                        <div className="pl-5">
+                          <h1 className="text-xl font-bold mb-2">
+                            {req_address}
+                          </h1>
+                          <div className="mb-4">
+                            <div className="flex items-center mb-1">
+                              <span className="font-semibold mr-1">
+                                Bottles:
+                              </span>
+                              <span>{bottles_number}</span>
+                            </div>
+                            <div className="flex items-center mb-1">
+                              <span className="font-semibold mr-1">Hours:</span>
+                              <span>
+                                {from_hour} - {to_hour}
+                              </span>
+                            </div>
+                            <div className="flex items-center mb-1">
+                              <span className="font-semibold mr-1">Date:</span>
+                              <span>{formatDateTime(request_date)}</span>
+                            </div>
+                            <div className="flex items-center mb-1">
+                              <span className="font-semibold mr-1">
+                                Last Updated:
+                              </span>
+                              <span>{formatTime(request_date)}</span>
+                            </div>
+                          </div>
+                          <div className="flex justify-center">
+                            {isCurrentUser && (
+                              <Link
+                                to={`/user/update-request?Id=${request_id}`}
+                                className="bg-white hover:bg-yellow-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                              >
+                                Update
+                              </Link>
+                            )}
+                            {currentUser &&
+                              (currentUser.role === 1 ||
+                                (currentUser.ID !== user_id &&
+                                  currentUser.role !== 2 &&
+                                  currentUser.role !== 5 &&
+                                  status !== 2)) && (
+                                <Link
+                                  to={`/collect?Id=${request_id}`}
+                                  className="bg-white ml-2 hover:bg-green-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                                >
+                                  Collect
+                                </Link>
+                              )}
+                            {currentUser?.role !== 2 &&
+                              currentUser?.role !== 5 &&
+                              status !== 2 &&
+                              currentUser && (
+                                <button
+                                  className="bg-white ml-2 hover:bg-blue-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                                  onClick={() =>
+                                    handleOpenGoogleMaps(req_lat, req_lng)
+                                  }
+                                >
+                                  Navigate
+                                </button>
+                              )}
+                          </div>
                         </div>
-                        <div className="flex items-center mb-1">
-                          <span className="font-semibold mr-1">Hours:</span>
-                          <span>
-                            {from_hour} - {to_hour}
-                          </span>
-                        </div>
-                        <div className="flex items-center mb-1">
-                          <span className="font-semibold mr-1">Date:</span>
-                          <span>{formatDateTime(request_date)}</span>
-                        </div>
-                        <div className="flex items-center mb-1">
-                          <span className="font-semibold mr-1">
-                            Last Updated:
-                          </span>
-                          <span>{formatTime(request_date)}</span>
-                        </div>
-                      </div>
-                      <div className="flex justify-center">
-                        {isCurrentUser && (
-                          <Link
-                            to={`/user/update-request?Id=${request_id}`}
-                            className="bg-white hover:bg-yellow-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
-                          >
-                            Update
-                          </Link>
-                        )}
-                        {currentUser &&
-                          (currentUser.role === 1 ||
-                            (currentUser.ID !== user_id &&
-                              currentUser.role !== 2 &&
-                              currentUser.role !== 5 &&
-                              status !== 2)) && (
-                            <Link
-                              to={`/collect?Id=${request_id}`}
-                              className="bg-white ml-2 hover:bg-green-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
-                            >
-                              Collect
-                            </Link>
-                          )}
-                        {currentUser?.role !== 2 &&
-                          currentUser?.role !== 5 &&
-                          status !== 2 &&
-                          currentUser && (
-                            <button
-                              className="bg-white ml-2 hover:bg-blue-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
-                              onClick={() =>
-                                handleOpenGoogleMaps(req_lat, req_lng)
-                              }
-                            >
-                              Navigate
-                            </button>
-                          )}
-                      </div>
-                    </div>
-                  </InfoWindowF>
-                )}
-              </MarkerF>
-            );
-          })}
+                      </InfoWindowF>
+                    )}
+                  </MarkerF>
+                );
+              })
+            : null}
         </GoogleMap>
       )}
     </div>

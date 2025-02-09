@@ -1,33 +1,3 @@
-import axios from "axios";
-
-// Fetching Markers from DB - NO LONGER IN USE
-export async function fetchActiveMarkers(type) {
-  try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/markers${type}`,
-      { withCredentials: true } // ✅ Ensures authentication
-    );
-    return res.data;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
-
-// Fetching Requests from DB
-export async function fetchRequests(type) {
-  try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/requests${type}`,
-      { withCredentials: true } // ✅ Ensures authentication
-    );
-    return res.data;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
-
 // Show a single Marker Address
 export function showAddress(setSelectedMarker, address) {
   setSelectedMarker(address);

@@ -15,6 +15,7 @@ const UpdateRequest = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: libraries,
+    loading: "async",
   });
 
   const [requestData, setRequestData] = useState({});
@@ -140,6 +141,8 @@ const UpdateRequest = () => {
     fetchRequestData();
   }, []);
 
+  console.log(requestData);
+
   if (!isLoaded) {
     return (
       <div className={classes.loaderWrapper}>
@@ -155,7 +158,9 @@ const UpdateRequest = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-lg font-semibold">Update Request</p>
+      <p className="text-lg font-semibold">
+        Update Request {getRequestIdFromURL()}
+      </p>
       <div className="mr-4" style={{ height: "400px", width: "100%" }}>
         <GoogleMap
           mapContainerStyle={{ height: "100%", width: "100%" }}
