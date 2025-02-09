@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
-import { format } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import { format } from "date-fns";
 import {
   fetchAllRequests,
   updateRequestStatus,
   searchRequestsByUserId,
   statusMeanings,
-} from './AdminFunctions';
+} from "./AdminFunctions";
 
 const AllRequests = () => {
   const [allRequests, setAllRequests] = useState([]);
   const [selectedStatusFilter, setSelectedStatusFilter] = useState(null);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   const filterByStatus = (status) => {
@@ -21,7 +21,7 @@ const AllRequests = () => {
   const clearStatusFilter = () => {
     setSelectedStatusFilter(null);
     setSearchResults([]);
-    setSearchInput('');
+    setSearchInput("");
   };
 
   const handleSearch = async () => {
@@ -35,21 +35,21 @@ const AllRequests = () => {
         setSearchResults(results);
       }
     } catch (error) {
-      console.error('Error searching requests:', error);
+      console.error("Error searching requests:", error);
     }
   };
 
   const handleCancelRequest = async (requestId) => {
     const confirmed = window.confirm(
-      'Are you sure you want to cancel this request?'
+      "Are you sure you want to cancel this request?"
     );
 
     if (confirmed) {
       try {
         await updateRequestStatus(requestId, 4);
-        await handleSearch('user_id');
+        await handleSearch("user_id");
       } catch (error) {
-        console.error('Error canceling request:', error);
+        console.error("Error canceling request:", error);
       }
     }
   };
@@ -64,42 +64,42 @@ const AllRequests = () => {
   }, [selectedStatusFilter]);
 
   const columns = [
-    { name: 'User ID', selector: (row) => row.user_id, sortable: true },
-    { name: 'Request ID', selector: (row) => row.request_id, sortable: true },
+    { name: "User ID", selector: (row) => row.user_id, sortable: true },
+    { name: "Request ID", selector: (row) => row.request_id, sortable: true },
     {
-      name: 'Collector Name',
+      name: "Collector Name",
       selector: (row) => row.full_name,
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Request Date',
+      name: "Request Date",
       selector: (row) =>
-        format(new Date(row.request_date), 'dd/MM/yyyy - HH:MM'),
+        format(new Date(row.request_date), "dd/MM/yyyy - HH:MM"),
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Address',
+      name: "Address",
       selector: (row) => row.req_address,
       sortable: true,
       wrap: true,
     },
     {
-      name: 'Bottles Number',
+      name: "Bottles Number",
       selector: (row) => row.bottles_number,
       sortable: true,
     },
     {
-      name: 'Status',
+      name: "Status",
       selector: (row) => statusMeanings[row.status],
       sortable: true,
       wrap: true,
     },
     {
-      name: 'Actions',
+      name: "Actions",
       cell: (row) => (
         <div className="flex flex-col">
           {row.status === 1 || row.status === 2 || row.status === 5 ? (
@@ -172,7 +172,7 @@ const AllRequests = () => {
               className="px-2 py-1 rounded border text-black"
             />
             <button
-              onClick={() => handleSearch('user_id')}
+              onClick={() => handleSearch("user_id")}
               className="px-2 py-1 rounded bg-blue-500 text-white ml-2"
             >
               Search by User ID
@@ -193,7 +193,7 @@ const AllRequests = () => {
         </div>
       ) : (
         <p>
-          {searchResults.length > 0 ? 'No requests found' : 'No results found'}
+          {searchResults.length > 0 ? "No requests found" : "No results found"}
         </p>
       )}
     </div>

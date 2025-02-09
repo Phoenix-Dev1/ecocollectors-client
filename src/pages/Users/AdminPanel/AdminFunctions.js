@@ -62,21 +62,20 @@ export async function updateJoinRequestStatus(joinID, newStatus, userID) {
 }
 
 // Recycle Requests
-export async function fetchAllRequests(statusFilter = null) {
+export const fetchAllRequests = async (statusFilter) => {
   try {
+    const queryParam = statusFilter ? `?status=${statusFilter}` : "";
     const response = await axios.get(
-      `${process.env.REACT_APP_URL}/admin/all-requests`,
-      {
-        params: { status: statusFilter },
-        withCredentials: true,
-      }
+      `${process.env.REACT_APP_URL}/requests${queryParam}`,
+      { withCredentials: true }
     );
-    return response.data;
-  } catch (err) {
-    console.error(err);
-    throw err;
+
+    return response.data || []; // Ensure it never returns undefined
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+    return []; // Return empty array on error
   }
-}
+};
 
 export async function updateRequestStatus(requestId, newStatus) {
   try {

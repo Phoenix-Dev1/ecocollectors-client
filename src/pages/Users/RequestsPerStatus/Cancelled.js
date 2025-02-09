@@ -1,128 +1,78 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../../../context/authContext';
-import DataTable from 'react-data-table-component';
-import { fetchUserRequests, fetchRecyclerDetails } from '../UserFunctions';
-import { format } from 'date-fns';
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../../context/authContext";
+import DataTable from "react-data-table-component";
+import { fetchUserRequests, fetchRecyclerDetails } from "../UserFunctions";
+import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 const Cancelled = () => {
   const { currentUser } = useContext(AuthContext);
-  const [cancelledRequests, setCancelledRequests] = useState([]);
 
-  // Fetching user request by user id
-  useEffect(() => {
-    const fetchData = async () => {
-      const userId = currentUser.ID;
-      const data = await fetchUserRequests(userId);
-      setCancelledRequests(data.filter((request) => request.status === 4));
-    };
+  // Fetch user requests using react-query
+  const { data: cancelledRequests = [] } = useQuery({
+    queryKey: ["cancelledRequests", currentUser.ID],
+    queryFn: async () => {
+      const data = await fetchUserRequests(currentUser.ID);
+      return data.filter((request) => request.status === 4);
+    },
+    staleTime: 60000,
+    refetchOnWindowFocus: false,
+  });
 
-    fetchData();
-  }, [currentUser]);
-
-  // fetching recycler details based on recycler id in user_request table
-  useEffect(() => {
-    const fetchRecyclerData = async () => {
-      const recyclerIds = cancelledRequests.map(
-        (request) => request.recycler_id
+  // Fetch recycler details only if there are cancelled requests
+  const { data: recyclerDetails = {} } = useQuery({
+    queryKey: ["recyclerDetails", cancelledRequests],
+    queryFn: async () => {
+      const recyclerIds = cancelledRequests.map((req) => req.recycler_id);
+      const detailsArray = await Promise.all(
+        recyclerIds.map((id) => fetchRecyclerDetails(id))
       );
-      const recyclerDetails = await Promise.all(
-        recyclerIds.map((recyclerId) => fetchRecyclerDetails(recyclerId))
+      return Object.fromEntries(
+        detailsArray.map((detail, index) => [recyclerIds[index], detail[0]])
       );
-      setCancelledRequests((prevCancelledRequests) => {
-        const updatedCancelledRequests = prevCancelledRequests.map(
-          (request, index) => {
-            const recyclerDetail = recyclerDetails[index];
-            if (recyclerDetail && recyclerDetail.length > 0) {
-              request.recycler = recyclerDetail[0];
-            }
-            return request;
-          }
-        );
-        return updatedCancelledRequests;
-      });
-    };
+    },
+    enabled: cancelledRequests.length > 0,
+    staleTime: 60000,
+    refetchOnWindowFocus: false,
+  });
 
-    if (cancelledRequests.length > 0) {
-      fetchRecyclerData();
-    }
-  }, [cancelledRequests, cancelledRequests.length]); // Use cancelledRequests.length as the dependency
-
-  // Define columns for the data table
   const columns = [
     {
-      name: 'Request Date',
+      name: "Request Date",
       selector: (row) =>
-        format(new Date(row.request_date), 'dd/MM/yyyy - HH:mm'),
+        format(new Date(row.request_date), "dd/MM/yyyy - HH:mm"),
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Address',
+      name: "Address",
       selector: (row) => row.req_address,
       sortable: true,
       wrap: true,
     },
     {
-      name: 'Bottles Number',
+      name: "Bottles Number",
       selector: (row) => row.bottles_number,
       sortable: true,
       center: true,
     },
     {
-      name: 'Recycler Name',
-      selector: (row) => row.recyclerFullName,
+      name: "Recycler Name",
+      selector: (row) =>
+        recyclerDetails[row.recycler_id]?.first_name +
+          " " +
+          recyclerDetails[row.recycler_id]?.last_name || "None",
       sortable: true,
       center: true,
     },
     {
-      name: 'Phone Number',
-      selector: (row) => row.recyclerPhone,
+      name: "Phone Number",
+      selector: (row) => recyclerDetails[row.recycler_id]?.phone || "None",
       sortable: true,
       center: true,
     },
   ];
-
-  // Transform cancelledRequests data to include 'recyclerFullName' and 'recyclerPhone'
-  const data = cancelledRequests.map((request) => ({
-    ...request,
-    recyclerFullName:
-      request.status === 4
-        ? 'None'
-        : request.recycler
-        ? `${request.recycler.first_name} ${request.recycler.last_name}`
-        : 'Awaits Recycler',
-    recyclerPhone: request.recycler ? request.recycler.phone : 'None',
-  }));
-
-  // Custom styles for the table
-  const customStyles = {
-    table: {
-      style: {
-        minWidth: '100%',
-      },
-    },
-    rows: {
-      style: {
-        textAlign: 'center',
-      },
-    },
-  };
-
-  // Custom cell renderer to allow text wrapping for the "Address" column
-  const customCell = (cell) => {
-    return (
-      <div
-        style={{
-          whiteSpace: 'normal',
-          wordWrap: 'break-word',
-          textAlign: 'center',
-        }}
-      >
-        {cell}
-      </div>
-    );
-  };
 
   return (
     <div className="text-center">
@@ -131,12 +81,10 @@ const Cancelled = () => {
         <div className="mx-auto w-full px-4 md:max-w-3xl lg:max-w-4xl xl:max-w-6xl text-center">
           <DataTable
             columns={columns}
-            data={data}
+            data={cancelledRequests}
             striped
             highlightOnHover
             pagination
-            customStyles={customStyles}
-            customCell={customCell}
             className="border w-full"
           />
         </div>

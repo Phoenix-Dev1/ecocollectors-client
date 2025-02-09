@@ -1,69 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
-import { fetchCompletedRequests } from './RecyclerFunctions';
-import { format } from 'date-fns';
+import React from "react";
+import DataTable from "react-data-table-component";
+import { fetchCompletedRequests } from "./RecyclerFunctions";
+import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 const CompletedRequests = () => {
-  const [completedRequests, setCompletedRequests] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchCompletedRequests();
-      setCompletedRequests(data);
-    };
-
-    fetchData();
-  }, [completedRequests]);
+  const {
+    data: completedRequests = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["completedRequests"],
+    queryFn: fetchCompletedRequests,
+    staleTime: 60000, // Cache results for 60 seconds
+    refetchOnWindowFocus: false, // Prevent unnecessary re-fetching
+  });
 
   const columns = [
-    { name: 'Request ID', selector: (row) => row.request_id, sortable: true },
+    { name: "Request ID", selector: (row) => row.request_id, sortable: true },
     {
-      name: 'Address',
+      name: "Address",
       selector: (row) => row.req_address,
       sortable: true,
       wrap: true,
     },
     {
-      name: 'Bottles Number',
+      name: "Bottles Number",
       selector: (row) => row.bottles_number,
       sortable: true,
       wrap: true,
     },
     {
-      name: 'Collector Name',
+      name: "Collector Name",
       selector: (row) => row.full_name,
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Collector Phone',
+      name: "Collector Phone",
       selector: (row) => row.phone_number,
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Request Date',
+      name: "Request Date",
       selector: (row) =>
-        format(new Date(row.request_date), 'dd/MM/yyyy - HH:mm'),
+        row.request_date
+          ? format(new Date(row.request_date), "dd/MM/yyyy - HH:mm")
+          : "N/A",
       sortable: true,
       center: true,
       wrap: true,
     },
     {
-      name: 'Completion date',
+      name: "Completion Date",
       selector: (row) =>
-        format(new Date(row.completed_date), 'dd/MM/yyyy - HH:mm'),
+        row.completed_date
+          ? format(new Date(row.completed_date), "dd/MM/yyyy - HH:mm")
+          : "N/A",
       sortable: true,
       center: true,
       wrap: true,
     },
   ];
 
-  const data = completedRequests.map((request) => ({
-    ...request,
-  }));
+  if (isLoading) return <p>Loading completed requests...</p>;
+  if (error) return <p>Error fetching data: {error.message}</p>;
 
   return (
     <div className="text-center">
@@ -72,7 +76,7 @@ const CompletedRequests = () => {
         <div className="mx-auto w-full px-4 md:max-w-3xl lg:max-w-4xl xl:max-w-6xl text-center">
           <DataTable
             columns={columns}
-            data={data}
+            data={completedRequests}
             striped
             highlightOnHover
             pagination
