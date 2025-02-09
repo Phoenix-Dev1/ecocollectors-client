@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import DataTable from "react-data-table-component";
 import { fetchUserRequests, fetchRecyclerDetails } from "../UserFunctions";
