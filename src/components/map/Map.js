@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useMemo } from "react";
 import {
   GoogleMap,
   MarkerF,
@@ -330,11 +330,116 @@ const Map = () => {
   };
 
   const { data: requests = [], refetch: refetchRequests } = useQuery({
-    queryKey: ["requests"], // React-query will track this query by key
+    queryKey: ["requests"],
     queryFn: fetchRequests,
-    staleTime: 30000, // Cache data for 30 seconds before fetching again
-    refetchOnWindowFocus: false, // Prevent refetching when switching tabs
+    staleTime: 60000, // Cache data for 60 seconds before refetching
+    refetchOnWindowFocus: false, // Prevent auto refetch on tab switch
+    refetchInterval: false, // Prevents automatic refetching
   });
+
+  const renderedMarkers = useMemo(() => {
+    return Array.isArray(requests) && requests.length > 0
+      ? requests.map((request) => {
+          const {
+            request_id,
+            req_lat,
+            req_lng,
+            req_address,
+            bottles_number,
+            from_hour,
+            to_hour,
+            request_date,
+            status,
+            type,
+            user_id,
+          } = request;
+
+          const markerClicked = selectedMarker === req_address;
+          const isCurrentUser =
+            currentUser?.ID === user_id || currentUser?.role === 1;
+
+          return (
+            <MarkerF
+              key={request_id}
+              position={{ lat: req_lat, lng: req_lng }}
+              icon={{
+                url: require(`../../img/icons/${type}.png`),
+              }}
+              onClick={() => handleShowAddress(req_address)}
+            >
+              {markerClicked && (
+                <InfoWindowF
+                  onCloseClick={() => setSelectedMarker(null)}
+                  disableAutoClose={true}
+                >
+                  <div className="pl-5">
+                    <h1 className="text-xl font-bold mb-2">{req_address}</h1>
+                    <div className="mb-4">
+                      <div className="flex items-center mb-1">
+                        <span className="font-semibold mr-1">Bottles:</span>
+                        <span>{bottles_number}</span>
+                      </div>
+                      <div className="flex items-center mb-1">
+                        <span className="font-semibold mr-1">Hours:</span>
+                        <span>
+                          {from_hour} - {to_hour}
+                        </span>
+                      </div>
+                      <div className="flex items-center mb-1">
+                        <span className="font-semibold mr-1">Date:</span>
+                        <span>{formatDateTime(request_date)}</span>
+                      </div>
+                      <div className="flex items-center mb-1">
+                        <span className="font-semibold mr-1">
+                          Last Updated:
+                        </span>
+                        <span>{formatTime(request_date)}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-center">
+                      {isCurrentUser && (
+                        <Link
+                          to={`/user/update-request?Id=${request_id}`}
+                          className="bg-white hover:bg-yellow-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                        >
+                          Update
+                        </Link>
+                      )}
+                      {currentUser &&
+                        (currentUser.role === 1 ||
+                          (currentUser.ID !== user_id &&
+                            currentUser.role !== 2 &&
+                            currentUser.role !== 5 &&
+                            status !== 2)) && (
+                          <Link
+                            to={`/collect?Id=${request_id}`}
+                            className="bg-white ml-2 hover:bg-green-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                          >
+                            Collect
+                          </Link>
+                        )}
+                      {currentUser?.role !== 2 &&
+                        currentUser?.role !== 5 &&
+                        status !== 2 &&
+                        currentUser && (
+                          <button
+                            className="bg-white ml-2 hover:bg-blue-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow items-center"
+                            onClick={() =>
+                              handleOpenGoogleMaps(req_lat, req_lng)
+                            }
+                          >
+                            Navigate
+                          </button>
+                        )}
+                    </div>
+                  </div>
+                </InfoWindowF>
+              )}
+            </MarkerF>
+          );
+        })
+      : null;
+  }, [requests, selectedMarker, currentUser]); // ✅ Only re-run when these dependencies change
 
   // Fetch Bins
   const fetchActiveMarkers = async ({ queryKey }) => {
@@ -591,6 +696,7 @@ const Map = () => {
                 }
               )
             : null}
+          {renderedMarkers}
         </GoogleMap>
       )}
     </div>
