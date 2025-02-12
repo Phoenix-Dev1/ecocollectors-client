@@ -88,7 +88,7 @@ const WelcomeUser = () => {
         cardStyle:
           "bg-gradient-to-b from-red-200 to-red-100 border-b-4 border-red-500",
         titleStyle: "text-red-500",
-        value: `${avgClosingTime.days} days ${avgClosingTime.hours} hours ${avgClosingTime.minutes} minutes`,
+        value: removeNegativeSigns(avgClosingTime),
       },
     ];
 
@@ -151,5 +151,11 @@ const WelcomeUser = () => {
     </main>
   );
 };
+
+// GMT Bug quick fix
+function removeNegativeSigns(timeString) {
+  // Remove all minus signs from the string
+  return timeString.includes("-") ? timeString.replace(/-/g, "") : timeString;
+}
 
 export default WelcomeUser;

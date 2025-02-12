@@ -6,8 +6,8 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function SignInForm() {
   const [inputs, setInputs] = useState({
-    email: "barkaziro@gmail.com",
-    password: "1234",
+    email: "demo@gmail.com",
+    password: "1q2w3e4r",
   });
 
   const [err, setError] = useState(null);
