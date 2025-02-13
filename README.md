@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Screenshot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A smart recycling management platform that connects users with recyclers, allowing for efficient request handling, tracking, and real-time updates on recycling activities.
 
-## Available Scripts
+Project Live at: https://ecocollectors-client.vercel.app/
 
-In the project directory, you can run:
+![eco-collectors](/assets/banner-eco.png)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Real-Time Messaging: Instantly send and receive messages using Pusher for seamless live chat.
+- User Authentication: Secure login via NextAuth.js, supporting GitHub & Google OAuth and email authentication.
+- Presence Detection: Track active users in real-time with Pusher's presence channels.
+- Secure Conversations: Ensures privacy with server-side authentication and protected API routes.
+- Optimized Performance: Leverages Next.js for fast loading, server-side rendering, and API efficiency.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies used
 
-### `npm run build`
+- [React](https://react.dev/) - Front-End JavaScript library.
+- [Google Maps API](https://developers.google.com/maps) - Enables interactive map features, geolocation, and place search functionality.
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework for responsive and modern UI design.
+- [Node.js](https://nodejs.org/) - Back-End JavaScript runtime for handling server-side logic and API requests.
+- [JWT](https://jwt.io/) - Secure token-based authentication for user sessions.
+- [MySQL](https://www.mysql.com/) - Relational database for storing and managing user and request data.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Build
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone this repository
 
-### `npm run eject`
+```bash
+git clone https://github.com/Phoenix-Dev1/ecocollectors-client.git && cd eco-collectors
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Install project dependencies
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. Set up environment variables (Required)
 
-## Learn More
+- Create a .env file in the root directory.
+- Add the necessary API keys and configuration.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- REACT_APP_GOOGLE_API_KEY =
+- REACT_APP_GOOGLE_LIB = places
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- REACT_APP_URL =
 
-### Code Splitting
+## Start the project
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. Build the project and start it -
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm start
+```
