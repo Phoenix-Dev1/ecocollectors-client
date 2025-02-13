@@ -4,7 +4,7 @@ A smart recycling management platform that connects users with recyclers, allowi
 
 Project Live at: https://ecocollectors-client.vercel.app/
 
-![eco-collectors](/assets/banner-eco.png)
+![eco-collectors](https://github.com/Phoenix-Dev1/ecocollectors-client/blob/main/public/assets/banner-eco.png)
 
 ---
 
