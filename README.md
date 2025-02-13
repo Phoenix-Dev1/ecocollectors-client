@@ -1,4 +1,4 @@
-# Screenshot
+# Intro
 
 A smart recycling management platform that connects users with recyclers, allowing for efficient request handling, tracking, and real-time updates on recycling activities.
 
