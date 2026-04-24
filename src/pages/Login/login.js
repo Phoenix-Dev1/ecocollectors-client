@@ -64,27 +64,27 @@ function SignInForm() {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-eco-primary/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-eco-secondary/5 rounded-full blur-3xl"></div>
 
-      <div className="w-full max-w-md animate-fade-in relative z-10">
-        <div className="flex flex-col items-center mb-10">
+      <div className="w-full max-w-md animate-fade-in relative z-10 px-4 md:px-0">
+        <div className="flex flex-col items-center mb-8 md:mb-10">
           <a href="/" className="group transition-transform hover:scale-105">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-eco-primary rounded-2xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
-                <img className="w-8 h-8" src={smallLogo} alt="logo" />
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-eco-primary rounded-2xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
+                <img className="w-6 h-6 md:w-8 md:h-8" src={smallLogo} alt="logo" />
               </div>
-              <span className="text-3xl font-black tracking-tight text-eco-text">
+              <span className="text-2xl md:text-3xl font-black tracking-tight text-eco-text">
                 Eco<span className="text-eco-primary">Collectors</span>
               </span>
             </div>
           </a>
         </div>
 
-        <div className="glass !rounded-[2.5rem] p-10 shadow-2xl shadow-eco-primary/5 border border-white/40">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-black text-eco-text tracking-tight">Welcome Back</h1>
-            <p className="text-eco-muted mt-3 font-medium">Log in to manage your recycling impact</p>
+        <div className="glass !rounded-[2rem] md:!rounded-[2.5rem] p-6 md:p-10 shadow-2xl shadow-eco-primary/5 border border-white/40">
+          <div className="text-center mb-8 md:mb-10">
+            <h1 className="text-2xl md:text-3xl font-black text-eco-text tracking-tight">Welcome Back</h1>
+            <p className="text-eco-muted mt-2 md:mt-3 font-medium text-sm md:text-base">Log in to manage your recycling impact</p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-5 md:space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="email">
                 Email Address
@@ -95,7 +95,7 @@ function SignInForm() {
                 name="email"
                 id="email"
                 value={inputs.email}
-                className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400 min-h-[48px]"
                 placeholder="name@example.com"
                 required
               />
@@ -121,7 +121,7 @@ function SignInForm() {
                   id="password"
                   placeholder="••••••••"
                   value={inputs.password}
-                  className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium pr-14"
+                  className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium pr-14 min-h-[48px]"
                   required
                 />
                 <button
@@ -143,7 +143,7 @@ function SignInForm() {
 
             <button
               type="submit"
-              className="w-full btn-primary !py-4 shadow-xl shadow-eco-primary/20 flex items-center justify-center space-x-2 group active:scale-[0.98]"
+              className="w-full btn-primary !py-4 shadow-xl shadow-eco-primary/20 flex items-center justify-center space-x-2 group active:scale-[0.98] min-h-[52px]"
             >
               <span className="text-lg">Sign In</span>
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,8 +152,8 @@ function SignInForm() {
             </button>
           </form>
 
-          <div className="mt-10 pt-8 border-t border-gray-100 text-center">
-            <p className="text-eco-muted font-medium">
+          <div className="mt-8 md:mt-10 pt-8 border-t border-gray-100 text-center">
+            <p className="text-eco-muted font-medium text-sm md:text-base">
               Don't have an account?{" "}
               <a
                 href="/register"

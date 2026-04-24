@@ -18,7 +18,9 @@ const FilterWindow = ({
   ];
 
   return (
-    <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 overflow-hidden animate-fade-in relative">
+    <div className="bg-white md:bg-white/95 md:backdrop-blur-md rounded-t-[2.5rem] rounded-b-none md:rounded-3xl shadow-2xl border border-white/50 overflow-hidden animate-slide-up md:animate-fade-in relative pt-2 md:pt-0">
+      {/* Mobile Drag Handle */}
+      <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mt-2 mb-1 md:hidden" />
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-eco-background/50">
         <h3 className="text-sm font-black text-eco-text uppercase tracking-widest">Filter by Type</h3>
         <button 

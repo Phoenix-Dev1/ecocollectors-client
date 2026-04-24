@@ -127,7 +127,7 @@ const Map = () => {
   if (markersError) return <h4>{markersError.message}</h4>;
 
   return (
-    <div className={classes.Map}>
+    <div className={`${classes.Map} h-[calc(100dvh-64px)] md:h-screen`}>
       <MapControls
         showFilterWindow={showFilterWindow}
         toggleFilterWindow={toggleFilterWindow}
@@ -180,6 +180,10 @@ const Map = () => {
             searchRadius={searchRadius}
             handleSearchRadiusChange={setSearchRadius}
             classes={classes}
+            toggleFilterWindow={toggleFilterWindow}
+            showFilterWindow={showFilterWindow}
+            selectedMarkerType={selectedMarkerType}
+            handleMarkerTypeChange={handleMarkerTypeChange}
           />
 
           <BinMarkers

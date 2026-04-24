@@ -11,6 +11,18 @@ const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // Prevent background scroll when mobile menu is open
+  React.useEffect(() => {
+    if (nav) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [nav]);
+
   const handleNav = () => {
     setNav(!nav);
   };
@@ -41,7 +53,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 left-0 right-0 z-[1000] glass px-6 h-20 flex justify-between items-center transition-all duration-300">
+    <nav className={`sticky top-0 left-0 right-0 glass px-6 h-20 flex justify-between items-center transition-all duration-300 ${nav ? 'z-[100000]' : 'z-[1000]'}`}>
       <Link to="/" className="flex items-center space-x-3 group">
         <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 transition-transform duration-300 group-hover:scale-110">
           <img src={smallLogo} className="h-6 w-6" alt="Logo" />
@@ -133,60 +145,96 @@ const Navbar = () => {
       </ul>
 
       {/* Mobile menu icon */}
-      <div onClick={handleNav} className="block md:hidden cursor-pointer text-gray-800">
-        {!nav ? <AiOutlineMenu size={24} /> : <AiOutlineClose size={24} />}
+      <div onClick={handleNav} className={`md:hidden cursor-pointer text-gray-800 ${nav ? 'hidden' : 'block'}`}>
+        <AiOutlineMenu size={24} />
       </div>
 
-      {/* Mobile menu */}
-      <div
-        className={
-          nav
-            ? 'fixed left-0 top-0 w-[75%] h-full bg-white shadow-2xl transition-transform duration-500 ease-in-out z-[2000] p-6'
-            : 'fixed left-[-100%] top-0 h-full transition-all duration-500 z-[2000]'
-        }
-      >
-        <div className="flex items-center mb-10 group">
-          <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 mr-3">
-            <img src={smallLogo} className="h-6 w-6" alt="Logo" />
+      {/* Nuclear Mobile Menu Overlay Reset */}
+      {nav && (
+        <div className="fixed inset-0 z-[99999] w-screen h-[100dvh] bg-white flex flex-col overflow-hidden m-0 p-0 md:hidden">
+          
+          {/* 1. Header Area (Logo & Close Button) */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
+                <img src={smallLogo} className="h-6 w-6" alt="Logo" />
+              </div>
+              <span className="text-xl font-black tracking-tight text-eco-text">
+                Eco<span className="text-eco-primary">Collectors</span>
+              </span>
+            </div>
+            <button 
+              onClick={closeNav} 
+              className="p-2 text-slate-500 hover:text-emerald-600 transition-colors"
+            >
+              <AiOutlineClose size={32} />
+            </button>
           </div>
-          <span className="text-2xl font-black tracking-tight text-eco-text">
-            Eco<span className="text-eco-primary">Collectors</span>
-          </span>
-        </div>
-        
-        <ul className="space-y-6">
-          <li className="text-lg font-medium">
-            <Link to="/" onClick={closeNav}>Home</Link>
-          </li>
-          <li className="text-lg font-medium">
-            <Link to="/map" onClick={closeNav}>Interactive Map</Link>
-          </li>
-          {currentUser && (
-            <>
-              <li className="text-lg font-medium text-eco-secondary border-t pt-6">
-                <Link to={handleWelcome()} onClick={closeNav}>
+
+          {/* 2. Navigation Links Area */}
+          <div className="flex-1 flex flex-col items-center justify-start pt-12 pb-6 px-6 gap-8 bg-white overflow-y-auto">
+            <Link 
+              to="/" 
+              onClick={closeNav}
+              className="text-2xl font-semibold text-slate-800 hover:text-emerald-500 transition-colors"
+            >
+              Home
+            </Link>
+            <Link 
+              to="/map" 
+              onClick={closeNav}
+              className="text-2xl font-semibold text-slate-800 hover:text-emerald-500 transition-colors"
+            >
+              Interactive Map
+            </Link>
+            
+            {currentUser ? (
+              <>
+                <Link 
+                  to={handleWelcome()} 
+                  onClick={closeNav}
+                  className="text-2xl font-semibold text-eco-secondary hover:text-emerald-500 transition-colors"
+                >
                   {currentUser.first_name} {currentUser.last_name}
                 </Link>
-              </li>
-              <li className="text-lg font-medium">
-                <Link to="/contact-us" onClick={closeNav}>Contact Us</Link>
-              </li>
-              <li
-                className="text-lg font-medium text-red-500 cursor-pointer"
-                onClick={logout}
-              >
-                Logout
-              </li>
-            </>
-          )}
-          {!currentUser && (
-            <div className="space-y-4 pt-6 border-t">
-              <Link to="/register" onClick={closeNav} className="block btn-primary text-center">Register</Link>
-              <Link to="/login" onClick={closeNav} className="block text-center font-medium py-2">Login</Link>
-            </div>
-          )}
-        </ul>
-      </div>
+                <Link 
+                  to="/contact-us" 
+                  onClick={closeNav}
+                  className="text-2xl font-semibold text-slate-800 hover:text-emerald-500 transition-colors"
+                >
+                  Contact Us
+                </Link>
+                <button
+                  className="text-2xl font-semibold text-red-500 hover:text-red-600 transition-colors"
+                  onClick={() => {
+                    handleLogout();
+                    closeNav();
+                  }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  to="/login" 
+                  onClick={closeNav}
+                  className="text-2xl font-semibold text-slate-800 hover:text-emerald-500 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register" 
+                  onClick={closeNav} 
+                  className="mt-4 px-10 py-4 bg-emerald-500 text-white rounded-full font-semibold text-xl shadow-lg shadow-emerald-200 active:scale-95 transition-all text-center min-w-[200px]"
+                >
+                  Join Now
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
