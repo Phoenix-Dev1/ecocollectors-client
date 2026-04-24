@@ -58,9 +58,14 @@ const Navbar = () => {
         <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 transition-transform duration-300 group-hover:scale-110">
           <img src={smallLogo} className="h-6 w-6" alt="Logo" />
         </div>
-        <span className="hidden lg:block text-2xl font-black tracking-tight text-eco-text">
-          Eco<span className="text-eco-primary">Collectors</span>
-        </span>
+        <div className="hidden lg:flex items-center">
+          <span className="text-2xl font-black tracking-tight text-eco-text">
+            Eco<span className="text-eco-primary">Collectors</span>
+          </span>
+          <span className="ml-2 text-[11px] font-extrabold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-200/60 shadow-sm tracking-wide select-none">
+            2.0
+          </span>
+        </div>
       </Link>
 
       <ul className="hidden md:flex items-center space-x-8">
@@ -159,9 +164,14 @@ const Navbar = () => {
               <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
                 <img src={smallLogo} className="h-6 w-6" alt="Logo" />
               </div>
-              <span className="text-xl font-black tracking-tight text-eco-text">
-                Eco<span className="text-eco-primary">Collectors</span>
-              </span>
+              <div className="flex items-center">
+                <span className="text-xl font-black tracking-tight text-eco-text">
+                  Eco<span className="text-eco-primary">Collectors</span>
+                </span>
+                <span className="ml-2 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full border border-emerald-200/60 shadow-sm tracking-wide select-none">
+                  2.0
+                </span>
+              </div>
             </div>
             <button 
               onClick={closeNav} 

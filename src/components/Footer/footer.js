@@ -17,9 +17,14 @@ const Footer = () => {
               <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 mr-3">
                 <img src={smallLogo} className="h-6 w-6" alt="Logo" />
               </div>
-              <span className="text-xl font-black tracking-tight text-eco-text">
-                Eco<span className="text-eco-primary">Collectors</span>
-              </span>
+              <div className="flex items-center">
+                <span className="text-xl font-black tracking-tight text-eco-text">
+                  Eco<span className="text-eco-primary">Collectors</span>
+                </span>
+                <span className="ml-2 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full border border-emerald-200/60 shadow-sm tracking-wide select-none">
+                  2.0
+                </span>
+              </div>
             </a>
             
             <div className="h-8 w-px bg-gray-200"></div>

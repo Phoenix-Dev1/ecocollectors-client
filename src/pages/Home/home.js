@@ -27,8 +27,15 @@ const Home = () => {
             </span>
           </h1>
           <p className="text-xl text-eco-muted mb-12 max-w-2xl mx-auto leading-relaxed">
-            Join the <span className="text-eco-primary font-bold">EcoCollectors</span> community in making Israel cleaner. 
-            Locate bins, schedule collections, and earn points while protecting our environment.
+            Join the 
+            <span className="inline-flex items-center align-middle mx-1.5">
+              <span className="text-eco-primary font-bold">EcoCollectors</span>
+              <span className="text-[14px] font-black bg-gradient-to-br from-emerald-400 to-teal-500 bg-clip-text text-transparent ml-1 tracking-tighter select-none">
+                2.0
+              </span>
+            </span> 
+            community in making Israel cleaner. 
+            Locate bins, schedule collections, and contribute to a sustainable future while protecting our environment.
           </p>
           <div className="flex items-center justify-center space-x-6">
             <a href="/map" className="btn-primary !px-10 !py-4 text-lg flex items-center space-x-2 group">
