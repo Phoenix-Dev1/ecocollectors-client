@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import { FiGrid, FiX, FiSettings, FiUser, FiBox, FiCheckCircle, FiClock, FiUsers, FiUserPlus, FiLayers, FiTrash2 } from "react-icons/fi";
@@ -12,10 +12,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserRole = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_URL}/user/role`,
-          { withCredentials: true }
-        );
+        const response = await api.get("/user/role");
         setUserRole(response.data.role);
       } catch (error) {
         console.error("Error fetching user role:", error);

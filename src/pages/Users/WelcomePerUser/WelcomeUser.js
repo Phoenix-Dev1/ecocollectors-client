@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../../../api/axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../context/authContext";
 import { FiMap, FiClock, FiCheckCircle, FiUser, FiSettings, FiArrowRight, FiActivity, FiUsers, FiCalendar } from "react-icons/fi";
