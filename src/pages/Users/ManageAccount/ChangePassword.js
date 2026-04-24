@@ -68,95 +68,84 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-left">
-      <div className="leading-loose bg-gray-900 overflow-auto w-96">
-        <h1 className="flex items-center justify-center text-lg font-bold mb-4">
-          Change your password
-        </h1>
-        <form
-          className="m-0 p-8 bg-gray-800 rounded shadow-xl"
-          onSubmit={handleSubmit}
-        >
-          <div className="mt-2 relative">
-            <label className="text-sm block text-white" htmlFor="old_password">
-              Old Password
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white pr-10"
-              id="old_password"
-              name="old_password"
-              type={showPassword ? "text" : "password"}
-              aria-label="Old Password"
-            />
+    <div className="animate-fade-in p-8">
+      <div className="mb-8 text-center md:text-left">
+        <h2 className="text-3xl font-bold text-eco-text">Security Settings</h2>
+        <p className="text-eco-muted mt-2">Manage your account password and security preferences</p>
+      </div>
+
+      <div className="max-w-md mx-auto">
+        <div className="glass !rounded-3xl p-8 shadow-sm">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="relative">
+              <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="old_password">
+                Current Password
+              </label>
+              <input
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all pr-12"
+                id="old_password"
+                name="old_password"
+                type={showPassword ? "text" : "password"}
+              />
+              <button
+                type="button"
+                className="absolute right-4 top-[38px] text-gray-400 hover:text-eco-primary transition-colors"
+                onClick={togglePasswordVisibility}
+                tabIndex={-1}
+              >
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              </button>
+            </div>
+
+            <div className="relative">
+              <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="new_password">
+                New Password
+              </label>
+              <input
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all pr-12"
+                id="new_password"
+                name="new_password"
+                type={showNewPassword ? "text" : "password"}
+              />
+              <button
+                type="button"
+                className="absolute right-4 top-[38px] text-gray-400 hover:text-eco-primary transition-colors"
+                onClick={toggleNewPasswordVisibility}
+                tabIndex={-1}
+              >
+                {showNewPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              </button>
+            </div>
+
+            <div className="relative">
+              <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="confirm_password">
+                Confirm New Password
+              </label>
+              <input
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all pr-12"
+                id="confirm_password"
+                name="confirm_password"
+                type={showNewPassword ? "text" : "password"}
+              />
+            </div>
+
+            {err && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-medium whitespace-pre-line text-center">
+                {err}
+              </div>
+            )}
+
             <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3 pt-4 justify-center"
-              onClick={togglePasswordVisibility}
-              tabIndex={-1}
-            >
-              {showPassword ? (
-                <FiEyeOff className="h-5 w-5 text-gray-500" />
-              ) : (
-                <FiEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-          <div className="mt-2 relative">
-            <label className="text-sm block text-white" htmlFor="new_password">
-              New Password
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="new_password"
-              name="new_password"
-              type={showNewPassword ? "text" : "password"}
-              aria-label="New Password"
-            />
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3 pt-4 justify-center"
-              onClick={toggleNewPasswordVisibility}
-              tabIndex={-1}
-            >
-              {showNewPassword ? (
-                <FiEyeOff className="h-5 w-5 text-gray-500" />
-              ) : (
-                <FiEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-          <div className="mt-2 relative">
-            <label
-              className="text-sm block text-white"
-              htmlFor="confirm_password"
-            >
-              Confirm Password
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="confirm_password"
-              name="confirm_password"
-              type={showNewPassword ? "text" : "password"}
-              aria-label="Confirm Password"
-            />
-          </div>
-          {err && (
-            <p className="flex items-center justify-center text-sm text-red-700 font-semibold">
-              {err}
-            </p>
-          )}
-          <div className="flex justify-center">
-            <button
-              className="px-4 py-1 mt-3 text-white font-light tracking-wider bg-gray-900 rounded justify-center items-center hover:bg-black"
+              className="w-full btn-primary !py-4 mt-4"
               type="submit"
             >
-              Change Password
+              Update Password
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

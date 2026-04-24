@@ -7,15 +7,13 @@ import Dashboard from '../components/Sidebar/usersDashboard';
 export default function UserLayout() {
   return (
     <>
-      <div className="flex">
+      <div className="flex bg-eco-background min-h-[calc(100vh-80px)]">
         <Dashboard />
-        <div className="flex-1 bg-gray-800">
-          {/* Header */}
-          <div className="ml-8 text-center text-white">
-            {/* Render nested routes */}
+        <main className="flex-1 p-8">
+          <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
-        </div>
+        </main>
       </div>
     </>
   );

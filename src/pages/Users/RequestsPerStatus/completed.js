@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/authContext";
 import DataTable from "react-data-table-component";
 import { fetchUserRequests, fetchRecyclerDetails } from "../UserFunctions";
-import axios from "axios";
 import { format } from "date-fns";
 
 const Completed = () => {
@@ -51,7 +50,7 @@ const Completed = () => {
     ) {
       fetchRecyclerData();
     }
-  }, [completedRequests]); // ✅ Runs **only after fetching completed requests**
+  }, [completedRequests, recyclerDetails]); // ✅ satisfy ESLint
 
   // Define columns for the data table
   const columns = [
@@ -62,25 +61,25 @@ const Completed = () => {
       wrap: true,
     },
     {
-      name: "Bottles Number",
+      name: "Bottles",
       selector: (row) => row.bottles_number || "0",
       sortable: true,
       center: true,
     },
     {
-      name: "Recycler Name",
+      name: "Recycler",
       selector: (row) => row.recyclerFullName || "Awaiting Recycler",
       sortable: true,
       center: true,
     },
     {
-      name: "Phone Number",
+      name: "Phone",
       selector: (row) => row.recyclerPhone || "N/A",
       sortable: true,
       center: true,
     },
     {
-      name: "Request Date",
+      name: "Scheduled",
       selector: (row) => row.request_date || "N/A",
       sortable: true,
       center: true,
@@ -90,7 +89,7 @@ const Completed = () => {
           : "N/A",
     },
     {
-      name: "Completed Date",
+      name: "Completed",
       selector: (row) => row.completed_date || "N/A",
       sortable: true,
       center: true,
@@ -113,21 +112,65 @@ const Completed = () => {
   }));
 
   return (
-    <div className="text-center">
-      <h2 className="text-lg font-bold mb-4">Completed Requests:</h2>
+    <div className="p-8 animate-fade-in">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-eco-text">Completed Requests</h2>
+        <p className="text-eco-muted text-sm mt-1">History of your successful recycling collections</p>
+      </div>
+
       {data.length > 0 ? (
-        <div className="mx-auto w-full px-4 md:max-w-3xl lg:max-w-4xl xl:max-w-6xl text-center">
+        <div className="glass !rounded-3xl p-6 shadow-sm overflow-hidden">
           <DataTable
             columns={columns}
             data={data}
             striped
             highlightOnHover
             pagination
-            className="border w-full"
+            customStyles={{
+              table: {
+                style: {
+                  backgroundColor: 'transparent',
+                },
+              },
+              headRow: {
+                style: {
+                  backgroundColor: '#f9fafb',
+                  borderRadius: '12px',
+                  border: 'none',
+                  marginBottom: '8px',
+                },
+              },
+              headCells: {
+                style: {
+                  fontWeight: 'bold',
+                  color: '#065f46',
+                  textTransform: 'uppercase',
+                  fontSize: '11px',
+                  letterSpacing: '0.05em',
+                },
+              },
+              rows: {
+                style: {
+                  borderRadius: '12px',
+                  border: 'none',
+                  marginBottom: '4px',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: '#f0fdf4 !important',
+                    transform: 'scale(1.005)',
+                  },
+                },
+              },
+            }}
           />
         </div>
       ) : (
-        <p>No completed requests found</p>
+        <div className="glass !rounded-3xl p-20 text-center">
+          <div className="w-16 h-16 bg-eco-background rounded-2xl flex items-center justify-center mx-auto mb-4">
+             <i className="fa fa-info-circle text-eco-primary text-2xl"></i>
+          </div>
+          <p className="text-eco-muted font-medium">No completed requests found in your history.</p>
+        </div>
       )}
     </div>
   );

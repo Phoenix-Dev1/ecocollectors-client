@@ -1,4 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply bg-eco-background text-eco-text antialiased;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-glass-md;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-black/40 border border-white/10 shadow-glass-lg;
+  }
+
+  .btn-primary {
+    @apply bg-eco-primary hover:bg-eco-secondary text-white font-semibold py-2 px-6 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95;
+  }
+
+  .card-modern {
+    @apply bg-white rounded-3xl p-6 shadow-glass-md hover:shadow-glass-lg transition-all duration-300;
+  }
+}

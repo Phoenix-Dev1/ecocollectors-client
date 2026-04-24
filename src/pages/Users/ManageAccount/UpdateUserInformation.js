@@ -18,7 +18,6 @@ export default function UpdateUserInformation() {
     phone: "",
   });
 
-  const [isDataFetched, setDataFetched] = useState(false);
   const [deactivated, setDeactivated] = useState(false); // State to track account deactivation
   const [err, setError] = useState(null);
   const navigate = useNavigate();
@@ -39,7 +38,6 @@ export default function UpdateUserInformation() {
           address: userData.address,
           phone: userData.phone,
         });
-        setDataFetched(true);
       } catch (error) {
         setError("Error fetching user information");
         console.error(error);
@@ -114,132 +112,131 @@ export default function UpdateUserInformation() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-left">
-      <div className="leading-loose bg-gray-900 overflow-auto w-96">
-        <h1 className="flex items-center justify-center text-lg font-bold mb-4">
-          Change your information
-        </h1>
-        <form
-          ref={form}
-          className="m-0 p-8 bg-gray-800 rounded shadow-xl w-full"
-        >
-          <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-white" htmlFor="first_name">
-              First Name
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="first_name"
-              name="first_name"
-              type="text"
-              aria-label="First name"
-              value={texts.first_name}
-            />
-          </div>
-          <div className="inline-block mt-2 -mx-1 pl-1 w-1/2">
-            <label className="block text-sm text-white" htmlFor="last_name">
-              Last Name
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="last_name"
-              name="last_name"
-              type="text"
-              aria-label="Last Name"
-              value={texts.last_name}
-            />
-          </div>
-          <div className="mt-2">
-            <label className="block text-sm text-white" htmlFor="email">
-              Email
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="email"
-              name="email"
-              type="email"
-              aria-label="email"
-              required
-              value={texts.email}
-            />
-          </div>
-          <div className="mt-2">
-            <div className="inline-block mt-2 w-1/2 pr-1">
-              <label className="block text-sm text-white" htmlFor="address">
-                Address
+    <div className="animate-fade-in p-8">
+      <div className="mb-8 text-center md:text-left">
+        <h2 className="text-3xl font-bold text-eco-text">Manage Account</h2>
+        <p className="text-eco-muted mt-2">Update your personal information and contact details</p>
+      </div>
+
+      <div className="max-w-2xl mx-auto">
+        <div className="glass !rounded-3xl p-8 shadow-sm">
+          <form ref={form} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="first_name">
+                  First Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  value={texts.first_name}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="last_name">
+                  Last Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  value={texts.last_name}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="email">
+                Email Address
               </label>
               <input
                 onChange={handleChange}
-                className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-                id="address"
-                name="address"
-                type="text"
-                aria-label="Address"
-                value={texts.address}
+                className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={texts.email}
               />
             </div>
-            <div className="inline-block mt-2 -mx-1 pl-1 w-1/2">
-              <label className="block text-sm text-white" htmlFor="city">
-                City
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="address">
+                  Street Address
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                  id="address"
+                  name="address"
+                  type="text"
+                  value={texts.address}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="city">
+                  City
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                  id="city"
+                  name="city"
+                  type="text"
+                  value={texts.city}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-eco-text mb-2" htmlFor="phone">
+                Phone Number
               </label>
               <input
                 onChange={handleChange}
-                className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-                id="city"
-                name="city"
-                type="text"
-                aria-label="City"
-                value={texts.city}
+                className="w-full px-4 py-3 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-2 focus:ring-eco-primary/20 outline-none transition-all"
+                id="phone"
+                name="phone"
+                type="tel"
+                value={texts.phone}
               />
             </div>
-          </div>
-          <div className="mt-2">
-            <label className="text-sm block text-white" htmlFor="phone">
-              Phone Number
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="phone"
-              name="phone"
-              type="tel"
-              aria-label="Phone Number"
-              value={texts.phone}
-            />
-          </div>
-          {err && (
-            <p className="flex items-center justify-center text-sm text-red-700 font-semibold">
-              {err}
+
+            {err && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-medium text-center">
+                {err}
+              </div>
+            )}
+
+            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={handleSubmit}
+                className="flex-1 btn-primary !py-4"
+                type="submit"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={handleDeactivateAccount}
+                className="px-8 py-4 text-red-600 font-bold hover:bg-red-50 rounded-2xl transition-all border border-red-100"
+                type="button"
+              >
+                Deactivate
+              </button>
+            </div>
+          </form>
+          {deactivated && (
+            <p className="text-red-600 font-bold mt-6 text-center animate-pulse">
+              Your account has been deactivated.
             </p>
           )}
-          <div className="flex justify-center">
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-1 mt-3 text-white font-light tracking-wider bg-gray-900 rounded justify-center items-center hover:bg-black"
-              type="submit"
-            >
-              Update Account
-            </button>
-          </div>
-        </form>
-        {deactivated ? (
-          <p className="text-red-600 font-medium mt-3">
-            Your account is deactivated.
-          </p>
-        ) : (
-          <div className="flex justify-center mt-3">
-            <button
-              onClick={handleDeactivateAccount}
-              className="px-4 py-1 text-white font-light tracking-wider bg-red-600 rounded hover:bg-red-700"
-              type="button"
-            >
-              Deactivate Account
-            </button>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

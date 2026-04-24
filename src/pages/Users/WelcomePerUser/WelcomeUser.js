@@ -40,115 +40,88 @@ const WelcomeUser = () => {
     const currentMonth = new Intl.DateTimeFormat("en", {
       month: "long",
     }).format(currentDate);
-    const metricStyles = [
+
+    const metrics = [
       {
         title: "Total Requests",
-        cardStyle:
-          "bg-gradient-to-b from-green-200 to-green-100 border-b-4 border-green-600",
-        titleStyle: "text-green-600",
         value: totalRequests,
+        icon: "fa-list-check",
+        color: "text-blue-500",
+        bg: "bg-blue-50",
       },
       {
-        title: "Total Number Of Bottles Recycled",
-        cardStyle:
-          "bg-gradient-to-b from-indigo-200 to-indigo-100 border-b-4 border-indigo-500",
-        titleStyle: "text-indigo-500",
+        title: "Bottles Recycled",
         value: totalRecycledBottles,
+        icon: "fa-bottle-water",
+        color: "text-emerald-500",
+        bg: "bg-emerald-50",
       },
       {
-        title: "Total Completed Requests",
-        cardStyle:
-          "bg-gradient-to-b from-yellow-200 to-yellow-100 border-b-4 border-indigo-yellow",
-        titleStyle: "text-yellow-500",
+        title: "Completed",
         value: totalCompletedRequests,
+        icon: "fa-circle-check",
+        color: "text-amber-500",
+        bg: "bg-amber-50",
       },
       {
-        title: "Last 3 Recycler Names Who Collected",
-        cardStyle:
-          "bg-gradient-to-b from-purple-300 to-purple-200 border-b-4 border-purple-500",
-        titleStyle: "text-purple-500",
-        value:
-          last3RecyclersNames.length > 0 ? (
-            last3RecyclersNames.map((request, index) => (
-              <div key={`last-request-${index}`}>{request.full_name}</div>
-            ))
-          ) : (
-            <div>No Completed Requests</div>
-          ),
+        title: "Recent Recyclers",
+        value: last3RecyclersNames.length > 0 ? (
+          <div className="space-y-1">
+            {last3RecyclersNames.slice(0, 3).map((request, index) => (
+              <div key={index} className="text-sm font-medium">{request.full_name}</div>
+            ))}
+          </div>
+        ) : "None yet",
+        icon: "fa-users",
+        color: "text-purple-500",
+        bg: "bg-purple-50",
       },
       {
-        title: `Bottles Recycled This Month (${currentMonth})`,
-        cardStyle:
-          "bg-gradient-to-b from-pink-200 to-pink-100 border-b-4 border-pink-500",
-        titleStyle: "text-pink-500",
-        value: currentMonthRecycledBottles,
+        title: `${currentMonth} Impact`,
+        value: `${currentMonthRecycledBottles} Bottles`,
+        icon: "fa-calendar-check",
+        color: "text-pink-500",
+        bg: "bg-pink-50",
       },
       {
-        title: "Average Request Closing Time",
-        cardStyle:
-          "bg-gradient-to-b from-red-200 to-red-100 border-b-4 border-red-500",
-        titleStyle: "text-red-500",
+        title: "Avg. Closing Time",
         value: removeNegativeSigns(avgClosingTime),
+        icon: "fa-clock",
+        color: "text-indigo-500",
+        bg: "bg-indigo-50",
       },
     ];
 
-    return metricStyles.map((metric, index) => {
-      const { title, cardStyle, titleStyle, value } = metric;
-
-      return (
-        <div
-          className="w-full md:w-1/2 xl:w-1/3 p-6"
-          key={`metric-card-${index}`}
-        >
-          <div className={`border rounded-lg shadow-xl p-5 ${cardStyle}`}>
-            <h2 className={`text-lg font-semibold ${titleStyle}`}>{title}</h2>
-            <p className="text-gray-600 mt-2">{value}</p>
+    return metrics.map((metric, index) => (
+      <div className="w-full sm:w-1/2 lg:w-1/3 p-4" key={index}>
+        <div className="glass !rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-white/20 group">
+          <div className="flex items-center justify-between mb-4">
+            <div className={`w-12 h-12 ${metric.bg} ${metric.color} rounded-2xl flex items-center justify-center text-xl transition-transform group-hover:scale-110`}>
+              <i className={`fa-solid ${metric.icon}`}></i>
+            </div>
+          </div>
+          <h3 className="text-eco-muted font-medium text-sm uppercase tracking-wider">{metric.title}</h3>
+          <div className="text-2xl font-bold text-eco-text mt-1">
+            {metric.value}
           </div>
         </div>
-      );
-    });
+      </div>
+    ));
   };
 
   return (
-    <main>
-      <div className="flex flex-col md:flex-row">
-        <section>
-          <div className="bg-gray-800 pt-3">
-            <h1
-              className="font-bold text-5xl cursor-pointer mb-4 mt-6"
-              style={{
-                "--s": "0.1em",
-                "--c": "#2c4bff",
-                color: "var(--c)",
-                paddingBottom: "var(--s)",
-                background: `linear-gradient(90deg,var(--c) 50%,#000 0) calc(100% - var(--_p,0%))/200% 100%,linear-gradient(var(--c) 0 0) 0% 100%/var(--_p,0%) var(--s) no-repeat`,
-                WebkitBackgroundClip: "text,padding-box",
-                backgroundClip: "text,padding-box",
-                transition: "0.5s",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.setProperty("--_p", "100%");
-                e.target.style.setProperty("--c", "#2c4bff");
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.setProperty("--_p", "0%");
-                e.target.style.setProperty("--c", "#ffffff");
-              }}
-            >
-              Welcome Collector!
-            </h1>
-          </div>
-          <div
-            id="main"
-            className="main-content flex-1 bg-gray-700 mt-4 md:mt-2 pb-24 md:pb-5"
-          >
-            <div className="mb-6 flex flex-wrap font-bold text-2xl">
-              {renderMetricCards()}
-            </div>
-          </div>
-        </section>
+    <div className="animate-fade-in">
+      <div className="mb-10">
+        <h1 className="text-4xl font-black text-eco-text">
+          Welcome back, <span className="bg-gradient-to-r from-eco-primary to-eco-secondary bg-clip-text text-transparent">Collector!</span>
+        </h1>
+        <p className="text-eco-muted mt-2 text-lg">Here's a summary of your environmental impact</p>
       </div>
-    </main>
+
+      <div className="flex flex-wrap -m-4">
+        {renderMetricCards()}
+      </div>
+    </div>
   );
 };
 
