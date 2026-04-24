@@ -127,8 +127,10 @@ const WelcomeUser = () => {
 
 // GMT Bug quick fix
 function removeNegativeSigns(timeString) {
+  if (timeString === null || timeString === undefined) return "0";
+  const str = String(timeString);
   // Remove all minus signs from the string
-  return timeString.includes("-") ? timeString.replace(/-/g, "") : timeString;
+  return str.includes("-") ? str.replace(/-/g, "") : str;
 }
 
 export default WelcomeUser;
