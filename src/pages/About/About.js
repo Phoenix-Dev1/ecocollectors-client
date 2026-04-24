@@ -32,6 +32,22 @@ export default function About() {
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
+          {/* Team Member: Bar */}
+          <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+                <img src={bar} alt="Bar" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-eco-text">Bar Kaziro</h3>
+                <p className="text-eco-secondary font-bold text-sm uppercase tracking-wider">The Recycler</p>
+              </div>
+            </div>
+            <p className="text-eco-muted leading-relaxed font-medium">
+              Bar oversees the recycling process. He coordinates with collectors, validates requests, and manages the placement of materials in designated recycling centers.
+            </p>
+          </div>
+
           {/* Team Member: Liran */}
           <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
             <div className="flex items-center space-x-4 mb-6">
@@ -45,22 +61,6 @@ export default function About() {
             </div>
             <p className="text-eco-muted leading-relaxed font-medium">
               Liran gathers bottles for recycling from various sources across Haifa. He ensures every collected item is handled with care and directed to the proper facilities.
-            </p>
-          </div>
-
-          {/* Team Member: Bar */}
-          <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
-                <img src={bar} alt="Bar" className="w-full h-full object-cover" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-eco-text">Bar</h3>
-                <p className="text-eco-secondary font-bold text-sm uppercase tracking-wider">The Recycler</p>
-              </div>
-            </div>
-            <p className="text-eco-muted leading-relaxed font-medium">
-              Bar oversees the recycling process. He coordinates with collectors, validates requests, and manages the placement of materials in designated recycling centers.
             </p>
           </div>
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { validateForm } from "./recyclerFormValidation";
 import axios from "axios";
 import * as moment from "moment";
+import smallLogo from "../../img/sm-logo.png";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { AuthContext } from "../../context/authContext";
 
@@ -76,8 +77,8 @@ const RecyclerRegister = () => {
           
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl mb-4 shadow-inner">
-              <i className="fa-solid fa-leaf text-2xl"></i>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-600 rounded-2xl mb-4 shadow-lg shadow-emerald-200">
+              <img src={smallLogo} alt="EcoCollectors Logo" className="w-10 h-10" />
             </div>
             <h1 className="text-3xl font-black text-eco-text leading-tight">
               Join <span className="text-emerald-600">EcoCollectors</span>
