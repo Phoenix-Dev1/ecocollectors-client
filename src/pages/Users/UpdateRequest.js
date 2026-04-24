@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { validateInputs } from "../Users/RequestUtils";
 import classes from "./UpdateRequest.module.css";
+import { createRequestIcon } from "../../components/map/mapIcons";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 
@@ -167,7 +168,14 @@ const UpdateRequest = () => {
           center={coordinates}
           zoom={15}
         >
-          <MarkerF position={coordinates} />
+          <MarkerF 
+            position={coordinates} 
+            icon={{
+              url: createRequestIcon(updatedData.type),
+              scaledSize: new window.google.maps.Size(40, 40),
+              anchor: new window.google.maps.Point(20, 20),
+            }}
+          />
         </GoogleMap>
       </div>
       <div className="mt-6 w-96">

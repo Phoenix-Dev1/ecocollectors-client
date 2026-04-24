@@ -15,6 +15,11 @@ import RequestMarkers from "./RequestMarkers";
 import BinMarkers from "./BinMarkers";
 import SearchOverlay from "./SearchOverlay";
 import MapControls from "./MapControls";
+import FilterWindow from "./FilterWindow";
+import AddWindow from "./AddWindow";
+
+// Icon Utility
+import { createAddMarkerIcon } from "./mapIcons";
 
 const Map = () => {
   const { currentUser } = useContext(AuthContext);
@@ -28,8 +33,6 @@ const Map = () => {
     refetchRequests,
     markers,
     markersLoading,
-    markersPending,
-    markersError,
   } = useMapData();
 
   const {
@@ -120,90 +123,119 @@ const Map = () => {
     setToTime,
     err,
     handleSubmit: (e) => handleSubmit(e, setMarkerWithIdA),
+    toggleAddWindow,
+    classes,
     form: formRef,
   };
 
-  if (markersPending || markersLoading) return <LoadingPage />;
-  if (markersError) return <h4>{markersError.message}</h4>;
+  const filterWindowProps = {
+    selectedMarkerType,
+    handleMarkerTypeChange,
+    toggleFilterWindow,
+  };
+
+  const searchOverlayProps = {
+    searchReference,
+    handleSearchCoordinates,
+    setSearchAddress,
+    handleFilterMarkers,
+    handleCancelSearch,
+    searchPerformed,
+    searchRadius,
+    handleSearchRadiusChange: setSearchRadius,
+    searchClicked,
+    toggleFilterWindow,
+    showFilterWindow,
+    selectedMarkerType,
+    handleMarkerTypeChange,
+  };
+
+  const controlsProps = {
+    toggleFilterWindow,
+    toggleAddWindow,
+    currentUser,
+    isLoaded,
+    handleCancelSearch,
+    searchPerformed,
+  };
+
+  if (!isLoaded || markersLoading) return <LoadingPage />;
 
   return (
-    <div className={`${classes.Map} h-[calc(100dvh-64px)] md:h-screen`}>
-      <MapControls
-        showFilterWindow={showFilterWindow}
-        toggleFilterWindow={toggleFilterWindow}
-        showAddWindow={showAddWindow}
-        toggleAddWindow={toggleAddWindow}
-        currentUser={currentUser}
-        selectedMarkerType={selectedMarkerType}
-        handleMarkerTypeChange={handleMarkerTypeChange}
-        addWindowProps={addWindowProps}
-        classes={classes}
-      />
+    <div className="relative w-full h-[calc(100vh-80px)] bg-slate-50 overflow-hidden">
+    <GoogleMap
+        onRightClick={(e) =>
+          handleRightClick(
+            e,
+            setReqLat,
+            setReqLng,
+            setReqAddress,
+            setShowAddWindow
+          )
+        }
+        mapContainerClassName="w-full h-full"
+        center={center}
+        zoom={mapZoom}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: false,
+          styles: [
+            {
+              featureType: "poi",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
+        }}
+      >
+        <BinMarkers
+          markers={filteredMarkersByType}
+          selectedMarker={selectedMarker}
+          setSelectedMarker={setSelectedMarker}
+          currentUser={currentUser}
+          handleShowAddress={handleShowAddress}
+          handleOpenGoogleMaps={handleOpenGoogleMaps}
+        />
 
-      {!isLoaded ? (
-        <div className={classes.loaderWrapper}>
-          <div className={classes.container}>
-            <div className={classes.ring}></div>
-            <div className={classes.ring}></div>
-            <div className={classes.ring}></div>
-            <span className={classes.loading}>Recycle</span>
+        <RequestMarkers
+          requests={requests}
+          selectedMarker={selectedMarker}
+          setSelectedMarker={setSelectedMarker}
+          currentUser={currentUser}
+          handleShowAddress={handleShowAddress}
+          handleOpenGoogleMaps={handleOpenGoogleMaps}
+        />
+
+        {markerWithIdA && (
+          <MarkerF
+            position={markerWithIdA}
+            icon={{
+              url: createAddMarkerIcon(),
+              scaledSize: new window.google.maps.Size(50, 50),
+              anchor: new window.google.maps.Point(25, 25),
+            }}
+          />
+        )}
+      </GoogleMap>
+
+      <SearchOverlay {...searchOverlayProps} />
+      <MapControls {...controlsProps} />
+
+      {/* Slide-over Overlays */}
+      {showFilterWindow && (
+        <div className="fixed inset-0 z-[2000] flex items-end md:items-center md:justify-center p-0 md:p-6 bg-black/20 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md">
+            <FilterWindow {...filterWindowProps} />
           </div>
         </div>
-      ) : (
-        <GoogleMap
-          mapContainerClassName={classes.mapContainer}
-          gestureHandling="none"
-          center={center}
-          zoom={mapZoom}
-          onRightClick={(e) =>
-            handleRightClick(e, setReqLat, setReqLng, setReqAddress, setShowAddWindow)
-          }
-        >
-          {markerWithIdA && (
-            <MarkerF
-              key={markerWithIdA.id}
-              position={{ lat: markerWithIdA.lat, lng: markerWithIdA.lng }}
-              icon={{
-                url: require(`../../img/icons/${markerWithIdA.type}.png`),
-              }}
-              onClick={() => handleShowAddress(markerWithIdA.address)}
-            />
-          )}
+      )}
 
-          <SearchOverlay
-            searchReference={searchReference}
-            handleSearchCoordinates={handleSearchCoordinates}
-            setSearchAddress={setSearchAddress}
-            handleCancelSearch={handleCancelSearch}
-            handleFilterMarkers={handleFilterMarkers}
-            searchClicked={searchClicked}
-            searchRadius={searchRadius}
-            handleSearchRadiusChange={setSearchRadius}
-            classes={classes}
-            toggleFilterWindow={toggleFilterWindow}
-            showFilterWindow={showFilterWindow}
-            selectedMarkerType={selectedMarkerType}
-            handleMarkerTypeChange={handleMarkerTypeChange}
-          />
-
-          <BinMarkers
-            markers={filteredMarkersByType}
-            selectedMarker={selectedMarker}
-            setSelectedMarker={setSelectedMarker}
-            currentUser={currentUser}
-            handleShowAddress={handleShowAddress}
-            handleOpenGoogleMaps={handleOpenGoogleMaps}
-          />
-
-          <RequestMarkers
-            requests={requests}
-            selectedMarker={selectedMarker}
-            setSelectedMarker={setSelectedMarker}
-            currentUser={currentUser}
-            handleShowAddress={handleShowAddress}
-            handleOpenGoogleMaps={handleOpenGoogleMaps}
-          />
-        </GoogleMap>
+      {showAddWindow && (
+        <div className="fixed inset-0 z-[2000] flex items-end md:items-center md:justify-center p-0 md:p-6 bg-black/20 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md">
+            <AddWindow {...addWindowProps} />
+          </div>
+        </div>
       )}
     </div>
   );

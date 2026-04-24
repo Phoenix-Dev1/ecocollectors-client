@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import classes from "./bins.module.css";
+import { createMarkerIcon } from "../../../../components/map/mapIcons";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const UpdateBin = () => {
@@ -146,7 +147,14 @@ const UpdateBin = () => {
           center={coordinates}
           zoom={13}
         >
-          <MarkerF position={coordinates} />
+          <MarkerF 
+            position={coordinates} 
+            icon={{
+              url: createMarkerIcon(updatedData.type),
+              scaledSize: new window.google.maps.Size(40, 40),
+              anchor: new window.google.maps.Point(20, 20),
+            }}
+          />
         </GoogleMap>
       </div>
       <div className="mt-6 w-96">
