@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { VscFilter } from "react-icons/vsc";
@@ -18,6 +18,22 @@ const SearchOverlay = ({
   selectedMarkerType,
   handleMarkerTypeChange,
 }) => {
+  const [placeholder, setPlaceholder] = useState("Search recycling bins near you...");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setPlaceholder("Search Bins...");
+      } else {
+        setPlaceholder("Search recycling bins near you...");
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="absolute top-16 md:top-6 left-4 md:left-1/2 md:-translate-x-1/2 z-[100] w-[calc(100%-2rem)] md:w-auto md:min-w-[700px]">
       <div className="flex items-center gap-4">
@@ -32,7 +48,7 @@ const SearchOverlay = ({
               <input
                 type="text"
                 className="w-full bg-transparent border-none focus:ring-0 text-base font-medium text-eco-text placeholder:text-eco-muted py-2"
-                placeholder="Search recycling bins near you..."
+                placeholder={placeholder}
                 onChange={(e) => setSearchAddress(e.target.value)}
                 required
               />

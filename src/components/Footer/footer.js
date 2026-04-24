@@ -9,10 +9,10 @@ const Footer = () => {
       {/* Decorative background blur */}
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-eco-primary/5 rounded-full blur-3xl -mb-32 -mr-32"></div>
       
-      <div className="w-full max-w-7xl mx-auto px-6 py-8 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start">
-            <a href="/" className="group flex items-center mb-3 transition-transform hover:scale-105">
+      <div className="w-full max-w-7xl mx-auto px-6 py-3.5 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5">
+            <a href="/" className="group flex items-center transition-transform hover:scale-105 shrink-0">
               <div className="w-9 h-9 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 mr-3">
                 <img src={smallLogo} className="h-5 w-5" alt="Logo" />
               </div>
@@ -20,13 +20,16 @@ const Footer = () => {
                 Eco<span className="text-eco-primary">Collectors</span>
               </span>
             </a>
-            <p className="text-eco-muted font-medium text-xs max-w-xs text-center md:text-left">
+            
+            <div className="hidden md:block h-6 w-px bg-gray-200"></div>
+
+            <p className="text-eco-muted font-medium text-[11px] md:text-xs max-w-xs md:max-w-md text-center md:text-left leading-tight">
               Empowering communities to build a sustainable future through innovative recycling solutions.
             </p>
           </div>
 
           <div className="flex flex-col items-center md:items-end">
-            <nav className="mb-4">
+            <nav>
               <ul className="flex flex-wrap justify-center gap-6 text-sm font-bold text-eco-text">
                 <li>
                   <a href="/about" className="hover:text-eco-primary transition-colors">About Us</a>
@@ -42,7 +45,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-3">
           <span className="text-xs text-eco-muted font-medium text-center md:text-left">
             © {currentYear} <span className="text-eco-text font-bold">EcoCollectors.</span> Developed by Bar Kaziro & Liran Barzilai.
           </span>
