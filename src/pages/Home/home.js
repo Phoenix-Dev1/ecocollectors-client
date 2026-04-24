@@ -89,7 +89,7 @@ const Home = () => {
             </p>
           </div>
           {/* Quiz Card */}
-          <div className="animate-pulse">
+          <div>
             <QuizCard quiz={randomQuiz} />
           </div>
         </div>

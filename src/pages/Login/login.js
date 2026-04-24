@@ -59,95 +59,109 @@ function SignInForm() {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
-        <a
-          href="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-        >
-          <img className="w-8 h-8 mr-2" src={smallLogo} alt="logo" />
-          Eco Collectors
-        </a>
-        <div className="w-full h-[450px] bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign in to your account
-            </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
-              <div>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  name="email"
-                  id="email"
-                  value={inputs.email}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-              <div>
-                <div className="relative">
-                  <input
-                    onChange={handleChange}
-                    type={showPassword ? "text" : "password"} // Toggle input type based on visibility state
-                    name="password"
-                    id="password"
-                    placeholder="Please enter your password"
-                    value={inputs.password}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    onClick={togglePasswordVisibility}
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <FiEyeOff className="h-5 w-5 text-gray-500" />
-                    ) : (
-                      <FiEye className="h-5 w-5 text-gray-500" />
-                    )}
-                  </button>
-                </div>
-              </div>
+    <section className="min-h-screen bg-eco-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-eco-primary/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-eco-secondary/5 rounded-full blur-3xl"></div>
 
-              <button
-                onClick={handleSubmit}
-                type="submit"
-                className="text-sm font-medium leading-6 text-gray-900 rounded-lg shadow-md focus:outline-none w-full h-12 transition-colors duration-150 ease-in-out bg-gray-700  dark:text-white hover:bg-gray-600 hover:text-primary-500"
-              >
-                Sign In
-              </button>
-              <div className="flex items-right justify-left">
-                <a
-                  href="/password-recovery"
-                  className="text-sm font-medium text-white text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Forgot password?
-                </a>
+      <div className="w-full max-w-md animate-fade-in relative z-10">
+        <div className="flex flex-col items-center mb-10">
+          <a href="/" className="group transition-transform hover:scale-105">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-eco-primary rounded-2xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
+                <img className="w-8 h-8" src={smallLogo} alt="logo" />
               </div>
-            </form>
-            {err && (
-              <p className="flex items-center justify-center  text-s text-red-700 font-semibold ">
-                {err}
-              </p>
-            )}
-            <hr className="my-6 border-gray-300 w-full" />
-            <div className="flex flex-col space-y-4">
-              <span className="flex flex-col sm:flex-row items-center sm:items-center">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Don't have an account?
-                </span>
-                <a
-                  href="/register"
-                  className="ml-2 text-primary-600 hover:underline text-purple-600 dark:text-primary-500"
-                >
-                  Sign up
-                </a>
+              <span className="text-3xl font-black tracking-tight text-eco-text">
+                Eco<span className="text-eco-primary">Collectors</span>
               </span>
             </div>
+          </a>
+        </div>
+
+        <div className="glass !rounded-[2.5rem] p-10 shadow-2xl shadow-eco-primary/5 border border-white/40">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-black text-eco-text tracking-tight">Welcome Back</h1>
+            <p className="text-eco-muted mt-3 font-medium">Log in to manage your recycling impact</p>
+          </div>
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="email">
+                Email Address
+              </label>
+              <input
+                onChange={handleChange}
+                type="text"
+                name="email"
+                id="email"
+                value={inputs.email}
+                className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between ml-1">
+                <label className="block text-sm font-bold text-eco-text" htmlFor="password">
+                  Password
+                </label>
+                <a
+                  href="/password-recovery"
+                  className="text-xs font-bold text-eco-primary hover:text-eco-secondary transition-colors"
+                >
+                  Forgot Password?
+                </a>
+              </div>
+              <div className="relative group">
+                <input
+                  onChange={handleChange}
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  value={inputs.password}
+                  className="w-full px-5 py-4 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium pr-14"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-eco-primary transition-colors duration-300"
+                  onClick={togglePasswordVisibility}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {err && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-bold text-center border border-red-100 animate-shake">
+                {err}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full btn-primary !py-4 shadow-xl shadow-eco-primary/20 flex items-center justify-center space-x-2 group active:scale-[0.98]"
+            >
+              <span className="text-lg">Sign In</span>
+              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </form>
+
+          <div className="mt-10 pt-8 border-t border-gray-100 text-center">
+            <p className="text-eco-muted font-medium">
+              Don't have an account?{" "}
+              <a
+                href="/register"
+                className="text-eco-primary font-black hover:text-eco-secondary transition-colors inline-flex items-center"
+              >
+                Create one now
+              </a>
+            </p>
           </div>
         </div>
       </div>

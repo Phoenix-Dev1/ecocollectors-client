@@ -54,187 +54,205 @@ function SignupForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen dark:bg-gray-900">
-      <div className="leading-loose bg-gray-50 dark:bg-gray-900 overflow-auto w-96">
-        <form className="m-0 p-8 bg-gray-50 dark:bg-gray-800 rounded shadow-xl">
-          <a
-            href="/"
-            className="flex items-center justify-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white "
-          >
-            <img className="w-8 h-8 mr-2" src={smallLogo} alt="logo" />
-            Register - Eco Collectors
+    <div className="min-h-screen bg-eco-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-eco-primary/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-eco-secondary/5 rounded-full blur-3xl"></div>
+
+      <div className="w-full max-w-2xl animate-fade-in relative z-10">
+        <div className="flex flex-col items-center mb-10">
+          <a href="/" className="group transition-transform hover:scale-105">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-eco-primary rounded-2xl flex items-center justify-center shadow-lg shadow-eco-primary/20">
+                <img className="w-8 h-8" src={smallLogo} alt="logo" />
+              </div>
+              <span className="text-3xl font-black tracking-tight text-eco-text">
+                Eco<span className="text-eco-primary">Collectors</span>
+              </span>
+            </div>
           </a>
-          <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-white" htmlFor="first_name">
-              First Name
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="first_name"
-              name="first_name"
-              type="text"
-              required
-              placeholder="First Name"
-              aria-label="First name"
-            />
+        </div>
+
+        <div className="glass !rounded-[2.5rem] p-10 shadow-2xl shadow-eco-primary/5 border border-white/40">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-black text-eco-text tracking-tight">Join the Mission</h1>
+            <p className="text-eco-muted mt-3 font-medium">Create your account and start making a difference</p>
           </div>
-          <div className="inline-block mt-2 -mx-1 pl-1 w-1/2">
-            <label className="block text-sm text-white" htmlFor="last_name">
-              Last Name
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="last_name"
-              name="last_name"
-              type="text"
-              required
-              placeholder="Last Name"
-              aria-label="Last Name"
-            />
-          </div>
-          <div className="mt-2">
-            <label className="block text-sm text-white" htmlFor="email">
-              Email
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="ex: name@example.com"
-              aria-label="email"
-            />
-          </div>
-          <div className="mt-2">
-            <div className="inline-block mt-2 w-1/2 pr-1">
-              <label className="block text-sm text-white" htmlFor="address">
-                Address
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="first_name">
+                  First Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  required
+                  placeholder="John"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="last_name">
+                  Last Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  required
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="email">
+                Email Address
               </label>
               <input
                 onChange={handleChange}
-                className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-                id="address"
-                name="address"
-                type="text"
+                className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                id="email"
+                name="email"
+                type="email"
                 required
-                placeholder="Street"
-                aria-label="Address"
+                placeholder="john@example.com"
               />
             </div>
-            <div className="inline-block mt-2 -mx-1 pl-1 w-1/2">
-              <label className="block text-sm text-white" htmlFor="city">
-                City
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="address">
+                  Street Address
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                  id="address"
+                  name="address"
+                  type="text"
+                  required
+                  placeholder="123 Eco St"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="city">
+                  City
+                </label>
+                <input
+                  onChange={handleChange}
+                  className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                  id="city"
+                  name="city"
+                  type="text"
+                  required
+                  placeholder="Green City"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="phone">
+                Phone Number
               </label>
               <input
                 onChange={handleChange}
-                className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-                id="city"
-                name="city"
-                type="text"
+                className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium placeholder:text-gray-400"
+                id="phone"
+                name="phone"
+                type="tel"
                 required
-                placeholder="City"
-                aria-label="City"
+                placeholder="+1 (555) 000-0000"
               />
             </div>
-          </div>
-          <div className="mt-2">
-            <label className="text-sm block text-white" htmlFor="phone">
-              Phone Number
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="phone"
-              name="phone"
-              type="tel"
-              required
-              placeholder="Enter your phone number"
-              aria-label="Phone Number"
-            />
-          </div>
-          <div className="mt-2 relative">
-            <label className="text-sm block text-white" htmlFor="password">
-              Password
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"} // Toggle password visibility
-              required
-              placeholder="••••••••"
-              aria-label="Password"
-            />
-            <button
-              type="button"
-              className="absolute mt-3 inset-y-0 right-0 flex items-center pr-3"
-              onClick={togglePasswordVisibility}
-              tabIndex={-1}
-            >
-              {showPassword ? (
-                <FiEyeOff className="h-5 w-5 text-gray-500" />
-              ) : (
-                <FiEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-          <div className="mt-2 relative">
-            <label
-              className="text-sm block text-white"
-              htmlFor="confirm_password"
-            >
-              Confirm Password
-            </label>
-            <input
-              onChange={handleChange}
-              className="w-full px-2 py-2 bg-gray-600 rounded border border-gray-300 text-white"
-              id="confirm_password"
-              name="confirm_password"
-              type={showConfirmPassword ? "text" : "password"} // Toggle confirm password visibility
-              required
-              placeholder="••••••••"
-              aria-label="Confirm Password"
-            />
-            <button
-              type="button"
-              className="absolute pt-3 inset-y-0 right-0 flex items-center pr-3"
-              onClick={toggleConfirmPasswordVisibility}
-              tabIndex={-1}
-            >
-              {showConfirmPassword ? (
-                <FiEyeOff className="h-5 w-5 text-gray-500" />
-              ) : (
-                <FiEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-          {err && (
-            <p className="flex items-center justify-center text-sm text-red-700 font-semibold">
-              {err}
-            </p>
-          )}
-          <div className="mt-4 flex justify-center">
-            <a href="/login">
-              <p className="mb-4 underline text-gray-400 hover:text-gray-50">
-                Already have an account?
-              </p>
-            </a>
-          </div>
-          <div className="flex justify-center">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2 relative">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="password">
+                  Password
+                </label>
+                <div className="relative group">
+                  <input
+                    onChange={handleChange}
+                    className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium pr-12"
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-eco-primary transition-colors"
+                    onClick={togglePasswordVisibility}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2 relative">
+                <label className="block text-sm font-bold text-eco-text ml-1" htmlFor="confirm_password">
+                  Confirm Password
+                </label>
+                <div className="relative group">
+                  <input
+                    onChange={handleChange}
+                    className="w-full px-5 py-3.5 bg-white/50 rounded-2xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all duration-300 font-medium pr-12"
+                    id="confirm_password"
+                    name="confirm_password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    required
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-eco-primary transition-colors"
+                    onClick={toggleConfirmPasswordVisibility}
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {err && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-bold text-center border border-red-100 animate-shake">
+                {err}
+              </div>
+            )}
+
             <button
               onClick={handleSubmit}
-              className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded justify-center items-center hover:bg-black"
               type="submit"
+              className="w-full btn-primary !py-4 shadow-xl shadow-eco-primary/20 flex items-center justify-center space-x-2 group active:scale-[0.98] mt-4"
             >
-              Create Account
+              <span className="text-lg">Create Account</span>
+              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
             </button>
+          </form>
+
+          <div className="mt-10 pt-8 border-t border-gray-100 text-center">
+            <p className="text-eco-muted font-medium">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="text-eco-primary font-black hover:text-eco-secondary transition-colors"
+              >
+                Sign In
+              </a>
+            </p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

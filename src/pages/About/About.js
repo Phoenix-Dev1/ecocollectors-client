@@ -1,11 +1,3 @@
-import { useState, Fragment, useEffect } from 'react';
-import {
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Avatar,
-} from '@material-tailwind/react';
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import ec from '../../img/sm-logo.png';
 import liran from '../../img/liran.jpg';
 import bar from '../../img/bar.jpg';
@@ -13,161 +5,108 @@ import manager from '../../img/recyclers-manager-icon.png';
 import maps from '../../img/google-maps-icon.webp';
 
 export default function About() {
-  const [open, setOpen] = useState(0);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
-  const customAnimation = {
-    mount: { scale: 1 },
-    unmount: { scale: 0.9 },
-  };
-
-  useEffect(() => {
-    setOpen(1); // Open the first accordion on initial load or refresh
-  }, []);
-
   return (
-    <Fragment>
-      {/* About Eco-Collectors Accordion */}
-      <Accordion
-        open={open === 1}
-        animate={customAnimation}
-        className="bg-gray-700"
-      >
-        <AccordionHeader
-          onClick={() => handleOpen(1)}
-          className="bg-gray-800 text-white px-12 py-8 flex items-center justify-between"
-        >
-          <Avatar src={ec} alt="avatar" className="mr-5" />
-          About Eco-Collectors
-          {open === 1 ? (
-            <ArrowUpIcon className="w-5 h-5 ml-auto" />
-          ) : (
-            <ArrowDownIcon className="w-5 h-5 ml-auto" />
-          )}
-        </AccordionHeader>
-        {open === 1 && (
-          <AccordionBody className="text-white text-base font-bold px-6 py-4">
-            Eco-Collectors is a recycling initiative founded by Liran and Bar,
-            two students at the Technion University in Haifa, Israel. Our
-            mission is to promote recycling and contribute to a cleaner
-            environment.
-          </AccordionBody>
-        )}
-      </Accordion>
+    <div className="animate-fade-in bg-eco-background min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 px-6 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full">
+           <div className="absolute top-10 right-10 w-64 h-64 bg-eco-primary/10 rounded-full blur-3xl"></div>
+           <div className="absolute bottom-10 left-10 w-64 h-64 bg-eco-secondary/10 rounded-full blur-3xl"></div>
+        </div>
 
-      {/* Liran - The Collector Accordion */}
-      <Accordion
-        open={open === 2}
-        animate={customAnimation}
-        className="bg-gray-700"
-      >
-        <AccordionHeader
-          onClick={() => handleOpen(2)}
-          className="bg-gray-800 text-white px-12 py-8"
-        >
-          <Avatar src={liran} alt="avatar" className="mr-5" />
-          Liran - The Collector
-          {open === 2 ? (
-            <ArrowUpIcon className="w-5 h-5 ml-auto" />
-          ) : (
-            <ArrowDownIcon className="w-5 h-5 ml-auto" />
-          )}
-        </AccordionHeader>
-        {open === 2 && (
-          <AccordionBody className="text-white text-base font-bold px-6 py-4">
-            Liran is a dedicated collector who gathers bottles for recycling. He
-            plays a vital role in our initiative by collecting bottles from
-            various sources and ensuring they are properly recycled.
-          </AccordionBody>
-        )}
-      </Accordion>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center justify-center p-3 bg-white rounded-3xl shadow-xl mb-8 group hover:scale-110 transition-transform">
+             <img src={ec} alt="Eco-Collectors" className="w-16 h-16 object-contain" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black text-eco-text tracking-tight mb-6">
+            Our Mission for a <span className="text-eco-primary italic">Greener</span> Haifa
+          </h1>
+          <p className="text-xl text-eco-muted leading-relaxed font-medium">
+            Eco-Collectors is a recycling initiative founded by students at the Technion University. 
+            We are dedicated to promoting sustainability and contributing to a cleaner environment through technology and community action.
+          </p>
+        </div>
+      </section>
 
-      {/* Bar - The Recycler Accordion */}
-      <Accordion
-        open={open === 3}
-        animate={customAnimation}
-        className="bg-gray-700"
-      >
-        <AccordionHeader
-          onClick={() => handleOpen(3)}
-          className="bg-gray-800 text-white px-12 py-8"
-        >
-          <Avatar src={bar} alt="avatar" className="mr-5" />
-          Bar - The Recycler
-          {open === 3 ? (
-            <ArrowUpIcon className="w-5 h-5 ml-auto" />
-          ) : (
-            <ArrowDownIcon className="w-5 h-5 ml-auto" />
-          )}
-        </AccordionHeader>
-        {open === 3 && (
-          <AccordionBody className="text-white text-base font-bold px-6 py-4">
-            Bar is responsible for recycling the collected bottles. After
-            requesting collection, Bar meets with the designated collector,
-            receives the bottles, and ensures they are placed in the appropriate
-            recycling facilities.
-          </AccordionBody>
-        )}
-      </Accordion>
+      {/* Team & Operations Grid */}
+      <section className="py-20 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          {/* Team Member: Liran */}
+          <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+                <img src={liran} alt="Liran" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-eco-text">Liran</h3>
+                <p className="text-eco-primary font-bold text-sm uppercase tracking-wider">The Collector</p>
+              </div>
+            </div>
+            <p className="text-eco-muted leading-relaxed font-medium">
+              Liran gathers bottles for recycling from various sources across Haifa. He ensures every collected item is handled with care and directed to the proper facilities.
+            </p>
+          </div>
 
-      {/* The Recycler's Manager Accordion */}
-      <Accordion
-        open={open === 4}
-        animate={customAnimation}
-        className="bg-gray-700"
-      >
-        <AccordionHeader
-          onClick={() => handleOpen(4)}
-          className="bg-gray-800 text-white px-12 py-8"
-        >
-          <Avatar src={manager} alt="avatar" className="mr-5" />
-          The Recycler's Manager
-          {open === 4 ? (
-            <ArrowUpIcon className="w-5 h-5 ml-auto" />
-          ) : (
-            <ArrowDownIcon className="w-5 h-5 ml-auto" />
-          )}
-        </AccordionHeader>
-        {open === 4 && (
-          <AccordionBody className="text-white text-base font-bold px-6 py-4">
-            The Recycler's Manager, handled by Liran and Bar, oversees the
-            operations and addresses user complaints. Additionally, the manager
-            reviews and approves new recyclers who submit their information
-            through the authorization form on our website.
-          </AccordionBody>
-        )}
-      </Accordion>
+          {/* Team Member: Bar */}
+          <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+                <img src={bar} alt="Bar" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-eco-text">Bar</h3>
+                <p className="text-eco-secondary font-bold text-sm uppercase tracking-wider">The Recycler</p>
+              </div>
+            </div>
+            <p className="text-eco-muted leading-relaxed font-medium">
+              Bar oversees the recycling process. He coordinates with collectors, validates requests, and manages the placement of materials in designated recycling centers.
+            </p>
+          </div>
 
-      {/* Google Maps Integration Accordion */}
-      <Accordion
-        open={open === 5}
-        animate={customAnimation}
-        className="bg-gray-700"
-      >
-        <AccordionHeader
-          onClick={() => handleOpen(5)}
-          className="bg-gray-800 text-white px-12 py-8"
-        >
-          <Avatar src={maps} alt="avatar" className="mr-5" />
-          Google Maps Integration
-          {open === 5 ? (
-            <ArrowUpIcon className="w-5 h-5 ml-auto" />
-          ) : (
-            <ArrowDownIcon className="w-5 h-5 ml-auto" />
-          )}
-        </AccordionHeader>
-        {open === 5 && (
-          <AccordionBody className="text-white text-base font-bold px-6 py-4">
-            We have integrated the Google Maps API into our website to provide a
-            map interface where users can view and upload requests for bottle
-            collection. Currently, we are focusing on serving the city of Haifa,
-            Israel.
-          </AccordionBody>
-        )}
-      </Accordion>
-    </Fragment>
+          {/* Management */}
+          <div className="glass !rounded-[2.5rem] p-8 shadow-glass hover:shadow-glass-lg transition-all duration-500 group">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <img src={manager} alt="Manager" className="w-10 h-10 object-contain" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-eco-text">Operations</h3>
+                <p className="text-amber-500 font-bold text-sm uppercase tracking-wider">Management</p>
+              </div>
+            </div>
+            <p className="text-eco-muted leading-relaxed font-medium">
+              Our operations team oversees all activities, approves new recyclers, and ensures that user complaints are addressed promptly to maintain high service standards.
+            </p>
+          </div>
+
+          {/* Technology */}
+          <div className="lg:col-span-3 glass !rounded-[2.5rem] p-10 mt-8 shadow-glass flex flex-col md:flex-row items-center gap-10 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-eco-primary/5 rounded-full -mr-16 -mt-16"></div>
+            
+            <div className="w-32 h-32 flex-shrink-0 bg-blue-50 rounded-[2rem] flex items-center justify-center shadow-inner relative z-10">
+              <img src={maps} alt="Google Maps" className="w-20 h-20 object-contain" />
+            </div>
+            
+            <div className="relative z-10">
+              <h3 className="text-3xl font-black text-eco-text mb-4">Precision Recycling with Google Maps</h3>
+              <p className="text-lg text-eco-muted leading-relaxed font-medium max-w-3xl">
+                We've integrated high-precision mapping to connect collectors and recyclers efficiently. 
+                Our platform allows users to pin collection requests in real-time, focusing on optimizing routes and reducing carbon footprint across Haifa.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer-like CTA */}
+      <section className="py-20 px-6 text-center">
+        <h2 className="text-3xl font-bold text-eco-text mb-8">Ready to make an impact?</h2>
+        <div className="flex flex-wrap justify-center gap-4">
+          <a href="/register" className="btn-primary !px-10 !py-4 shadow-xl shadow-eco-primary/20">Get Started</a>
+          <a href="/contact-us" className="px-10 py-4 bg-white text-eco-text font-black rounded-2xl border border-gray-200 hover:bg-eco-background transition-all">Contact Us</a>
+        </div>
+      </section>
+    </div>
   );
 }
