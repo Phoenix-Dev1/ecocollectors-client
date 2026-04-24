@@ -16,10 +16,7 @@ const WelcomeUser = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeUser`,
-          { withCredentials: true }
-        );
+        const res = await api.get("/user/welcomeUser");
         setTotalRequests(res.data.totalRequests);
         setTotalRecycledBottles(res.data.totalRecycledBottles);
         setAvgClosingTime(res.data.avgClosingTime);
