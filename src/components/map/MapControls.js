@@ -29,7 +29,7 @@ const MapControls = ({
         />
       )}
 
-      <div className="absolute bottom-6 right-4 md:bottom-auto md:top-24 z-[500] flex flex-col gap-3">
+      <div className="fixed bottom-6 right-4 md:absolute md:bottom-auto md:top-24 z-[500] flex flex-col gap-3">
         {/* Filter FAB - Mobile Only */}
         <button 
           onClick={toggleFilterWindow}

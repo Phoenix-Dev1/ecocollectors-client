@@ -5,7 +5,7 @@ import { AuthContext } from "../../../context/authContext";
 import { FiMap, FiClock, FiCheckCircle, FiUser, FiSettings, FiArrowRight, FiActivity, FiUsers, FiCalendar } from "react-icons/fi";
 
 const WelcomeUser = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext);
   const [totalRequests, setTotalRequests] = useState(0);
   const [totalRecycledBottles, setTotalRecycledBottles] = useState(0);
   const [avgClosingTime, setAvgClosingTime] = useState(0);
@@ -27,6 +27,10 @@ const WelcomeUser = () => {
         setLast3RecyclersNames(res.data.last3RecyclersNames || []);
         setCurrentMonthRecycledBottles(res.data.currentMonthRecycledBottles);
       } catch (error) {
+        console.error("Session potentially expired or unauthorized:", error);
+        if (error.response?.status === 401) {
+          logout();
+        }
         setTotalRequests(-1);
         setTotalRecycledBottles(-1);
         setAvgClosingTime(-1);
@@ -36,7 +40,7 @@ const WelcomeUser = () => {
       }
     };
     fetchUserData();
-  }, []);
+  }, [logout]);
 
   const currentDate = new Date();
   const currentMonth = new Intl.DateTimeFormat("en", { month: "long" }).format(currentDate);

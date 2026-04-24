@@ -2,10 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-import { FiMenu, FiX, FiSettings, FiUser, FiBox, FiCheckCircle, FiClock, FiUsers, FiUserPlus, FiLayers, FiTrash2 } from "react-icons/fi";
+import { FiGrid, FiX, FiSettings, FiUser, FiBox, FiCheckCircle, FiClock, FiUsers, FiUserPlus, FiLayers, FiTrash2 } from "react-icons/fi";
 
 const Dashboard = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext);
   const [userRole, setUserRole] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -19,10 +19,13 @@ const Dashboard = () => {
         setUserRole(response.data.role);
       } catch (error) {
         console.error("Error fetching user role:", error);
+        if (error.response?.status === 401) {
+          logout();
+        }
       }
     };
     fetchUserRole();
-  }, []);
+  }, [logout]);
 
   const handleWelcome = () => {
     if (currentUser.role === 1) return "/user/welcomeAdmin";
@@ -39,12 +42,12 @@ const Dashboard = () => {
   return (
     <>
       {/* Mobile Toggle Button */}
-      <div className="lg:hidden fixed top-20 left-4 z-50">
+      <div className="lg:hidden fixed top-24 left-4 z-50">
         <button 
           onClick={toggleMenu}
           className="p-3 bg-white shadow-xl rounded-2xl text-slate-800 border border-slate-100 hover:bg-slate-50 transition-all active:scale-95"
         >
-          {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          {isMobileMenuOpen ? <FiX size={24} /> : <FiGrid size={24} />}
         </button>
       </div>
 
@@ -65,9 +68,9 @@ const Dashboard = () => {
         transition-transform duration-500 ease-in-out
         ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
       `}>
-        <div className="p-8 flex flex-col h-full">
-          {/* Logo Section */}
-          <div className="mb-10 pt-4 lg:pt-0">
+        <div className="p-8 pt-28 lg:pt-8 flex flex-col h-full">
+          {/* Logo Section - Hidden on mobile to avoid overlap with toggle */}
+          <div className="mb-10 pt-4 lg:pt-0 hidden lg:block">
             <Link to={handleWelcome()} className="group inline-block" onClick={() => setIsMobileMenuOpen(false)}>
               <h1 className="text-2xl font-black text-slate-800 tracking-tighter transition-all group-hover:scale-105">
                 Eco<span className="text-emerald-500">Collectors</span>
