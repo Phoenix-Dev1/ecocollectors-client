@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../../img/logo-no-bg.png';
+import smallLogo from "../../img/sm-logo.png";
 import { AuthContext } from '../../context/authContext';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 
@@ -42,22 +42,34 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 left-0 right-0 z-[1000] glass px-6 h-20 flex justify-between items-center transition-all duration-300">
-      <Link to="/" className="flex items-center space-x-2">
-        <img className="h-12 w-auto object-contain transition-transform duration-300 hover:scale-105" src={Logo} alt="Eco Collectors" />
-        <span className="hidden lg:block text-xl font-bold bg-gradient-to-r from-eco-secondary to-eco-primary bg-clip-text text-transparent">
-          EcoCollectors
+      <Link to="/" className="flex items-center space-x-3 group">
+        <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 transition-transform duration-300 group-hover:scale-110">
+          <img src={smallLogo} className="h-6 w-6" alt="Logo" />
+        </div>
+        <span className="hidden lg:block text-2xl font-black tracking-tight text-eco-text">
+          Eco<span className="text-eco-primary">Collectors</span>
         </span>
       </Link>
 
-      <ul className="hidden md:flex items-center space-x-6">
-        <li className="hover:text-eco-primary transition-colors font-medium">
-          <Link to="/">Home</Link>
+      <ul className="hidden md:flex items-center space-x-8">
+        <li className="group">
+          <Link to="/" className="flex items-center space-x-1.5 hover:text-eco-primary transition-all duration-300 font-medium text-gray-700">
+            <span>Home</span>
+          </Link>
+        </li>
+        <li className="group">
+          <Link to="/map" className="flex items-center space-x-1.5 hover:text-eco-primary transition-all duration-300 font-medium text-gray-700">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            <span>Interactive Map</span>
+          </Link>
         </li>
         {currentUser && (
           <>
             <li className={`relative group py-2`}>
               <div 
-                className="flex items-center cursor-pointer hover:text-eco-primary transition-colors font-medium"
+                className="flex items-center cursor-pointer hover:text-eco-primary transition-colors font-medium text-gray-700"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
               >
@@ -91,23 +103,17 @@ const Navbar = () => {
                 </Link>
               </div>
             </li>
-            <li className="hover:text-eco-primary transition-colors font-medium">
+            <li className="hover:text-eco-primary transition-colors font-medium text-gray-700">
               <Link to="/contact-us">Contact Us</Link>
             </li>
           </>
         )}
         
         {currentUser ? (
-          <div className="flex items-center space-x-4 ml-4 pl-6 border-l border-gray-200">
-             <Link
-                to="/map"
-                className="btn-primary flex items-center justify-center !py-2 !px-5"
-              >
-                Open Map
-              </Link>
+          <div className="flex items-center space-x-6 ml-4 pl-6 border-l border-gray-200">
             <Link 
               to={handleWelcome()} 
-              className="font-semibold text-eco-secondary hover:text-eco-primary transition-colors"
+              className="font-bold text-eco-secondary hover:text-eco-primary transition-colors"
             >
               {currentUser.first_name}
             </Link>
@@ -139,9 +145,13 @@ const Navbar = () => {
             : 'fixed left-[-100%] top-0 h-full transition-all duration-500 z-[2000]'
         }
       >
-        <div className="flex items-center mb-10">
-           <img className="h-10 w-auto" src={Logo} alt="Eco Collectors" />
-           <span className="ml-2 text-xl font-bold text-eco-primary">EcoCollectors</span>
+        <div className="flex items-center mb-10 group">
+          <div className="w-10 h-10 bg-eco-primary rounded-xl flex items-center justify-center shadow-lg shadow-eco-primary/20 mr-3">
+            <img src={smallLogo} className="h-6 w-6" alt="Logo" />
+          </div>
+          <span className="text-2xl font-black tracking-tight text-eco-text">
+            Eco<span className="text-eco-primary">Collectors</span>
+          </span>
         </div>
         
         <ul className="space-y-6">
@@ -149,7 +159,7 @@ const Navbar = () => {
             <Link to="/" onClick={closeNav}>Home</Link>
           </li>
           <li className="text-lg font-medium">
-            <Link to="/map" onClick={closeNav}>Live Map</Link>
+            <Link to="/map" onClick={closeNav}>Interactive Map</Link>
           </li>
           {currentUser && (
             <>
