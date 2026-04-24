@@ -33,8 +33,8 @@ const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUs
               position={{ lat: req_lat, lng: req_lng }}
               icon={{
                 url: createRequestIcon(type),
-                scaledSize: new window.google.maps.Size(40, 40),
-                anchor: new window.google.maps.Point(20, 20),
+                scaledSize: new window.google.maps.Size(44, 44),
+                anchor: new window.google.maps.Point(22, 22),
               }}
               onClick={() => handleShowAddress(req_address)}
             >

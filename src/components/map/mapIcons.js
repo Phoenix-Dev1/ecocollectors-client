@@ -31,28 +31,35 @@ export const createMarkerIcon = (type) => {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 };
 
-export const createRequestIcon = (type) => {
-  const isPending = type === 'Pending';
+export const createRequestIcon = (type = "") => {
+  const normalizedType = String(type).toLowerCase();
+  const isPending = normalizedType.includes("pending");
   const color = isPending ? "#64748B" : "#F43F5E";
+  
   const svg = `
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
-          <feOffset dx="0" dy="1.5" result="offsetblur"/>
-          <feComponentTransfer><feFuncA type="linear" slope="0.2"/></feComponentTransfer>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+          <feOffset dx="0" dy="2" result="offsetblur"/>
+          <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
           <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
+      
       ${isPending 
-        ? `<rect x="10" y="10" width="20" height="20" rx="4" fill="${color}" transform="rotate(45 20 20)" filter="url(#shadow)"/>
-           <path d="M20 16V20L22.5 21.5M26.5 20C26.5 23.6 23.6 26.5 20 26.5C16.4 26.5 13.5 23.6 13.5 20C13.5 16.4 16.4 13.5 20 13.5C23.6 13.5 26.5 16.4 26.5 20Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
-        : `<rect x="6" y="6" width="28" height="28" rx="8" fill="${color}" filter="url(#shadow)"/>
-           <path d="M15 16V26C15 26.8 15.7 27.5 16.5 27.5H23.5C24.3 27.5 25 26.8 25 26V16M20 12.5V16M15 16H25M18 21H22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`
+        ? `<!-- Pending Request: Slate Diamond -->
+           <rect x="12" y="12" width="20" height="20" rx="4" fill="${color}" filter="url(#glow)" transform="rotate(45 22 22)"/>
+           <rect x="12" y="12" width="20" height="20" rx="4" stroke="white" stroke-width="2.5" transform="rotate(45 22 22)"/>
+           <path d="M22 17V22L24.5 23.5M29 22C29 25.866 25.866 29 22 29C18.134 29 15 25.866 15 22C15 18.134 18.134 15 22 15C25.866 15 29 18.134 29 22Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`
+        : `<!-- Active Request: Rose Rounded Square -->
+           <rect x="8" y="8" width="28" height="28" rx="8" fill="${color}" filter="url(#glow)"/>
+           <rect x="8" y="8" width="28" height="28" rx="8" stroke="white" stroke-width="2.5"/>
+           <path d="M16 20V28C16 28.5523 16.4477 29 17 29H27C27.5523 29 28 28.5523 28 28V20M16 20C16 19.4477 16.4477 19 17 19H27C27.5523 19 28 19.4477 28 20M16 20H28M20 24H24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`
       }
     </svg>
   `;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.trim())}`;
 };
 
 export const createAddMarkerIcon = () => {
