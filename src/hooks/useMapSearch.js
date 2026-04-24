@@ -36,9 +36,15 @@ export const useMapSearch = (markers, setCenter, setMapZoom) => {
   const handleSearchCoordinates = (searchReference) => {
     const [place] = searchReference.current.getPlaces();
     if (place) {
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
       setSearchAddress(place.formatted_address);
-      setSearchLat(place.geometry.location.lat());
-      setSearchLng(place.geometry.location.lng());
+      setSearchLat(lat);
+      setSearchLng(lng);
+      setCenter({ lat, lng });
+      setMapZoom(15);
+      setSearchClicked(true);
+      setSearchPerformed(true);
     }
   };
 

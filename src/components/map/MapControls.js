@@ -13,6 +13,7 @@ const MapControls = ({
   selectedMarkerType,
   handleMarkerTypeChange,
   addWindowProps,
+  filterWindowProps,
   classes,
 }) => {
   return (
@@ -28,47 +29,49 @@ const MapControls = ({
         />
       )}
 
-      <div className="absolute bottom-48 right-6 md:bottom-auto md:top-24 z-[500] flex flex-col space-y-4">
-        {/* Filter FAB - Mobile Only (Migrated to Search Island on Desktop) */}
+      <div className="absolute bottom-6 right-4 md:bottom-auto md:top-24 z-[500] flex flex-col gap-3">
+        {/* Filter FAB - Mobile Only */}
         <button 
           onClick={toggleFilterWindow}
-          className={`md:hidden w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl active:scale-95 hover:scale-105 ${
-            showFilterWindow ? 'bg-eco-primary text-white' : 'bg-white text-eco-text hover:bg-eco-background'
+          className={`md:hidden w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-md active:scale-95 hover:scale-105 ${
+            showFilterWindow ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-600 border border-white/50'
           }`}
           title="Filter Bins"
         >
           <VscFilter size={24} />
         </button>
 
-        {/* Add FAB */}
+        {/* Add FAB - Mobile Only */}
         {currentUser && (
           <button 
             onClick={toggleAddWindow}
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl active:scale-95 hover:scale-105 ${
-              showAddWindow ? 'bg-eco-accent text-white' : 'bg-white text-eco-accent hover:bg-eco-background'
+            className={`md:hidden w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 hover:scale-105 shadow-xl shadow-emerald-500/30 ${
+              showAddWindow ? 'bg-emerald-600 text-white' : 'bg-emerald-500 text-white'
             }`}
             title="New Request"
           >
-            <FaPlus size={24} />
+            <FaPlus size={22} />
           </button>
         )}
-
-        {/* Window Overlays - Mobile Bottom Sheet / Desktop Floating Card */}
-        {showFilterWindow && (
-          <div className="fixed bottom-0 inset-x-0 z-[1000] md:hidden animate-slide-up">
-            <FilterWindow
-              selectedMarkerType={selectedMarkerType}
-              handleMarkerTypeChange={handleMarkerTypeChange}
-              toggleFilterWindow={toggleFilterWindow}
-            />
-          </div>
-        )}
-        {showAddWindow && (
-          <div className="fixed bottom-0 inset-x-0 z-[1000] md:absolute md:inset-auto md:top-0 md:right-20 w-full md:w-[400px] animate-slide-up md:animate-fade-in">
-            <AddWindow {...addWindowProps} toggleAddWindow={toggleAddWindow} />
-          </div>
-        )}
       </div>
+
+      {/* Window Overlays - Mobile Bottom Sheet */}
+      {showFilterWindow && (
+        <div 
+          className="fixed bottom-0 inset-x-0 z-[1000] md:hidden animate-slide-up"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FilterWindow {...filterWindowProps} />
+        </div>
+      )}
+      {showAddWindow && (
+        <div 
+          className="fixed bottom-0 inset-x-0 z-[1000] md:hidden animate-slide-up"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AddWindow {...addWindowProps} />
+        </div>
+      )}
     </>
   );
 };

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { VscFilter } from "react-icons/vsc";
+import { FaPlus } from "react-icons/fa";
 import FilterWindow from "./FilterWindow";
+import AddWindow from "./AddWindow";
 
 const SearchOverlay = ({
   searchReference,
@@ -15,8 +17,13 @@ const SearchOverlay = ({
   handleSearchRadiusChange,
   toggleFilterWindow,
   showFilterWindow,
+  toggleAddWindow,
+  showAddWindow,
   selectedMarkerType,
   handleMarkerTypeChange,
+  currentUser,
+  filterWindowProps,
+  addWindowProps,
 }) => {
   const [placeholder, setPlaceholder] = useState("Search recycling bins near you...");
 
@@ -35,7 +42,7 @@ const SearchOverlay = ({
   }, []);
 
   return (
-    <div className="absolute top-16 md:top-6 left-4 md:left-1/2 md:-translate-x-1/2 z-[100] w-[calc(100%-2rem)] md:w-auto md:min-w-[700px]">
+    <div className="absolute top-4 md:top-6 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[100] w-auto md:min-w-[700px]">
       <div className="flex items-center gap-4">
         <div className="flex-1 bg-white/90 backdrop-blur-md rounded-full flex items-center p-1.5 pl-5 shadow-xl border border-white/40 transition-all duration-300 focus-within:ring-2 focus-within:ring-emerald-500/50">
           <AiOutlineSearch className="text-eco-muted w-6 h-6 mr-3 flex-shrink-0" />
@@ -47,7 +54,7 @@ const SearchOverlay = ({
             >
               <input
                 type="text"
-                className="w-full bg-transparent border-none focus:ring-0 text-base font-medium text-eco-text placeholder:text-eco-muted py-2"
+                className="w-full h-12 bg-transparent border-none focus:ring-0 text-base font-medium text-eco-text placeholder:text-eco-muted"
                 placeholder={placeholder}
                 onChange={(e) => setSearchAddress(e.target.value)}
                 required
@@ -77,31 +84,58 @@ const SearchOverlay = ({
           </div>
         </div>
 
-        {/* Desktop Filter Button (Control Island) */}
-        <div className="hidden md:block relative">
-          <button 
-            onClick={toggleFilterWindow}
-            className={`flex w-14 h-14 bg-white/90 backdrop-blur-md rounded-2xl items-center justify-center transition-all duration-300 shadow-xl border border-white/40 active:scale-95 hover:scale-105 group ${
-              showFilterWindow || selectedMarkerType !== "" ? 'border-emerald-500/30 ring-2 ring-emerald-500/10' : ''
-            }`}
-            title="Filter Bins"
-          >
-            <VscFilter 
-              size={24} 
-              className={`transition-colors ${
-                showFilterWindow || selectedMarkerType !== "" ? 'text-eco-primary' : 'text-eco-text group-hover:text-eco-primary'
-              }`} 
-            />
-          </button>
-
-          {/* Desktop Filter Dropdown */}
-          {showFilterWindow && (
-            <div className="absolute top-[4.5rem] right-0 w-72 z-[200] animate-fade-in">
-              <FilterWindow
-                selectedMarkerType={selectedMarkerType}
-                handleMarkerTypeChange={handleMarkerTypeChange}
-                toggleFilterWindow={toggleFilterWindow}
+        {/* Desktop Control Island (Filter & Add) */}
+        <div className="hidden md:flex items-center gap-3">
+          {/* Desktop Filter Button */}
+          <div className="relative">
+            <button 
+              onClick={toggleFilterWindow}
+              className={`flex w-14 h-14 bg-white/90 backdrop-blur-md rounded-2xl items-center justify-center transition-all duration-300 shadow-xl border border-white/40 active:scale-95 hover:scale-105 group ${
+                showFilterWindow || selectedMarkerType !== "" ? 'border-emerald-500/30 ring-2 ring-emerald-500/10' : ''
+              }`}
+              title="Filter Bins"
+            >
+              <VscFilter 
+                size={24} 
+                className={`transition-colors ${
+                  showFilterWindow || selectedMarkerType !== "" ? 'text-eco-primary' : 'text-eco-text group-hover:text-eco-primary'
+                }`} 
               />
+            </button>
+
+            {/* Desktop Filter Popover */}
+            {showFilterWindow && (
+              <div 
+                className="absolute top-[4.5rem] right-0 w-80 z-[200] animate-fade-in shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <FilterWindow {...filterWindowProps} />
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Add Button */}
+          {currentUser && (
+            <div className="relative">
+              <button 
+                onClick={toggleAddWindow}
+                className={`flex w-14 h-14 rounded-2xl items-center justify-center transition-all duration-300 shadow-xl active:scale-95 hover:scale-105 ${
+                  showAddWindow ? 'bg-emerald-600 text-white shadow-emerald-500/40' : 'bg-emerald-500 text-white shadow-emerald-500/20'
+                }`}
+                title="New Request"
+              >
+                <FaPlus size={20} />
+              </button>
+
+              {/* Desktop Add Popover */}
+              {showAddWindow && (
+                <div 
+                  className="absolute top-[4.5rem] right-0 w-[400px] z-[200] animate-fade-in shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AddWindow {...addWindowProps} />
+                </div>
+              )}
             </div>
           )}
         </div>

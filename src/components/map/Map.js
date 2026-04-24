@@ -15,8 +15,6 @@ import RequestMarkers from "./RequestMarkers";
 import BinMarkers from "./BinMarkers";
 import SearchOverlay from "./SearchOverlay";
 import MapControls from "./MapControls";
-import FilterWindow from "./FilterWindow";
-import AddWindow from "./AddWindow";
 
 // Icon Utility
 import { createAddMarkerIcon } from "./mapIcons";
@@ -146,13 +144,18 @@ const Map = () => {
     searchClicked,
     toggleFilterWindow,
     showFilterWindow,
+    toggleAddWindow,
+    showAddWindow,
     selectedMarkerType,
     handleMarkerTypeChange,
+    currentUser,
   };
 
   const controlsProps = {
     toggleFilterWindow,
+    showFilterWindow,
     toggleAddWindow,
+    showAddWindow,
     currentUser,
     isLoaded,
     handleCancelSearch,
@@ -218,25 +221,16 @@ const Map = () => {
         )}
       </GoogleMap>
 
-      <SearchOverlay {...searchOverlayProps} />
-      <MapControls {...controlsProps} />
-
-      {/* Slide-over Overlays */}
-      {showFilterWindow && (
-        <div className="fixed inset-0 z-[2000] flex items-end md:items-center md:justify-center p-0 md:p-6 bg-black/20 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md">
-            <FilterWindow {...filterWindowProps} />
-          </div>
-        </div>
-      )}
-
-      {showAddWindow && (
-        <div className="fixed inset-0 z-[2000] flex items-end md:items-center md:justify-center p-0 md:p-6 bg-black/20 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md">
-            <AddWindow {...addWindowProps} />
-          </div>
-        </div>
-      )}
+      <SearchOverlay 
+        {...searchOverlayProps} 
+        filterWindowProps={filterWindowProps}
+        addWindowProps={addWindowProps}
+      />
+      <MapControls 
+        {...controlsProps} 
+        filterWindowProps={filterWindowProps}
+        addWindowProps={addWindowProps}
+      />
     </div>
   );
 };
