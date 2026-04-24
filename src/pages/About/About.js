@@ -1,4 +1,4 @@
-import ec from '../../img/sm-logo.png';
+import ec from '../../img/logo-no-bg.png';
 import liran from '../../img/liran.jpg';
 import bar from '../../img/bar.jpg';
 import manager from '../../img/recyclers-manager-icon.png';
@@ -15,7 +15,7 @@ export default function About() {
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center justify-center p-3 bg-white rounded-3xl shadow-xl mb-8 group hover:scale-110 transition-transform">
+          <div className="inline-flex items-center justify-center p-3 bg-eco-primary/10 rounded-2xl shadow-xl mb-8 group hover:scale-110 transition-transform">
              <img src={ec} alt="Eco-Collectors" className="w-16 h-16 object-contain" />
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-eco-text tracking-tight mb-6">
