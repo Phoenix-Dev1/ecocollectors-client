@@ -1,4 +1,4 @@
-import ec from '../../img/logo-no-bg.png';
+import ec from '../../img/sm-logo.png';
 import liran from '../../img/liran.jpg';
 import bar from '../../img/bar.jpg';
 import manager from '../../img/recyclers-manager-icon.png';
@@ -15,11 +15,11 @@ export default function About() {
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center justify-center p-3 bg-eco-primary/10 rounded-2xl shadow-xl mb-8 group hover:scale-110 transition-transform">
-             <img src={ec} alt="Eco-Collectors" className="w-16 h-16 object-contain" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-eco-primary rounded-2xl shadow-xl mb-8 group hover:scale-110 transition-transform">
+             <img src={ec} alt="Eco-Collectors" className="w-10 h-10 object-contain" />
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-eco-text tracking-tight mb-6">
-            Our Mission for a <span className="text-eco-primary italic">Greener</span> Haifa
+            Our Mission for a <span className="text-eco-primary italic">Greener</span> Israel
           </h1>
           <p className="text-xl text-eco-muted leading-relaxed font-medium">
             Eco-Collectors is a recycling initiative founded by students at the Technion University. 
