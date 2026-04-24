@@ -7,9 +7,9 @@ import Dashboard from '../components/Sidebar/usersDashboard';
 export default function UserLayout() {
   return (
     <>
-      <div className="flex bg-eco-background min-h-[calc(100vh-80px)]">
+      <div className="flex flex-col lg:flex-row bg-eco-background min-h-[calc(100vh-80px)]">
         <Dashboard />
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

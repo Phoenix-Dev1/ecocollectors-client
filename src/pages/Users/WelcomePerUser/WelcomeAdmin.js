@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { FiUsers, FiUserPlus, FiLayers, FiTrash2, FiActivity, FiArrowRight, FiCheckCircle, FiCalendar, FiClock } from "react-icons/fi";
 
 const WelcomeAdmin = () => {
   const [totalRequests, setTotalRequests] = useState(0);
@@ -7,8 +9,7 @@ const WelcomeAdmin = () => {
   const [avgClosingTime, setAvgClosingTime] = useState(0);
   const [activeBinsCount, setActiveBinsCount] = useState(0);
   const [totalCompletedRequests, setTotalCompletedRequests] = useState(0);
-  const [currentMonthCollectedBottles, setCurrentMonthCollectedBottles] =
-    useState(0);
+  const [currentMonthCollectedBottles, setCurrentMonthCollectedBottles] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,130 +25,191 @@ const WelcomeAdmin = () => {
         setTotalCompletedRequests(res.data.totalCompletedRequests);
         setCurrentMonthCollectedBottles(res.data.currentMonthCollectedBottles);
       } catch (err) {
-        setTotalRequests(-1);
-        setTotalRecycledBottles(-1);
-        setAvgClosingTime(-1);
-        setActiveBinsCount(-1);
-        setTotalCompletedRequests(-1);
-        setCurrentMonthCollectedBottles(-1);
+        const errorVal = -1;
+        setTotalRequests(errorVal);
+        setTotalRecycledBottles(errorVal);
+        setAvgClosingTime(errorVal);
+        setActiveBinsCount(errorVal);
+        setTotalCompletedRequests(errorVal);
+        setCurrentMonthCollectedBottles(errorVal);
       }
     };
     fetchData();
   }, []);
 
-  const renderMetricCards = () => {
-    const currentDate = new Date();
-    const currentMonth = new Intl.DateTimeFormat("en", {
-      month: "long",
-    }).format(currentDate);
+  const currentDate = new Date();
+  const currentMonth = new Intl.DateTimeFormat("en", {
+    month: "long",
+  }).format(currentDate);
 
-    const metrics = [
-      {
-        title: "Total Requests",
-        subtitle: "All platform users",
-        value: totalRequests,
-        icon: "fa-list-check",
-        color: "text-indigo-600",
-        bg: "bg-indigo-50",
-      },
-      {
-        title: "Bottles Recycled",
-        subtitle: "Global ecosystem total",
-        value: totalRecycledBottles,
-        icon: "fa-bottle-water",
-        color: "text-emerald-600",
-        bg: "bg-emerald-50",
-      },
-      {
-        title: "Active Bins",
-        subtitle: "Deployed in system",
-        value: activeBinsCount,
-        icon: "fa-trash-can",
-        color: "text-amber-600",
-        bg: "bg-amber-50",
-      },
-      {
-        title: "Completed Work",
-        subtitle: "Fulfilled requests",
-        value: totalCompletedRequests,
-        icon: "fa-circle-check",
-        color: "text-blue-600",
-        bg: "bg-blue-50",
-      },
-      {
-        title: `${currentMonth} Collection`,
-        subtitle: "Current month impact",
-        value: `${currentMonthCollectedBottles} Bottles`,
-        icon: "fa-calendar-day",
-        color: "text-pink-600",
-        bg: "bg-pink-50",
-      },
-      {
-        title: "Avg. Resolution",
-        subtitle: "Closing time efficiency",
-        value: `${avgClosingTime} min`,
-        icon: "fa-clock",
-        color: "text-slate-600",
-        bg: "bg-slate-50",
-      },
-    ];
+  const metrics = [
+    {
+      title: "Total Requests",
+      subtitle: "Platform-wide",
+      value: totalRequests,
+      icon: <FiLayers />,
+      color: "text-indigo-600",
+      bg: "bg-indigo-50",
+    },
+    {
+      title: "Bottles Recycled",
+      subtitle: "Global Impact",
+      value: totalRecycledBottles,
+      icon: <FiActivity />,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+    },
+    {
+      title: "Active Bins",
+      subtitle: "Network Status",
+      value: activeBinsCount,
+      icon: <FiTrash2 />,
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+    },
+    {
+      title: "Completed Work",
+      subtitle: "Fulfilled requests",
+      value: totalCompletedRequests,
+      icon: <FiCheckCircle />,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    {
+      title: `${currentMonth} Impact`,
+      subtitle: "Monthly Collection",
+      value: currentMonthCollectedBottles,
+      icon: <FiCalendar />,
+      color: "text-pink-600",
+      bg: "bg-pink-50",
+    },
+    {
+      title: "Avg. Resolution",
+      subtitle: "Closing Efficiency",
+      value: `${avgClosingTime}m`,
+      icon: <FiClock />,
+      color: "text-slate-600",
+      bg: "bg-slate-50",
+    },
+  ];
 
-    return metrics.map((metric, index) => (
-      <div className="w-full sm:w-1/2 lg:w-1/3 p-4" key={index}>
-        <div className="backdrop-blur-md bg-white/70 rounded-[2rem] p-8 border border-white/40 shadow-sm hover:shadow-xl transition-all duration-500 group">
-          <div className="flex items-center justify-between mb-6">
-            <div className={`w-14 h-14 ${metric.bg} ${metric.color} rounded-2xl flex items-center justify-center text-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
-              <i className={`fa-solid ${metric.icon}`}></i>
-            </div>
-            <div className="flex flex-col items-end text-right">
-              <span className="text-[10px] font-black text-eco-muted uppercase tracking-[0.2em] mb-1">{metric.subtitle}</span>
-              <div className="h-1.5 w-12 bg-gray-100 rounded-full overflow-hidden">
-                <div className={`h-full ${metric.bg.replace('bg-', 'bg-').replace('50', '500')} w-2/3`}></div>
-              </div>
-            </div>
-          </div>
-          <h3 className="text-eco-muted font-bold text-sm uppercase tracking-wider">{metric.title}</h3>
-          <div className="text-4xl font-black text-eco-text mt-2 tracking-tight">
-            {metric.value === -1 ? (
-              <span className="text-red-400">Error</span>
-            ) : (
-              metric.value
-            )}
-          </div>
-        </div>
-      </div>
-    ));
-  };
+  const quickActions = [
+    {
+      title: "User Management",
+      desc: "Manage platform users and roles",
+      icon: <FiUsers size={24} />,
+      path: "/admin/user-management",
+      color: "indigo"
+    },
+    {
+      title: "Join Requests",
+      desc: "Review new recycler applications",
+      icon: <FiUserPlus size={24} />,
+      path: "/admin/join-requests",
+      color: "indigo"
+    },
+    {
+      title: "All Requests",
+      desc: "Monitor recycling transactions",
+      icon: <FiLayers size={24} />,
+      path: "/admin/requests",
+      color: "indigo"
+    },
+    {
+      title: "Recycle Bins",
+      desc: "Deploy and update bin locations",
+      icon: <FiTrash2 size={24} />,
+      path: "/admin/bins",
+      color: "indigo"
+    }
+  ];
 
   return (
-    <div className="animate-fade-in font-poppins">
+    <div className="animate-fade-in px-4 md:px-0">
       {/* Header Section */}
-      <div className="mb-12">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-1 w-12 bg-indigo-600 rounded-full"></div>
-          <span className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em]">Administrator Terminal</span>
+      <div className="mb-12 pt-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-1.5 w-12 bg-slate-800 rounded-full"></div>
+          <span className="text-xs font-black text-slate-800 uppercase tracking-[0.3em]">Administrator Terminal</span>
         </div>
-        <h1 className="text-5xl font-black text-eco-text leading-[1.1]">
+        <h1 className="text-4xl md:text-6xl font-black text-eco-text leading-[1.1] tracking-tight">
           Welcome Back, <br />
-          <span className="bg-gradient-to-r from-slate-800 to-indigo-600 bg-clip-text text-transparent">System Admin.</span>
+          <span className="bg-gradient-to-r from-slate-900 to-indigo-700 bg-clip-text text-transparent">System Admin.</span>
         </h1>
-        <p className="text-eco-muted mt-4 text-xl font-medium max-w-2xl leading-relaxed">
-          Monitor the global ecosystem performance and manage platform-wide recycling operations from your command center.
+        <p className="text-eco-muted mt-6 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+          Monitor global platform performance and manage recycling infrastructure from your centralized command center.
         </p>
       </div>
 
-      {/* Metrics Grid */}
-      <div className="flex flex-wrap -m-4">
-        {renderMetricCards()}
+      {/* Metrics Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {metrics.map((metric, index) => (
+          <div 
+            key={index}
+            className="glass !bg-white/90 p-6 rounded-[2.5rem] shadow-lg border border-white/40 group hover:shadow-xl transition-all duration-500"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className={`w-12 h-12 ${metric.bg} ${metric.color} rounded-2xl flex items-center justify-center text-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
+                {metric.icon}
+              </div>
+              <span className="text-[10px] font-black text-eco-muted uppercase tracking-wider">{metric.subtitle}</span>
+            </div>
+            <h3 className="text-eco-muted font-bold text-xs uppercase tracking-widest">{metric.title}</h3>
+            <div className="text-3xl font-black text-eco-text mt-2">
+              {metric.value === -1 ? <span className="text-red-400">Error</span> : metric.value}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Quick Actions Placeholder */}
-      <div className="mt-16 p-10 backdrop-blur-xl bg-slate-900/5 rounded-[3rem] border border-slate-200/50 relative overflow-hidden group">
-        <div className="relative z-10">
-          <h2 className="text-2xl font-black text-slate-800 mb-2">Platform Overview</h2>
-          <p className="text-slate-500 font-medium">All systems are operational. You have 0 pending join requests to review today.</p>
+      {/* Quick Actions Section */}
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-black text-slate-800 tracking-tight">Quick Access Control</h2>
+          <div className="hidden md:block h-px flex-1 bg-slate-100 mx-8"></div>
         </div>
-        <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-all duration-700"></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          {quickActions.map((action, index) => (
+            <Link 
+              key={index}
+              to={action.path}
+              className="group relative block p-8 glass !bg-white/80 rounded-[2.5rem] shadow-md border border-white/40 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden min-h-[140px]"
+            >
+              <div className="relative z-10 flex items-start justify-between">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:bg-indigo-600">
+                    {action.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-slate-800 mb-1 tracking-tight">{action.title}</h3>
+                    <p className="text-slate-500 font-medium text-sm">{action.desc}</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center text-slate-300 transition-all duration-500 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900">
+                  <FiArrowRight size={18} />
+                </div>
+              </div>
+              
+              {/* Decorative background pulse */}
+              <div className="absolute -right-10 -bottom-10 w-32 h-32 bg-slate-900/5 rounded-full blur-2xl group-hover:bg-indigo-600/10 transition-all duration-700"></div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer Insight Card */}
+      <div className="p-10 backdrop-blur-xl bg-slate-900 text-white rounded-[3rem] shadow-2xl relative overflow-hidden group">
+        <div className="relative z-10">
+          <h2 className="text-2xl font-black mb-2 tracking-tight italic">Platform Intelligence</h2>
+          <p className="text-slate-300 font-medium max-w-lg leading-relaxed">
+            All services are currently optimal. System-wide recycling activity is up 12% from last week. Keep up the great work!
+          </p>
+        </div>
+        <div className="absolute top-0 right-0 p-8 text-slate-800 opacity-20">
+          <FiActivity size={120} />
+        </div>
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-500/30 transition-all duration-700"></div>
       </div>
     </div>
   );
