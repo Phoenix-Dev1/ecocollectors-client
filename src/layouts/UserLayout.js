@@ -9,10 +9,8 @@ export default function UserLayout() {
     <>
       <div className="flex flex-col lg:flex-row bg-eco-background min-h-[calc(100vh-80px)]">
         <Dashboard />
-        <main className="flex-1 p-4 md:p-8">
-          <div className="max-w-7xl mx-auto">
-            <Outlet />
-          </div>
+        <main className="flex-1 w-full p-4 md:p-8 overflow-x-hidden">
+          <Outlet />
         </main>
       </div>
     </>

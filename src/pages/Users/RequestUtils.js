@@ -27,16 +27,21 @@ export function renderButtons(
   handleCancel,
   openModal
 ) {
+  const baseClass = "px-4 py-2.5 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all active:scale-95 whitespace-nowrap shadow-sm";
+  
   switch (status) {
     case 1:
       return (
         <>
-          <button className="mb-2 mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            <Link to={`/user/update-request?Id=${requestId}`}>Update</Link>
-          </button>
+          <Link 
+            to={`/user/update-request?Id=${requestId}`}
+            className={`${baseClass} bg-blue-500 hover:bg-blue-600 text-white shadow-blue-500/20`}
+          >
+            Update
+          </Link>
           <button
             onClick={() => handleCancel(requestId)}
-            className=" mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className={`${baseClass} bg-red-500 hover:bg-red-600 text-white shadow-red-500/20`}
           >
             Cancel Request
           </button>
@@ -47,13 +52,13 @@ export function renderButtons(
         <>
           <button
             onClick={() => handleAccept(requestId)}
-            className="mb-2 mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className={`${baseClass} bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20`}
           >
             Accept
           </button>
           <button
             onClick={() => handleDecline(requestId)}
-            className="mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className={`${baseClass} bg-red-500 hover:bg-red-600 text-white shadow-red-500/20`}
           >
             Decline
           </button>
@@ -61,33 +66,31 @@ export function renderButtons(
       );
     case 3:
       return (
-        <>
-          <p className="mb-2 text-black font-bold">Completed</p>
-        </>
+        <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-4 py-2 rounded-lg border border-emerald-100">
+          Completed
+        </span>
       );
     case 4:
       return (
-        <>
-          <p className="mb-2 text-black font-bold">Canceled</p>
-        </>
+        <span className="text-[10px] font-black uppercase tracking-widest text-red-600 bg-red-50 px-4 py-2 rounded-lg border border-red-100">
+          Canceled
+        </span>
       );
     case 5:
       return (
         <>
-          <>
-            <button
-              onClick={openModal} // Open the modal instead of handleAcceptAndClose
-              className="mb-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Accept & Close
-            </button>
-            <button
-              onClick={() => handleDecline(requestId)}
-              className="mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Cancel Pickup
-            </button>
-          </>{' '}
+          <button
+            onClick={openModal}
+            className={`${baseClass} bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20`}
+          >
+            Accept & Close
+          </button>
+          <button
+            onClick={() => handleDecline(requestId)}
+            className={`${baseClass} bg-red-500 hover:bg-red-600 text-white shadow-red-500/20`}
+          >
+            Cancel Pickup
+          </button>
         </>
       );
     default:
