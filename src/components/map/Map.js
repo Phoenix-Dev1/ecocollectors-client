@@ -250,6 +250,7 @@ const Map = () => {
         options={{
           disableDefaultUI: true,
           zoomControl: false,
+          gestureHandling: "greedy",
           styles: [
             {
               featureType: "poi",

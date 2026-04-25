@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { VscFilter } from "react-icons/vsc";
