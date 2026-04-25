@@ -83,7 +83,7 @@ const AddWindow = ({
             <input
               type="text"
               className="w-full px-4 py-3 bg-white/50 rounded-xl border border-gray-200 focus:border-eco-primary focus:ring-4 focus:ring-eco-primary/10 outline-none transition-all font-medium min-h-[44px]"
-              placeholder="Enter Location"
+              placeholder="Search or Right-Click Map"
               ref={inputReference}
               value={reqAddress}
               onChange={(e) => setReqAddress(e.target.value)}

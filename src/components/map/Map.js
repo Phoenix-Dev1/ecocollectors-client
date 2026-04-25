@@ -90,7 +90,7 @@ const Map = () => {
     handleShowAddress,
     handleOpenGoogleMaps,
     handleSubmit,
-  } = useMapActions(currentUser, refetchRequests);
+  } = useMapActions(currentUser, refetchRequests, setMarkerWithIdA);
 
   const {
     searchLat,
@@ -152,7 +152,10 @@ const Map = () => {
     setBottlesNumber,
     inputReference,
     handlePlaceChanged: () => {
-      const [place] = inputReference.current.getPlaces();
+      const places = inputReference.current?.getPlaces();
+      if (!places || places.length === 0) return;
+
+      const [place] = places;
       if (place) {
         setReqAddress(place.formatted_address);
         setReqLat(place.geometry.location.lat());
@@ -169,7 +172,7 @@ const Map = () => {
     toTime,
     setToTime,
     err,
-    handleSubmit: (e) => handleSubmit(e, setMarkerWithIdA),
+    handleSubmit,
     toggleAddWindow,
     classes,
     form: formRef,

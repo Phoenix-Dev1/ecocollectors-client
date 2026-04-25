@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { validateInputs } from "../components/map/InputValidation";
 import { showAddress, openGoogleMaps } from "../components/map/mapFunctions";
 
-export const useMapActions = (currentUser, refetchRequests) => {
+export const useMapActions = (currentUser, refetchRequests, setMarkerWithIdA) => {
   const navigate = useNavigate();
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [showFilterWindow, setShowFilterWindow] = useState(false);
@@ -32,9 +32,16 @@ export const useMapActions = (currentUser, refetchRequests) => {
   }, []);
 
   const toggleAddWindow = useCallback(() => {
-    setShowAddWindow((prev) => !prev);
+    setShowAddWindow((prev) => {
+      const nextState = !prev;
+      // If closing the window, clear the temporary "+" marker
+      if (!nextState && setMarkerWithIdA) {
+        setMarkerWithIdA(0);
+      }
+      return nextState;
+    });
     setShowFilterWindow(false);
-  }, []);
+  }, [setMarkerWithIdA]);
 
   const handleShowAddress = useCallback((address) => {
     showAddress(setSelectedMarker, address);
@@ -44,7 +51,7 @@ export const useMapActions = (currentUser, refetchRequests) => {
     openGoogleMaps(lat, lng);
   }, []);
 
-  const handleSubmit = async (e, setMarkerWithIdA) => {
+  const handleSubmit = async (e) => {
     if (e) e.preventDefault();
 
     const submittedFullName = fullName.trim() === "" ? initialName : fullName;
@@ -81,6 +88,7 @@ export const useMapActions = (currentUser, refetchRequests) => {
           );
 
           setShowAddWindow(false);
+          if (setMarkerWithIdA) setMarkerWithIdA(0); // Clear marker on success
           refetchRequests();
           navigate("/map");
 
@@ -94,7 +102,6 @@ export const useMapActions = (currentUser, refetchRequests) => {
           setFromTime("");
           setToTime("");
           setError(null);
-          if (setMarkerWithIdA) setMarkerWithIdA(0);
 
           window.alert("Request added successfully!");
         } catch (err) {
