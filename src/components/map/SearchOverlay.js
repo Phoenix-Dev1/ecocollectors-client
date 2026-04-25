@@ -25,24 +25,12 @@ const SearchOverlay = ({
   filterWindowProps,
   addWindowProps,
 }) => {
-  const [placeholder, setPlaceholder] = useState("Search recycling bins near you...");
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setPlaceholder("Search Bins...");
-      } else {
-        setPlaceholder("Search recycling bins near you...");
-      }
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="absolute top-4 md:top-6 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[100] w-auto md:min-w-[700px]">
+    <div className={`absolute top-4 md:top-6 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[100] transition-all duration-500 ease-in-out ${
+      isFocused ? 'md:w-[750px]' : 'md:w-[450px]'
+    }`}>
       <div className="flex items-center gap-4">
         <div className="flex-1 bg-white/90 backdrop-blur-md rounded-full flex items-center p-1.5 pl-5 shadow-xl border border-white/40 transition-all duration-300 focus-within:ring-2 focus-within:ring-emerald-500/50">
           <AiOutlineSearch className="text-eco-muted w-6 h-6 mr-3 flex-shrink-0" />
@@ -55,7 +43,9 @@ const SearchOverlay = ({
               <input
                 type="text"
                 className="w-full h-12 bg-transparent border-none focus:ring-0 text-base font-medium text-eco-text placeholder:text-eco-muted"
-                placeholder={placeholder}
+                placeholder="Search Bins..."
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 onChange={(e) => setSearchAddress(e.target.value)}
                 required
               />

@@ -1,6 +1,5 @@
 import React, { useRef, useContext, useMemo, useState, useEffect } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
-import { RiMap2Line } from "react-icons/ri";
 import { AuthContext } from "../../context/authContext";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import classes from "./map.module.css";
