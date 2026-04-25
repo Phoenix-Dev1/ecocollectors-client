@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useMemo } from "react";
+import React, { useRef, useContext, useMemo, useState, useEffect } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import { AuthContext } from "../../context/authContext";
 import LoadingPage from "../LoadingPage/LoadingPage";
@@ -19,11 +19,30 @@ import MapControls from "./MapControls";
 // Icon Utility
 import { createAddMarkerIcon } from "./mapIcons";
 
+/**
+ * RADAR PULSE SVG (Search Origin)
+ */
+const SEARCH_ORIGIN_SVG = `
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="9" fill="#10B981" />
+  <circle cx="50" cy="50" r="9" stroke="#10B981" stroke-width="2">
+    <animate attributeName="r" from="9" to="46" dur="1.5s" begin="0s" repeatCount="indefinite" />
+    <animate attributeName="stroke-opacity" from="0.8" to="0" dur="1.5s" begin="0s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="50" cy="50" r="9" stroke="#10B981" stroke-width="2">
+    <animate attributeName="r" from="9" to="46" dur="1.5s" begin="0.75s" repeatCount="indefinite" />
+    <animate attributeName="stroke-opacity" from="0.8" to="0" dur="1.5s" begin="0.75s" repeatCount="indefinite" />
+  </circle>
+</svg>`;
+
 const Map = () => {
   const { currentUser } = useContext(AuthContext);
   const searchReference = useRef();
   const inputReference = useRef();
   const formRef = useRef();
+
+  // Local state for temporal search marker visibility
+  const [showOriginPin, setShowOriginPin] = useState(false);
 
   // Initialize Custom Hooks
   const {
@@ -74,6 +93,8 @@ const Map = () => {
   } = useMapActions(currentUser, refetchRequests);
 
   const {
+    searchLat,
+    searchLng,
     setSearchAddress,
     filteredMarkers,
     searchPerformed,
@@ -94,6 +115,34 @@ const Map = () => {
       ? activeMarkers.filter((m) => m.type === selectedMarkerType)
       : activeMarkers;
   }, [searchPerformed, filteredMarkers, markers, selectedMarkerType]);
+
+  /**
+   * SEARCH ORIGIN VISIBILITY LIFECYCLE
+   * Manages the auto-hide logic for the radar pulse marker.
+   */
+  useEffect(() => {
+    let timeoutId;
+    
+    // If search is performed and coordinates exist, show the pin
+    if (searchPerformed && searchLat && searchLng) {
+      setShowOriginPin(true);
+      
+      // Auto-hide after 8 seconds to declutter the map
+      timeoutId = setTimeout(() => {
+        setShowOriginPin(false);
+      }, 10000);
+    }
+
+    // If user clicks a specific bin/request, instantly hide the origin pulse
+    if (selectedMarker) {
+      setShowOriginPin(false);
+      if (timeoutId) clearTimeout(timeoutId);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [searchPerformed, searchLat, searchLng, selectedMarker]);
 
   const addWindowProps = {
     fullName,
@@ -208,6 +257,19 @@ const Map = () => {
           handleShowAddress={handleShowAddress}
           handleOpenGoogleMaps={handleOpenGoogleMaps}
         />
+
+        {/* Temporal Search Origin Pulse Marker */}
+        {showOriginPin && searchLat && searchLng && (
+          <MarkerF
+            position={{ lat: searchLat, lng: searchLng }}
+            icon={{
+              url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(SEARCH_ORIGIN_SVG)}`,
+              scaledSize: new window.google.maps.Size(92, 92),
+              anchor: new window.google.maps.Point(46, 46),
+            }}
+            zIndex={0} // Keep it below the bins
+          />
+        )}
 
         {markerWithIdA && (
           <MarkerF

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import axios from "axios";
 import * as moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -26,23 +26,23 @@ export const useMapActions = (currentUser, refetchRequests) => {
     ? `${currentUser.first_name} ${currentUser.last_name}`
     : "";
 
-  const toggleFilterWindow = () => {
+  const toggleFilterWindow = useCallback(() => {
     setShowFilterWindow((prev) => !prev);
     setShowAddWindow(false);
-  };
+  }, []);
 
-  const toggleAddWindow = () => {
+  const toggleAddWindow = useCallback(() => {
     setShowAddWindow((prev) => !prev);
     setShowFilterWindow(false);
-  };
+  }, []);
 
-  const handleShowAddress = (address) => {
+  const handleShowAddress = useCallback((address) => {
     showAddress(setSelectedMarker, address);
-  };
+  }, []);
 
-  const handleOpenGoogleMaps = (lat, lng) => {
+  const handleOpenGoogleMaps = useCallback((lat, lng) => {
     openGoogleMaps(lat, lng);
-  };
+  }, []);
 
   const handleSubmit = async (e, setMarkerWithIdA) => {
     if (e) e.preventDefault();

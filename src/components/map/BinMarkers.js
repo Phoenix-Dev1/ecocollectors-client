@@ -76,34 +76,16 @@ const BinMarkers = ({ markers, selectedMarker, setSelectedMarker, currentUser, h
   }, [map]);
 
   /**
-   * 2. STABLE MARKER LIFECYCLE (PATCHED FOR MEMORY LEAKS)
+   * 2. STABLE MARKER LIFECYCLE (PATCHED FOR FLICKER & MEMORY LEAKS)
    */
   useEffect(() => {
     if (!map || !clustererRef.current) return;
 
-    // Helper to purge existing markers and their listeners from memory
-    const clearExistingMarkers = () => {
-      if (markersRef.current.length > 0) {
-        markersRef.current.forEach(m => {
-          window.google.maps.event.clearInstanceListeners(m); // Critical: Prevents listener leaks
-          m.setMap(null); // Remove from map
-        });
-        markersRef.current = [];
-      }
-      if (clustererRef.current) {
-        clustererRef.current.clearMarkers();
-      }
-    };
-
-    clearExistingMarkers();
-
-    if (validMarkers.length === 0) return;
-
-    // Create markers with explicit map attachment
+    // 1. Prepare new markers FIRST (minimizes the empty-map window)
     const newMarkers = validMarkers.map(binData => {
       const marker = new window.google.maps.Marker({
         position: { lat: Number(binData.lat), lng: Number(binData.lng) },
-        map: map, 
+        map: map, // Explicit attachment prevents the "vanishing" bug
         icon: {
           url: createMarkerIcon(binData.type),
           scaledSize: new window.google.maps.Size(40, 40),
@@ -119,10 +101,29 @@ const BinMarkers = ({ markers, selectedMarker, setSelectedMarker, currentUser, h
       return marker;
     });
 
-    markersRef.current = newMarkers;
-    clustererRef.current.addMarkers(newMarkers);
+    // 2. Helper to purge existing markers and their listeners from memory
+    const clearExistingMarkers = () => {
+      if (markersRef.current.length > 0) {
+        markersRef.current.forEach(m => {
+          window.google.maps.event.clearInstanceListeners(m);
+          m.setMap(null);
+        });
+        markersRef.current = [];
+      }
+      if (clustererRef.current) {
+        clustererRef.current.clearMarkers();
+      }
+    };
 
-    // CLEANUP ON UNMOUNT: Ensures total garbage collection
+    // 3. Swap markers (happens in a single execution block)
+    clearExistingMarkers();
+    
+    if (newMarkers.length > 0) {
+      markersRef.current = newMarkers;
+      clustererRef.current.addMarkers(newMarkers);
+    }
+
+    // CLEANUP ON UNMOUNT
     return () => clearExistingMarkers();
 
   }, [map, validMarkers, handleShowAddress]);

@@ -11,12 +11,23 @@ export const useMapSearch = (markers, setCenter, setMapZoom) => {
   const [searchRadius, setSearchRadius] = useState(5000);
   const [searchClicked, setSearchClicked] = useState(false);
 
+  const [debouncedRadius, setDebouncedRadius] = useState(searchRadius);
+
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     return geolib.getDistance(
       { latitude: lat1, longitude: lng1 },
       { latitude: lat2, longitude: lng2 }
     );
   };
+
+  // Debounce logic to prevent "The Radius Flicker"
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedRadius(searchRadius);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchRadius]);
 
   const updateFilteredMarkers = useCallback((radius) => {
     if (searchLat && searchLng) {
@@ -30,11 +41,16 @@ export const useMapSearch = (markers, setCenter, setMapZoom) => {
   }, [searchLat, searchLng, markers]);
 
   useEffect(() => {
-    updateFilteredMarkers(searchRadius);
-  }, [searchRadius, updateFilteredMarkers]);
+    updateFilteredMarkers(debouncedRadius);
+  }, [debouncedRadius, updateFilteredMarkers]);
 
-  const handleSearchCoordinates = (searchReference) => {
-    const [place] = searchReference.current.getPlaces();
+  const handleSearchCoordinates = useCallback((searchReference) => {
+    // Defensive check to prevent "undefined is not iterable" crash
+    const places = searchReference.current?.getPlaces();
+    
+    if (!places || places.length === 0) return;
+
+    const [place] = places;
     if (place) {
       const lat = place.geometry.location.lat();
       const lng = place.geometry.location.lng();
@@ -46,28 +62,28 @@ export const useMapSearch = (markers, setCenter, setMapZoom) => {
       setSearchClicked(true);
       setSearchPerformed(true);
     }
-  };
+  }, [setCenter, setMapZoom]);
 
-  const handleFilterMarkers = () => {
+  const handleFilterMarkers = useCallback(() => {
     if (searchLat && searchLng) {
       updateFilteredMarkers(searchRadius);
       setCenter({ lat: searchLat, lng: searchLng });
       setMapZoom(15);
       setSearchClicked(true);
     }
-  };
+  }, [searchLat, searchLng, searchRadius, updateFilteredMarkers, setCenter, setMapZoom]);
 
-  const handleCancelSearch = () => {
+  const handleCancelSearch = useCallback(() => {
     setSearchClicked(false);
     setSearchPerformed(false);
     setFilteredMarkers(markers);
     setSearchRadius(5000);
     setSearchAddress("");
-  };
+  }, [markers]);
 
-  const handleMarkerTypeChange = (e) => {
+  const handleMarkerTypeChange = useCallback((e) => {
     setSelectedMarkerType(e.target.value);
-  };
+  }, []);
 
   return {
     searchLat,
