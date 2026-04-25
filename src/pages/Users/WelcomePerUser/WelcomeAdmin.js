@@ -50,6 +50,7 @@ const WelcomeAdmin = () => {
       icon: <FiLayers />,
       color: "text-indigo-600",
       bg: "bg-indigo-50",
+      span: "lg:col-span-2",
     },
     {
       title: "Bottles Recycled",
@@ -58,6 +59,7 @@ const WelcomeAdmin = () => {
       icon: <FiActivity />,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
+      span: "lg:col-span-2",
     },
     {
       title: "Active Bins",
@@ -66,6 +68,7 @@ const WelcomeAdmin = () => {
       icon: <FiTrash2 />,
       color: "text-amber-600",
       bg: "bg-amber-50",
+      span: "lg:col-span-1",
     },
     {
       title: "Completed Work",
@@ -74,6 +77,7 @@ const WelcomeAdmin = () => {
       icon: <FiCheckCircle />,
       color: "text-blue-600",
       bg: "bg-blue-50",
+      span: "lg:col-span-1",
     },
     {
       title: `${currentMonth} Impact`,
@@ -82,6 +86,7 @@ const WelcomeAdmin = () => {
       icon: <FiCalendar />,
       color: "text-pink-600",
       bg: "bg-pink-50",
+      span: "lg:col-span-2",
     },
     {
       title: "Avg. Resolution",
@@ -90,6 +95,7 @@ const WelcomeAdmin = () => {
       icon: <FiClock />,
       color: "text-slate-600",
       bg: "bg-slate-50",
+      span: "lg:col-span-4",
     },
   ];
 
@@ -142,20 +148,20 @@ const WelcomeAdmin = () => {
       </div>
 
       {/* Metrics Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         {metrics.map((metric, index) => (
           <div 
             key={index}
-            className="glass !bg-white/90 p-6 rounded-[2.5rem] shadow-lg border border-white/40 group hover:shadow-xl transition-all duration-500"
+            className={`glass !bg-white/90 p-8 rounded-[2.5rem] shadow-lg border border-white/40 group hover:shadow-xl transition-all duration-500 ${metric.span}`}
           >
-            <div className="flex items-center justify-between mb-6">
-              <div className={`w-12 h-12 ${metric.bg} ${metric.color} rounded-2xl flex items-center justify-center text-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
+            <div className="flex items-center justify-between mb-8">
+              <div className={`w-14 h-14 ${metric.bg} ${metric.color} rounded-2xl flex items-center justify-center text-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
                 {metric.icon}
               </div>
-              <span className="text-[10px] font-black text-eco-muted uppercase tracking-wider">{metric.subtitle}</span>
+              <span className="text-[10px] font-black text-eco-muted uppercase tracking-[0.2em]">{metric.subtitle}</span>
             </div>
-            <h3 className="text-eco-muted font-bold text-xs uppercase tracking-widest">{metric.title}</h3>
-            <div className="text-3xl font-black text-eco-text mt-2">
+            <h3 className="text-eco-muted font-bold text-xs uppercase tracking-widest mb-1">{metric.title}</h3>
+            <div className="text-3xl md:text-4xl font-black text-eco-text">
               {metric.value === -1 ? <span className="text-red-400">Error</span> : metric.value}
             </div>
           </div>
