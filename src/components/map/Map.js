@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useMemo, useState, useEffect } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { RiMap2Line } from "react-icons/ri";
 import { AuthContext } from "../../context/authContext";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import classes from "./map.module.css";
@@ -43,6 +44,7 @@ const Map = () => {
 
   // Local state for temporal search marker visibility
   const [showOriginPin, setShowOriginPin] = useState(false);
+  const [mapTypeId, setMapTypeId] = useState("roadmap");
 
   // Initialize Custom Hooks
   const {
@@ -157,9 +159,19 @@ const Map = () => {
 
       const [place] = places;
       if (place) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
         setReqAddress(place.formatted_address);
-        setReqLat(place.geometry.location.lat());
-        setReqLng(place.geometry.location.lng());
+        setReqLat(lat);
+        setReqLng(lng);
+        setCenter({ lat, lng });
+        setMapZoom(15);
+        setMarkerWithIdA({
+          id: "A",
+          lat: lat,
+          lng: lng,
+          type: "addMarker",
+        });
       }
     },
     reqAddress,
@@ -201,6 +213,8 @@ const Map = () => {
     selectedMarkerType,
     handleMarkerTypeChange,
     currentUser,
+    mapTypeId,
+    setMapTypeId,
   };
 
   const controlsProps = {
@@ -212,6 +226,8 @@ const Map = () => {
     isLoaded,
     handleCancelSearch,
     searchPerformed,
+    mapTypeId,
+    setMapTypeId,
   };
 
   if (!isLoaded || markersLoading) return <LoadingPage />;
@@ -231,6 +247,7 @@ const Map = () => {
         mapContainerClassName="w-full h-full"
         center={center}
         zoom={mapZoom}
+        mapTypeId={mapTypeId}
         options={{
           disableDefaultUI: true,
           zoomControl: false,
