@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import validatePassword from "./validatePassword";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -57,13 +58,14 @@ export default function ChangePassword() {
       );
 
       // Show success alert
-      alert("Password changed successfully!");
+      toast.success("Password changed successfully!");
 
       // Redirect to homepage
       navigate("/");
     } catch (err) {
       setError(err.response?.data || "Error changing password"); // ✅ Fix: Prevent crash if err.response is undefined
       console.error("Error changing password:", err);
+      toast.error(err.response?.data || "Error changing password");
     }
   };
 

@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import * as moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { validateInputs } from "../components/map/InputValidation";
 import { showAddress, openGoogleMaps } from "../components/map/mapFunctions";
 
@@ -103,10 +104,22 @@ export const useMapActions = (currentUser, refetchRequests, setMarkerWithIdA) =>
           setToTime("");
           setError(null);
 
-          window.alert("Request added successfully!");
+          toast.success("Request added successfully!", {
+            duration: 4000,
+            style: {
+              background: '#10B981',
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#10B981',
+            },
+          });
         } catch (err) {
           console.error("Error submitting request:", err);
           setError("Failed to add request. Please try again.");
+          toast.error("Failed to add request. Please try again.");
         }
       } else {
         setError(validation.message);

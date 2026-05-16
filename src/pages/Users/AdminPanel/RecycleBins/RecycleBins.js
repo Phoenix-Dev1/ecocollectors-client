@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import {
   fetchAllRecycleBins,
-  capitalizeFirstLetter,
   deactivateBin,
   activateBin,
 } from './BinsFunctions';
-import { FiGrid, FiX, FiSettings, FiUser, FiBox, FiCheckCircle, FiClock, FiUsers, FiUserPlus, FiLayers, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 

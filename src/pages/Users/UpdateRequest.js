@@ -9,6 +9,7 @@ import axios from "axios";
 import { validateInputs } from "../Users/RequestUtils";
 import classes from "./UpdateRequest.module.css";
 import { createRequestIcon } from "../../components/map/mapIcons";
+import { toast } from "react-hot-toast";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 
@@ -53,7 +54,7 @@ const UpdateRequest = () => {
     e.preventDefault();
 
     if (requestStatus !== 1) {
-      alert("You can't update the request in this status.");
+      toast.error("You can't update the request in this status.");
       return;
     }
 
@@ -90,6 +91,7 @@ const UpdateRequest = () => {
             { withCredentials: true } // ✅ Ensures authentication
           );
 
+          toast.success("Request updated successfully!");
           setShowSuccessMessage(true);
           setErrorMessage(null);
           setTimeout(() => {
@@ -102,6 +104,7 @@ const UpdateRequest = () => {
             error.response?.data || error
           );
           setErrorMessage("Failed to update request. Please try again.");
+          toast.error("Failed to update request. Please try again.");
         }
       }
     } else {

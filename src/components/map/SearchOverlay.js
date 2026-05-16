@@ -28,11 +28,11 @@ const SearchOverlay = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className={`absolute top-4 md:top-6 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[100] transition-all duration-500 ease-in-out ${
+    <div className={`absolute top-4 md:top-6 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[1000] pointer-events-none transition-all duration-500 ease-in-out ${
       isFocused ? 'md:w-[750px]' : 'md:w-[450px]'
     }`}>
       <div className="flex items-center gap-4">
-        <div className="flex-1 bg-white/90 backdrop-blur-md rounded-full flex items-center p-1.5 pl-5 shadow-xl border border-white/40 transition-all duration-300 focus-within:ring-2 focus-within:ring-emerald-500/50">
+        <div className="flex-1 bg-white/90 backdrop-blur-md rounded-full flex items-center p-1.5 pl-5 shadow-xl border border-white/40 transition-all duration-300 focus-within:ring-2 focus-within:ring-emerald-500/50 pointer-events-auto">
           <AiOutlineSearch className="text-eco-muted w-6 h-6 mr-3 flex-shrink-0" />
           
           <div className="flex-1">
@@ -75,7 +75,7 @@ const SearchOverlay = ({
         </div>
 
         {/* Desktop Control Island (Filter & Add) */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3 pointer-events-auto">
           {/* Desktop Filter Button */}
           <div className="relative">
             <button 
@@ -132,7 +132,7 @@ const SearchOverlay = ({
       </div>
 
       {searchClicked && (
-        <div className="mt-4 mx-auto max-w-md bg-white/90 backdrop-blur-md rounded-2xl p-4 flex items-center space-x-4 animate-fade-in shadow-lg border border-white/40">
+        <div className="mt-4 mx-auto max-w-md bg-white/90 backdrop-blur-md rounded-2xl p-4 flex items-center space-x-4 animate-fade-in shadow-lg border border-white/40 pointer-events-auto">
           <span className="text-xs font-black text-eco-text uppercase tracking-wider whitespace-nowrap">Search Radius</span>
           <input
             type="range"

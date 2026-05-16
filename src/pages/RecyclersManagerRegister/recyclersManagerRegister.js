@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { validateForm } from "./managerFormValidation";
 import axios from "axios";
 import * as moment from "moment";
@@ -55,10 +56,17 @@ const RecyclersManagerRegister = () => {
           `${process.env.REACT_APP_URL}/recyclersManagers/recyclerManagerRegister`,
           inputsWithUserId
         );
-        window.alert("Request sent successfully!");
+        toast.success("Request sent successfully!", {
+          style: {
+            background: "#4f46e5", // Indigo to match the theme
+            color: "#fff",
+            fontWeight: "bold",
+          },
+        });
         navigate("/");
       } catch (err) {
         setError(err.response.data);
+        toast.error("Failed to send request.");
       }
     }
   };

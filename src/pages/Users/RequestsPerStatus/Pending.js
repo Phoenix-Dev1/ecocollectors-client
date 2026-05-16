@@ -1,10 +1,8 @@
 import React, { useState, useContext } from "react";
+import { toast } from "react-hot-toast";
 import { AuthContext } from "../../../context/authContext";
 import DataTable from "react-data-table-component";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { red, green } from "@mui/material/colors";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -15,7 +13,7 @@ import {
   cancelRequest,
   acceptAndCloseRequest,
 } from "../UserFunctions";
-import { renderButtons, modalStyle } from "../RequestUtils";
+import { renderButtons } from "../RequestUtils";
 import { format } from "date-fns";
 
 const Pending = () => {
@@ -142,16 +140,18 @@ const Pending = () => {
           requestId,
           newBottlesNumber
         );
-        if (response) {
-          closeModal();
-          refetch();
+          if (response) {
+            toast.success("Request closed successfully!");
+            closeModal();
+            refetch();
+          }
+        } catch (error) {
+          console.error("Error accepting and closing request:", error);
+          toast.error("Failed to close request.");
         }
-      } catch (error) {
-        console.error("Error accepting and closing request:", error);
+      } else {
+        toast.error("Invalid bottle number. Please enter a number greater than 0.");
       }
-    } else {
-      alert("Invalid bottle number. Please enter a number greater than 0.");
-    }
   };
 
   // Table columns

@@ -39,6 +39,7 @@ import RegionalRequests from "./pages/Users/ManagerPanel/RegionalRequests";
 import RegionalRecyclerRequests from "./pages/Users/RecyclerPanel/RegionalRequests";
 import AcceptedRequests from "./pages/Users/RecyclerPanel/AcceptedRequests";
 import CompletedRequests from "./pages/Users/RecyclerPanel/CompletedRequests";
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -103,6 +104,7 @@ export default function App() {
           <Route path="/join" element={<RecyclerRegister />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster position="top-center" reverseOrder={false} />
         <Footer />
       </Router>
     </QueryClientProvider>

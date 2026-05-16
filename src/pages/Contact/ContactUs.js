@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 import { AuthContext } from "../../context/authContext";
 
@@ -40,7 +41,13 @@ const ContactUs = () => {
       console.log(message);
 
       setTimeout(() => {
-        window.alert("Message sent successfully!"); // Display confirmation alert
+        toast.success("Message sent successfully!", {
+          style: {
+            background: "#10B981", // Match Eco primary
+            color: "#fff",
+            fontWeight: "bold",
+          },
+        });
         if (form.current) {
           form.current.reset();
         }
@@ -48,6 +55,7 @@ const ContactUs = () => {
       }, 1000);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setIsSending(false);
     }

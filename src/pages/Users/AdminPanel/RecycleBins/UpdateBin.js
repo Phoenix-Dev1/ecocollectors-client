@@ -7,6 +7,7 @@ import {
 } from "@react-google-maps/api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import classes from "./bins.module.css";
 import { createMarkerIcon } from "../../../../components/map/mapIcons";
 
@@ -88,7 +89,7 @@ const UpdateBin = () => {
       setEmptyFieldsError(""); // Clear empty fields error
       setTypeError(false); // Clear type error
       setErrorMessage(""); // Clear error message
-      alert("Bin updated successfully!");
+      toast.success("Bin updated successfully!");
 
       navigate("/admin/bins"); // Redirect after update
     } catch (error) {
@@ -102,6 +103,7 @@ const UpdateBin = () => {
         }
       } else {
         console.error("Update failed:", error);
+        toast.error("An error occurred. Please try again.");
       }
     }
   };

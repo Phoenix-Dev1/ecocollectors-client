@@ -234,15 +234,17 @@ const Map = () => {
   return (
     <div className="relative w-full h-[calc(100vh-80px)] bg-slate-50 overflow-hidden">
     <GoogleMap
-        onRightClick={(e) =>
-          handleRightClick(
-            e,
-            setReqLat,
-            setReqLng,
-            setReqAddress,
-            setShowAddWindow
-          )
-        }
+        onRightClick={(e) => {
+          if (currentUser) {
+            handleRightClick(
+              e,
+              setReqLat,
+              setReqLng,
+              setReqAddress,
+              setShowAddWindow
+            );
+          }
+        }}
         mapContainerClassName="w-full h-full"
         center={center}
         zoom={mapZoom}
@@ -291,7 +293,7 @@ const Map = () => {
           />
         )}
 
-        {markerWithIdA && (
+        {currentUser && markerWithIdA && (
           <MarkerF
             position={markerWithIdA}
             icon={{

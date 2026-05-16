@@ -32,7 +32,7 @@ const MapControls = ({
       {/* Dimmed backdrop for mobile modals */}
       {(showFilterWindow || showAddWindow || showLayersMenu) && (
         <div 
-          className="fixed inset-0 z-[900]"
+          className="fixed inset-0 z-[900] md:hidden"
           onClick={() => {
             if (showFilterWindow) toggleFilterWindow();
             if (showAddWindow) toggleAddWindow();
@@ -113,7 +113,7 @@ const MapControls = ({
           <FilterWindow {...filterWindowProps} />
         </div>
       )}
-      {showAddWindow && (
+      {currentUser && showAddWindow && (
         <div 
           className="fixed bottom-0 inset-x-0 z-[1000] md:hidden animate-slide-up"
           onClick={(e) => e.stopPropagation()}
