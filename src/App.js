@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
@@ -46,6 +46,28 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 
 export default function App() {
+  // Automatically dismiss Google Maps development error popup if it appears
+  useEffect(() => {
+    const dismissPopup = () => {
+      const btn = document.querySelector(".dismissButton");
+      if (btn) {
+        btn.click();
+      }
+    };
+
+    const observer = new MutationObserver(() => {
+      dismissPopup();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    const interval = setInterval(dismissPopup, 500);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>

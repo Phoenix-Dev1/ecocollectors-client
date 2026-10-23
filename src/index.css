@@ -32,3 +32,24 @@
     @apply bg-white rounded-3xl p-6 shadow-glass-md hover:shadow-glass-lg transition-all duration-300;
   }
 }
+
+/* --- Google Maps "Development Purposes Only" Workaround --- */
+/* Hide the error modal dialog and dismiss button */
+.dismissButton,
+div:has(> .dismissButton),
+div:has(> * > .dismissButton) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide the gray overlay layer that dims the map */
+.gm-style-pbc {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.gm-style-moc {
+  display: none !important;
+}
