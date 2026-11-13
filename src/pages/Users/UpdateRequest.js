@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
-  StandaloneSearchBox,
   useLoadScript,
 } from "@react-google-maps/api";
+import PlacesSearchBox from "../../components/PlacesSearchBox/PlacesSearchBox";
 import axios from "axios";
 import { validateInputs } from "../Users/RequestUtils";
 import classes from "./UpdateRequest.module.css";
@@ -187,7 +187,7 @@ const UpdateRequest = () => {
             <label htmlFor="req_address" className="block text-white">
               Address
             </label>
-            <StandaloneSearchBox
+            <PlacesSearchBox
               onLoad={(ref) => (inputReference.current = ref)}
               onPlacesChanged={handlePlaceChanged}
             >
@@ -200,7 +200,7 @@ const UpdateRequest = () => {
                 value={updatedData.req_address || ""}
                 onChange={handleInputChange}
               />
-            </StandaloneSearchBox>
+            </PlacesSearchBox>
           </div>
           <div>
             <label htmlFor="phone_number" className="block text-white">

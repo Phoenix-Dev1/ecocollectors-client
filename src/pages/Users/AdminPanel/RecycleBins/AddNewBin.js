@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
-  StandaloneSearchBox,
   useLoadScript,
 } from "@react-google-maps/api";
+import PlacesSearchBox from "../../../../components/PlacesSearchBox/PlacesSearchBox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import classes from "./bins.module.css";
@@ -140,7 +140,7 @@ const AddNewBin = () => {
             <label htmlFor="address" className="block text-white">
               Address
             </label>
-            <StandaloneSearchBox
+            <PlacesSearchBox
               onLoad={(ref) => (inputReference.current = ref)}
               onPlacesChanged={handlePlaceChanged}
             >
@@ -153,7 +153,7 @@ const AddNewBin = () => {
                 value={newBinData.address || ""}
                 onChange={handleInputChange}
               />
-            </StandaloneSearchBox>
+            </PlacesSearchBox>
           </div>
           <div>
             <label htmlFor="city" className="block text-white">

@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
   MarkerF,
-  StandaloneSearchBox,
   useLoadScript,
 } from "@react-google-maps/api";
+import PlacesSearchBox from "../../../../components/PlacesSearchBox/PlacesSearchBox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -27,7 +27,7 @@ const UpdateBin = () => {
   const [typeError, setTypeError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const inputReference = useRef(); // Ref for StandaloneSearchBox
+  const inputReference = useRef(); // Ref for PlacesSearchBox
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -166,7 +166,7 @@ const UpdateBin = () => {
             <label htmlFor="address" className="block text-white">
               Address
             </label>
-            <StandaloneSearchBox
+            <PlacesSearchBox
               onLoad={(ref) => (inputReference.current = ref)}
               onPlacesChanged={handlePlaceChanged}
             >
@@ -179,7 +179,7 @@ const UpdateBin = () => {
                 value={updatedData.address || ""}
                 onChange={handleInputChange}
               />
-            </StandaloneSearchBox>
+            </PlacesSearchBox>
           </div>
           <div>
             <label htmlFor="city" className="block text-white">

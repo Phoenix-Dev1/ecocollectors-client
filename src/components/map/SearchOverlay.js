@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StandaloneSearchBox } from "@react-google-maps/api";
+import PlacesSearchBox from "../PlacesSearchBox/PlacesSearchBox";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { VscFilter } from "react-icons/vsc";
 import { FaPlus } from "react-icons/fa";
@@ -36,7 +36,7 @@ const SearchOverlay = ({
           <AiOutlineSearch className="text-eco-muted w-6 h-6 mr-3 flex-shrink-0" />
           
           <div className="flex-1">
-            <StandaloneSearchBox
+            <PlacesSearchBox
               onLoad={(ref) => (searchReference.current = ref)}
               onPlacesChanged={() => handleSearchCoordinates(searchReference)}
             >
@@ -49,7 +49,7 @@ const SearchOverlay = ({
                 onChange={(e) => setSearchAddress(e.target.value)}
                 required
               />
-            </StandaloneSearchBox>
+            </PlacesSearchBox>
           </div>
 
           <div className="flex items-center pr-1.5 space-x-2">
