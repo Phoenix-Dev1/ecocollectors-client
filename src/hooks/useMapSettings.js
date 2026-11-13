@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import axios from "axios";
 
 const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 
@@ -32,10 +31,11 @@ export const useMapSettings = () => {
     setReqLng(lng);
 
     try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
-      );
-      const address = response.data.results[0]?.formatted_address;
+      // The Maps JavaScript API geocoder works with the website-restricted key
+      // (the REST geocode URL used before refuses keys with website restrictions)
+      const geocoder = new window.google.maps.Geocoder();
+      const { results } = await geocoder.geocode({ location: { lat, lng } });
+      const address = results[0]?.formatted_address;
       setReqAddress(address);
       setShowAddWindow(true);
     } catch (error) {

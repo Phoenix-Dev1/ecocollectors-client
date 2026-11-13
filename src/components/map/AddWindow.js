@@ -1,5 +1,5 @@
 import React from "react";
-import { StandaloneSearchBox } from "@react-google-maps/api";
+import PlacesSearchBox from "../PlacesSearchBox/PlacesSearchBox";
 import { AiOutlineClose } from "react-icons/ai";
 
 const AddWindow = ({
@@ -76,7 +76,7 @@ const AddWindow = ({
           <label htmlFor="req_address" className="block text-xs font-black text-eco-text uppercase tracking-wider ml-1">
             Address
           </label>
-          <StandaloneSearchBox
+          <PlacesSearchBox
             onLoad={(ref) => (inputReference.current = ref)}
             onPlacesChanged={handlePlaceChanged}
           >
@@ -89,7 +89,7 @@ const AddWindow = ({
               onChange={(e) => setReqAddress(e.target.value)}
               required
             />
-          </StandaloneSearchBox>
+          </PlacesSearchBox>
         </div>
 
         <div className="space-y-1.5">
