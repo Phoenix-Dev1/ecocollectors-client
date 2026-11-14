@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { validateForm } from "./recyclerFormValidation";
-import axios from "axios";
+import api from "../../api/axios";
 import * as moment from "moment";
 import smallLogo from "../../img/sm-logo.png";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
@@ -53,10 +53,7 @@ const RecyclerRegister = () => {
       return;
     } else {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_URL}/recyclers/recyclerRegister`,
-          inputsWithUserId
-        );
+        await api.post("/recyclers/recyclerRegister", inputsWithUserId);
         toast.success("Request sent successfully!", {
           style: {
             background: "#059669", // Emerald to match the theme

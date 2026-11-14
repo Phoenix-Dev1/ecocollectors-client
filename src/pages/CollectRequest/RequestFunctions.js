@@ -1,12 +1,10 @@
-import axios from "axios";
+import { toast } from "react-hot-toast";
+import api, { apiErrorMessage } from "../../api/axios";
 
 // Fetching Request details from DB
 export async function fetchRequestById(id) {
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/requests/recycle/${id}`,
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.get(`/requests/recycle/${id}`);
     return res.data;
   } catch (err) {
     console.error("Error fetching request by ID:", err.response?.data || err);
@@ -17,14 +15,17 @@ export async function fetchRequestById(id) {
 // Updating the request Status
 export async function updateRequestById(id) {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/requests/${id}`,
-      {}, // ✅ Include an empty object for the request body
-      { withCredentials: true } // ✅ Ensures authentication
+    const res = await api.put(
+      `/requests/${id}`,
+      {} // ✅ Include an empty object for the request body
     );
     return res.data;
   } catch (err) {
     console.error("Error updating request by ID:", err.response?.data || err);
+    // e.g. 409 when another recycler claimed it first (a 401 has its own message)
+    if (err.response?.status !== 401) {
+      toast.error(apiErrorMessage(err, "Could not claim the request. Please try again."));
+    }
     return null;
   }
 }

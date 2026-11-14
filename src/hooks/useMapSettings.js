@@ -1,18 +1,12 @@
 import { useState } from "react";
-import { useLoadScript } from "@react-google-maps/api";
-
-const libraries = [process.env.REACT_APP_GOOGLE_LIB];
+import { useGoogleMaps } from "./useGoogleMaps";
 
 export const useMapSettings = () => {
   const [center, setCenter] = useState({ lat: 32.79413, lng: 34.98828 });
   const [mapZoom, setMapZoom] = useState(12);
   const [markerWithIdA, setMarkerWithIdA] = useState(0);
 
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: libraries,
-    loading: "async",
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const handleRightClick = async (event, setReqLat, setReqLng, setReqAddress, setShowAddWindow) => {
     const latLng = event.latLng;

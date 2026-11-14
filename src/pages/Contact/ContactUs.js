@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+import api from "../../api/axios";
 import { AuthContext } from "../../context/authContext";
 
 const ContactUs = () => {
@@ -28,8 +28,8 @@ const ContactUs = () => {
     try {
       setIsSending(true);
 
-      const emailResponse = await axios.post(
-        `${process.env.REACT_APP_URL}/user/sendEmail`,
+      const emailResponse = await api.post(
+        "/user/sendEmail",
         {
           email: form.current.email.value,
           subject: form.current.subject.value,

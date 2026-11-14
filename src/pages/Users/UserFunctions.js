@@ -1,12 +1,15 @@
-import axios from "axios";
+import { toast } from "react-hot-toast";
+import api, { apiErrorMessage } from "../../api/axios";
+
+// Show why a change failed (a 401 already has its own message and redirect)
+function reportError(err, fallback) {
+  if (err.response?.status !== 401) toast.error(apiErrorMessage(err, fallback));
+}
 
 // Fetch all user Requests
 export async function fetchUserRequests(id) {
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/dashboardUser/${id}`,
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.get(`/dashboardUser/${id}`);
     return res.data;
   } catch (err) {
     console.error("Error fetching user requests:", err.response?.data || err);
@@ -17,10 +20,7 @@ export async function fetchUserRequests(id) {
 // Fetch Recycler info based on request id
 export async function fetchRecyclerDetails(id) {
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/dashboardRecycler/${id}`,
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.get(`/dashboardRecycler/${id}`);
     return res.data;
   } catch (err) {
     console.error(
@@ -37,14 +37,11 @@ export async function acceptRequest(requestId) {
   if (!confirmed) return null;
 
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 5 },
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.put(`/dashboardUser/${requestId}`, { status: 5 });
     return res.data;
   } catch (err) {
     console.error("Error accepting request:", err.response?.data || err);
+    reportError(err, "Could not accept the pickup. Please try again.");
     return null;
   }
 }
@@ -57,14 +54,11 @@ export async function declineRequest(requestId) {
   if (!confirmed) return null;
 
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 1 },
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.put(`/dashboardUser/${requestId}`, { status: 1 });
     return res.data;
   } catch (err) {
     console.error("Error declining request:", err.response?.data || err);
+    reportError(err, "Could not decline the pickup. Please try again.");
     return null;
   }
 }
@@ -75,11 +69,7 @@ export async function cancelRequest(requestId) {
   if (!confirmed) return null;
 
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 4 },
-      { withCredentials: true } // ✅ Ensures authentication
-    );
+    const res = await api.put(`/dashboardUser/${requestId}`, { status: 4 });
     return res.data;
   } catch (err) {
     console.error("Error canceling request:", err.response?.data || err);
@@ -95,10 +85,9 @@ export async function acceptAndCloseRequest(requestId, newBottlesNumber) {
   if (!confirmed) return null;
 
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/dashboardUser/${requestId}`,
-      { status: 3, newBottlesNumber },
-      { withCredentials: true } // ✅ Ensures authentication
+    const res = await api.put(
+      `/dashboardUser/${requestId}`,
+      { status: 3, newBottlesNumber }
     );
     return res.data;
   } catch (err) {

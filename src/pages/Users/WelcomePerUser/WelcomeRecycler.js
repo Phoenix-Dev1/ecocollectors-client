@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../api/axios";
 
 const WelcomeRecycler = () => {
   const [totalRequestsPickedUp, setTotalRequestsPickedUp] = useState(0);
@@ -13,10 +13,7 @@ const WelcomeRecycler = () => {
   useEffect(() => {
     const fetchRecyclerData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeRecycler`,
-          { withCredentials: true }
-        );
+        const res = await api.get("/user/welcomeRecycler");
         setTotalRequestsPickedUp(res.data.totalRequestsPickedUp);
         setTotalRecycledBottles(res.data.totalRecycledBottles);
         setAvgClosingTime(res.data.avgClosingTime);

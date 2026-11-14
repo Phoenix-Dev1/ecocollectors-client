@@ -1,23 +1,15 @@
 import React, { useState, useRef } from "react";
-import {
-  GoogleMap,
-  MarkerF,
-  useLoadScript,
-} from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { useGoogleMaps } from "../../../../hooks/useGoogleMaps";
 import PlacesSearchBox from "../../../../components/PlacesSearchBox/PlacesSearchBox";
-import axios from "axios";
+import api from "../../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import classes from "./bins.module.css";
 import { createMarkerIcon } from "../../../../components/map/mapIcons";
 
-const libraries = ["places"];
-
 const AddNewBin = () => {
   const navigate = useNavigate();
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: libraries,
-  });
+  const { isLoaded, loadError } = useGoogleMaps();
 
   const [newBinData, setNewBinData] = useState({
     address: "",
@@ -75,11 +67,7 @@ const AddNewBin = () => {
     }
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_URL}/admin/bins`,
-        newBinData,
-        { withCredentials: true } // ✅ Ensures the token is sent with the request
-      );
+      await api.post("/admin/bins", newBinData);
       setShowSuccessMessage(true);
       setTypeError(false);
       setAddressError(false);

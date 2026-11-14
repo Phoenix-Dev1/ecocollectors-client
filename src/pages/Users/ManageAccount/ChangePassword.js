@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import validatePassword from "./validatePassword";
@@ -51,11 +51,7 @@ export default function ChangePassword() {
     }
 
     try {
-      await axios.put(
-        `${process.env.REACT_APP_URL}/user/change-password`,
-        { old_password, new_password },
-        { withCredentials: true } // ✅ Fix: Ensure credentials (cookies) are sent
-      );
+      await api.put("/user/change-password", { old_password, new_password });
 
       // Show success alert
       toast.success("Password changed successfully!");

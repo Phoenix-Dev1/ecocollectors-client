@@ -2,10 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { welcomePath } from "../../utils/roles";
 import { FiGrid, FiX, FiSettings, FiUser, FiBox, FiCheckCircle, FiClock, FiUsers, FiUserPlus, FiLayers, FiTrash2 } from "react-icons/fi";
 
 const Dashboard = () => {
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [userRole, setUserRole] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -15,22 +16,12 @@ const Dashboard = () => {
         const response = await api.get("/user/role");
         setUserRole(response.data.role);
       } catch (error) {
+        // a 401 logs the user out through <SessionExpiry />
         console.error("Error fetching user role:", error);
-        if (error.response?.status === 401) {
-          logout();
-        }
       }
     };
     fetchUserRole();
-  }, [logout]);
-
-  const handleWelcome = () => {
-    if (currentUser.role === 1) return "/user/welcomeAdmin";
-    else if (currentUser.role === 2 || currentUser.role === 5) return "/user/welcomeUser";
-    else if (currentUser.role === 3) return "/user/welcomeRecycler";
-    else if (currentUser.role === 4) return "/user/welcomeManager";
-    else return "/";
-  };
+  }, []);
 
   if (!currentUser) return null;
 
@@ -68,7 +59,7 @@ const Dashboard = () => {
         <div className="p-8 pt-28 lg:pt-8 flex flex-col h-full">
           {/* Logo Section - Hidden on mobile to avoid overlap with toggle */}
           <div className="mb-10 pt-4 lg:pt-0 hidden lg:block">
-            <Link to={handleWelcome()} className="group inline-block" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to={welcomePath(currentUser.role)} className="group inline-block" onClick={() => setIsMobileMenuOpen(false)}>
               <h1 className="text-2xl font-black text-slate-800 tracking-tighter transition-all group-hover:scale-105">
                 Eco<span className="text-emerald-500">Collectors</span>
               </h1>

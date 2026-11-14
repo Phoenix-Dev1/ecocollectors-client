@@ -1,22 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  GoogleMap,
-  MarkerF,
-  useLoadScript,
-} from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { useGoogleMaps } from "../../../../hooks/useGoogleMaps";
 import PlacesSearchBox from "../../../../components/PlacesSearchBox/PlacesSearchBox";
-import axios from "axios";
+import api from "../../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import classes from "./bins.module.css";
 import { createMarkerIcon } from "../../../../components/map/mapIcons";
 
-const libraries = [process.env.REACT_APP_GOOGLE_LIB];
 const UpdateBin = () => {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: libraries,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const [binData, setBinData] = useState({});
   const [updatedData, setUpdatedData] = useState({});
@@ -75,10 +68,9 @@ const UpdateBin = () => {
 
     try {
       // Send update request to the server
-      await axios.put(
-        `${process.env.REACT_APP_URL}/admin/bins/${binData.id}`,
-        updatedData, // Data payload
-        { withCredentials: true } // Ensures cookies are sent with the request
+      await api.put(
+        `/admin/bins/${binData.id}`,
+        updatedData // Data payload
       );
 
       // Update state with new bin data
@@ -112,10 +104,7 @@ const UpdateBin = () => {
     const fetchData = async () => {
       try {
         const binId = window.location.href.split("/").pop();
-        const response = await axios.get(
-          `${process.env.REACT_APP_URL}/admin/bins/${binId}`,
-          { withCredentials: true }
-        );
+        const response = await api.get(`/admin/bins/${binId}`);
         setBinData(response.data);
         setCoordinates({ lat: response.data.lat, lng: response.data.lng });
         setUpdatedData(response.data); // Initialize updatedData with bin data

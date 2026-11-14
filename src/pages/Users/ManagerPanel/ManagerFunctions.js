@@ -1,12 +1,9 @@
-import axios from "axios";
+import api from "../../../api/axios";
 
 // Recyclers
 export async function fetchAllRecyclers() {
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/manager/recyclers`,
-      { withCredentials: true } // ✅ Fix: Ensure credentials (cookies) are sent
-    );
+    const res = await api.get("/manager/recyclers");
     return res.data;
   } catch (err) {
     console.log(err);
@@ -16,10 +13,9 @@ export async function fetchAllRecyclers() {
 
 export const toggleRecyclerActivation = async (userID, newStatus) => {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/manager/recyclers/${userID}`,
-      { active: newStatus },
-      { withCredentials: true } // ✅ Fix: Include credentials
+    const res = await api.put(
+      `/manager/recyclers/${userID}`,
+      { active: newStatus }
     );
     return res.data;
   } catch (error) {
@@ -31,11 +27,10 @@ export const toggleRecyclerActivation = async (userID, newStatus) => {
 // Recyclers Requests
 export async function fetchRecyclerJoinRequests(statusFilter = null) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/manager/join-requests`,
+    const response = await api.get(
+      "/manager/join-requests",
       {
         params: { status: statusFilter },
-        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
     return response.data;
@@ -51,10 +46,9 @@ export async function updateRecyclerJoinRequestStatus(
   userID
 ) {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/manager/join-requests/${joinID}`,
-      { status: newStatus, userID: userID },
-      { withCredentials: true } // ✅ Fix: Include credentials
+    const res = await api.put(
+      `/manager/join-requests/${joinID}`,
+      { status: newStatus, userID: userID }
     );
     return res.data;
   } catch (err) {
@@ -66,11 +60,10 @@ export async function updateRecyclerJoinRequestStatus(
 // Recycle Requests
 export async function fetchAllRequests(statusFilter = null) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/manager/all-requests`,
+    const response = await api.get(
+      "/manager/all-requests",
       {
         params: { status: statusFilter },
-        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
     return response.data;
@@ -82,10 +75,9 @@ export async function fetchAllRequests(statusFilter = null) {
 
 export async function updateRequestStatus(requestId, newStatus) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_URL}/manager/requests/${requestId}`,
-      { status: newStatus },
-      { withCredentials: true } // ✅ Fix: Include credentials
+    const response = await api.put(
+      `/manager/requests/${requestId}`,
+      { status: newStatus }
     );
     return response.data;
   } catch (err) {
@@ -97,11 +89,10 @@ export async function updateRequestStatus(requestId, newStatus) {
 // Search requests By UserId
 export async function searchRequestsByUserId(searchTerm) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/manager/search-requests`,
+    const response = await api.get(
+      "/manager/search-requests",
       {
         params: { searchTerm },
-        withCredentials: true, // ✅ Fix: Include credentials
       }
     );
 

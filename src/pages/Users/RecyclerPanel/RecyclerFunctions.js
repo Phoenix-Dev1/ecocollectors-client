@@ -1,13 +1,12 @@
-import axios from "axios";
+import api from "../../../api/axios";
 
 // Recycle Requests
 export async function fetchAllRequests(statusFilter = null) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/recycler/all-requests`,
+    const response = await api.get(
+      "/recycler/all-requests",
       {
         params: { status: statusFilter },
-        withCredentials: true, // ✅ Ensure credentials (cookies) are sent
       }
     );
     return response.data;
@@ -20,10 +19,7 @@ export async function fetchAllRequests(statusFilter = null) {
 // Function to fetch accepted requests from the server
 export async function fetchAcceptedRequests() {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/recycler/accepted-requests`,
-      { withCredentials: true } // ✅ Ensure credentials are included
-    );
+    const response = await api.get("/recycler/accepted-requests");
     return response.data;
   } catch (error) {
     console.error("Error fetching accepted requests:", error);
@@ -34,10 +30,9 @@ export async function fetchAcceptedRequests() {
 // Function to update request status
 export async function updateRequestStatus(requestId, newStatus) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_URL}/recycler/requests/${requestId}`,
-      { status: newStatus },
-      { withCredentials: true } // ✅ Ensure credentials are included
+    const response = await api.put(
+      `/recycler/requests/${requestId}`,
+      { status: newStatus }
     );
     return response.data;
   } catch (error) {
@@ -49,10 +44,7 @@ export async function updateRequestStatus(requestId, newStatus) {
 // Function to fetch completed requests from the server
 export async function fetchCompletedRequests() {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/recycler/completed-requests`,
-      { withCredentials: true } // ✅ Ensure credentials are included
-    );
+    const response = await api.get("/recycler/completed-requests");
     return response.data;
   } catch (error) {
     console.error("Error fetching completed requests:", error);

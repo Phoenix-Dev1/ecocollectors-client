@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { welcomePath } from "../../utils/roles";
 import smallLogo from "../../img/sm-logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -14,6 +15,8 @@ function SignInForm() {
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
 
   const navigate = useNavigate();
+  // Set by <RequireAuth /> and <SessionExpiry />: the page to return to
+  const returnTo = useLocation().state?.from;
 
   const { login } = useContext(AuthContext);
 
@@ -26,17 +29,20 @@ function SignInForm() {
   };
 
   const handleWelcome = (userRole) => {
-    if (userRole === 1) navigate("/user/welcomeAdmin");
-    else if (userRole === 2 || userRole === 5) navigate("/user/welcomeUser");
-    else if (userRole === 3) navigate("/user/welcomeRecycler");
-    else if (userRole === 4) navigate("/user/welcomeManager");
-    else navigate("/");
+    const canReturn =
+      typeof returnTo === "string" &&
+      returnTo.startsWith("/") &&
+      !returnTo.startsWith("//") &&
+      !returnTo.startsWith("/login");
+    if (canReturn) {
+      navigate(returnTo, { replace: true });
+    } else {
+      navigate(welcomePath(userRole));
+    }
   };
 
   const handleLoginErrors = (error) => {
-    if (error.response?.status === 404) {
-      setError("User not found. Please check your email.");
-    } else if (error.response?.status === 401) {
+    if (error.response?.status === 401) {
       const errorMessage = error.response?.data?.error;
       if (errorMessage === "Account is inactive. Login is not permitted.") {
         setError("Account is inactive. Please contact support.");

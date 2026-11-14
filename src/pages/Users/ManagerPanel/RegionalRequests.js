@@ -76,7 +76,7 @@ const RegionalRequests = () => {
     {
       name: 'Request Date',
       selector: (row) =>
-        format(new Date(row.request_date), 'dd/MM/yyyy - HH:MM'),
+        format(new Date(row.request_date), 'dd/MM/yyyy - HH:mm'),
       sortable: true,
       center: true,
       wrap: true,

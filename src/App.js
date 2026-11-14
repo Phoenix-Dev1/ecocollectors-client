@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
@@ -40,95 +40,135 @@ import RegionalRecyclerRequests from "./pages/Users/RecyclerPanel/RegionalReques
 import AcceptedRequests from "./pages/Users/RecyclerPanel/AcceptedRequests";
 import CompletedRequests from "./pages/Users/RecyclerPanel/CompletedRequests";
 import { Toaster } from "react-hot-toast";
+import RequireAuth from "./components/Auth/RequireAuth";
+import SessionExpiry from "./components/Auth/SessionExpiry";
+import { ROLE, COLLECTOR_ROLES } from "./utils/roles";
 import "./index.css";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
-
 export default function App() {
-  // Automatically dismiss Google Maps development error popup if it appears
-  useEffect(() => {
-    const dismissPopup = () => {
-      const btn = document.querySelector(".dismissButton");
-      if (btn) {
-        btn.click();
-      }
-    };
-
-    const observer = new MutationObserver(() => {
-      dismissPopup();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-    const interval = setInterval(dismissPopup, 500);
-
-    return () => {
-      observer.disconnect();
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/collect" element={<CollectRequest />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/password-recovery" element={<ForgotPassword />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/manager-join" element={<RecyclersManagerRegister />} />
-          <Route path="/user/*" element={<UserLayout />}>
-            <Route path="welcomeAdmin" element={<WelcomeAdmin />} />
-            <Route path="welcomeUser" element={<WelcomeUser />} />
-            <Route path="welcomeRecycler" element={<WelcomeRecycler />} />
-            <Route path="welcomeManager" element={<WelcomeManager />} />
-            <Route
-              path="update-user-info"
-              element={<UpdateUserInformation />}
-            />
-            <Route path="change-password" element={<ChangePassword />} />
-            <Route path="update-request" element={<UpdateRequest />} />
-            <Route path="cancelled-requests" element={<Cancelled />} />
-            <Route path="completed-requests" element={<Completed />} />
-            <Route path="pending-requests" element={<Pending />} />
-          </Route>
-          <Route path="/admin/*" element={<UserLayout />}>
-            <Route path="user-management" element={<UserManagement />} />
-            <Route path="join-requests" element={<JoinRequests />} />
-            <Route path="requests" element={<AllRequests />} />
-            <Route path="bins" element={<RecycleBins />} />
-            <Route path="update-bin/*" element={<UpdateBin />} />
-            <Route path="add-bin" element={<AddNewBin />} />
-          </Route>
-          <Route path="/manager/*" element={<UserLayout />}>
-            <Route path="join-requests" element={<RecyclersJoinRequests />} />
-            <Route
-              path="recyclers-management"
-              element={<RecyclersManagement />}
-            />
-            <Route path="regional-requests" element={<RegionalRequests />} />
-          </Route>
-          <Route path="/recycler/*" element={<UserLayout />}>
-            <Route
-              path="regional-requests"
-              element={<RegionalRecyclerRequests />}
-            />
-            <Route path="accepted-requests" element={<AcceptedRequests />} />
-            <Route path="completed-requests" element={<CompletedRequests />} />
-          </Route>
-          <Route path="/terms" element={<TermsAndConditions />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/map/*" element={<Map />} />
-          <Route path="/join" element={<RecyclerRegister />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster position="top-center" reverseOrder={false} />
-        <Footer />
-      </Router>
-    </QueryClientProvider>
+    <Router>
+      <SessionExpiry />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/collect"
+          element={
+            <RequireAuth roles={COLLECTOR_ROLES}>
+              <CollectRequest />
+            </RequireAuth>
+          }
+        />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/password-recovery" element={<ForgotPassword />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/manager-join" element={<RecyclersManagerRegister />} />
+        <Route
+          path="/user/*"
+          element={
+            <RequireAuth>
+              <UserLayout />
+            </RequireAuth>
+          }
+        >
+          <Route
+            path="welcomeAdmin"
+            element={
+              <RequireAuth roles={[ROLE.ADMIN]}>
+                <WelcomeAdmin />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="welcomeUser"
+            element={
+              <RequireAuth roles={[ROLE.USER, ROLE.DEMOTED]}>
+                <WelcomeUser />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="welcomeRecycler"
+            element={
+              <RequireAuth roles={[ROLE.RECYCLER]}>
+                <WelcomeRecycler />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="welcomeManager"
+            element={
+              <RequireAuth roles={[ROLE.MANAGER]}>
+                <WelcomeManager />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="update-user-info"
+            element={<UpdateUserInformation />}
+          />
+          <Route path="change-password" element={<ChangePassword />} />
+          <Route path="update-request" element={<UpdateRequest />} />
+          <Route path="cancelled-requests" element={<Cancelled />} />
+          <Route path="completed-requests" element={<Completed />} />
+          <Route path="pending-requests" element={<Pending />} />
+        </Route>
+        <Route
+          path="/admin/*"
+          element={
+            <RequireAuth roles={[ROLE.ADMIN]}>
+              <UserLayout />
+            </RequireAuth>
+          }
+        >
+          <Route path="user-management" element={<UserManagement />} />
+          <Route path="join-requests" element={<JoinRequests />} />
+          <Route path="requests" element={<AllRequests />} />
+          <Route path="bins" element={<RecycleBins />} />
+          <Route path="update-bin/*" element={<UpdateBin />} />
+          <Route path="add-bin" element={<AddNewBin />} />
+        </Route>
+        <Route
+          path="/manager/*"
+          element={
+            <RequireAuth roles={[ROLE.MANAGER]}>
+              <UserLayout />
+            </RequireAuth>
+          }
+        >
+          <Route path="join-requests" element={<RecyclersJoinRequests />} />
+          <Route
+            path="recyclers-management"
+            element={<RecyclersManagement />}
+          />
+          <Route path="regional-requests" element={<RegionalRequests />} />
+        </Route>
+        <Route
+          path="/recycler/*"
+          element={
+            <RequireAuth roles={[ROLE.RECYCLER]}>
+              <UserLayout />
+            </RequireAuth>
+          }
+        >
+          <Route
+            path="regional-requests"
+            element={<RegionalRecyclerRequests />}
+          />
+          <Route path="accepted-requests" element={<AcceptedRequests />} />
+          <Route path="completed-requests" element={<CompletedRequests />} />
+        </Route>
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/map/*" element={<Map />} />
+        <Route path="/join" element={<RecyclerRegister />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Footer />
+    </Router>
   );
 }

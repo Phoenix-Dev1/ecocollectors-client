@@ -33,17 +33,7 @@
   }
 }
 
-/* --- Google Maps "Development Purposes Only" Workaround --- */
-/* Hide the error modal dialog and dismiss button */
-.dismissButton,
-div:has(> .dismissButton),
-div:has(> * > .dismissButton) {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* Hide the gray overlay layer that dims the map */
+/* Google Maps: hide the gray gesture-hint overlay that dims the map */
 .gm-style-pbc {
   display: none !important;
   opacity: 0 !important;

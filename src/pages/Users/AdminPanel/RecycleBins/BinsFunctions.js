@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../../../api/axios";
 
 // Utils
 // Function to capitalize the first letter of a string
@@ -9,11 +9,10 @@ export const capitalizeFirstLetter = (string) => {
 // Recycle Bins
 export async function fetchAllRecycleBins(typeFilter = null) {
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_URL}/admin/recycleBins`,
+    const res = await api.get(
+      "/admin/recycleBins",
       {
         params: { type: typeFilter }, // Pass the type filter to the API
-        withCredentials: true, // ✅ Ensure JWT is sent
       }
     );
     return res.data;
@@ -26,10 +25,9 @@ export async function fetchAllRecycleBins(typeFilter = null) {
 // Deactivate bin
 export async function deactivateBin(binId) {
   try {
-    await axios.put(
-      `${process.env.REACT_APP_URL}/admin/deactivateBin/${binId}`,
-      {}, // ✅ Must include an empty body for PUT requests
-      { withCredentials: true } // ✅ Ensure JWT is sent
+    await api.put(
+      `/admin/deactivateBin/${binId}`,
+      {} // ✅ Must include an empty body for PUT requests
     );
   } catch (error) {
     console.error("Error deactivating bin:", error);
@@ -40,10 +38,9 @@ export async function deactivateBin(binId) {
 // Activate bin
 export const activateBin = async (binId) => {
   try {
-    await axios.put(
-      `${process.env.REACT_APP_URL}/admin/activateBin/${binId}`,
-      {}, // Empty object for the request body
-      { withCredentials: true } // ✅ Ensures authentication token is sent
+    await api.put(
+      `/admin/activateBin/${binId}`,
+      {} // Empty object for the request body
     );
   } catch (error) {
     console.error("Error activating bin:", error);

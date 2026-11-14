@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import smallLogo from "../../img/sm-logo.png";
 import { AuthContext } from '../../context/authContext';
+import { welcomePath } from '../../utils/roles';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 
 const Navbar = () => {
@@ -43,14 +44,7 @@ const Navbar = () => {
     }
   };
 
-  const handleWelcome = () => {
-    if (currentUser.role === 1) return '/user/welcomeAdmin';
-    else if (currentUser.role === 2 || currentUser.role === 5)
-      return '/user/welcomeUser';
-    else if (currentUser.role === 3) return '/user/welcomeRecycler';
-    else if (currentUser.role === 4) return '/user/welcomeManager';
-    else return '/';
-  };
+  const handleWelcome = () => welcomePath(currentUser.role);
 
   return (
     <nav className={`sticky top-0 left-0 right-0 glass px-6 h-20 flex justify-between items-center transition-all duration-300 ${nav ? 'z-[100000]' : 'z-[1000]'}`}>
