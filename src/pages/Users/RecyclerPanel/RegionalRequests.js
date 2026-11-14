@@ -36,7 +36,7 @@ const RegionalRecyclerRequests = () => {
     {
       name: 'Request Date',
       selector: (row) =>
-        format(new Date(row.request_date), 'dd/MM/yyyy - HH:MM'), // Format the date
+        format(new Date(row.request_date), 'dd/MM/yyyy - HH:mm'), // Format the date
       sortable: true,
       center: true,
       wrap: true,

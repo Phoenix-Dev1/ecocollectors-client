@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../api/axios";
 
 const WelcomeManager = () => {
   const [totalPickedUpRequests, setTotalPickedUpRequests] = useState(0);
@@ -17,10 +17,7 @@ const WelcomeManager = () => {
   useEffect(() => {
     const fetchManagerData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeManager`,
-          { withCredentials: true }
-        );
+        const res = await api.get("/user/welcomeManager");
         setTotalPickedUpRequests(res.data.totalPickedUpRequests);
         setTotalRecycledBottles(res.data.totalRecycledBottles);
         setCurrentMonthCollectedBottles(res.data.currentMonthCollectedBottles);

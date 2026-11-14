@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { validateForm } from "./managerFormValidation";
-import axios from "axios";
+import api from "../../api/axios";
 import * as moment from "moment";
 import smallLogo from "../../img/sm-logo.png";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
@@ -52,8 +52,8 @@ const RecyclersManagerRegister = () => {
       return;
     } else {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_URL}/recyclersManagers/recyclerManagerRegister`,
+        await api.post(
+          "/recyclersManagers/recyclerManagerRegister",
           inputsWithUserId
         );
         toast.success("Request sent successfully!", {

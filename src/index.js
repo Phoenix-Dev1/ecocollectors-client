@@ -5,8 +5,8 @@ import "./index.css";
 
 import App from "./App";
 import { AuthContextProvider } from "./context/authContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./queryClient";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

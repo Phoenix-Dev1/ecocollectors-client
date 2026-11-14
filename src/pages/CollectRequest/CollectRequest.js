@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { useGoogleMaps } from '../../hooks/useGoogleMaps';
 import {
   fetchRequestById,
   updateRequestById,
@@ -7,16 +8,17 @@ import {
   formatTime,
 } from './RequestFunctions';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-hot-toast';
 import { createRequestIcon } from '../../components/map/mapIcons';
 
 import { FiMapPin, FiPackage, FiClock, FiCalendar, FiArrowLeft, FiCheck } from 'react-icons/fi';
 
 const CollectRequest = () => {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [request, setRequest] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,9 +28,13 @@ const CollectRequest = () => {
     navigate('/map');
   };
 
-  const handleNotify = () => {
+  // Claim the request, then show the map with its new status
+  const handleNotify = async () => {
     const requestId = window.location.href.split('?')[1].split('=')[1];
-    updateRequestById(requestId);
+    const result = await updateRequestById(requestId);
+    if (!result) return; // the error is already shown
+    toast.success('The owner has been notified');
+    queryClient.invalidateQueries({ queryKey: ['requests'] });
     navigate('/map');
   };
 

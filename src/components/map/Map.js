@@ -273,6 +273,7 @@ const Map = () => {
 
         <RequestMarkers
           requests={requests}
+          onRequestChanged={refetchRequests}
           selectedMarker={selectedMarker}
           setSelectedMarker={setSelectedMarker}
           currentUser={currentUser}

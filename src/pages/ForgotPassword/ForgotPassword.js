@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 import smallLogo from "../../img/sm-logo.png";
 
 const ForgotPassword = () => {
@@ -25,13 +25,9 @@ const ForgotPassword = () => {
       setIsResetting(true); // Set reset in progress
 
       // Check if the account is active (not deactivated)
-      const response = await axios.get(
-        `${process.env.REACT_APP_URL}/auth/checkActivation`,
-        {
-          params: { email },
-          withCredentials: true, // ✅ Ensures authentication
-        }
-      );
+      const response = await api.get("/auth/checkActivation", {
+        params: { email },
+      });
 
       if (!response.data.active) {
         setDeactivateMessage(
@@ -41,11 +37,7 @@ const ForgotPassword = () => {
       }
 
       // Proceed with password reset logic
-      const resetResponse = await axios.post(
-        `${process.env.REACT_APP_URL}/auth/forgotPassword`,
-        { email },
-        { withCredentials: true } // ✅ Ensures authentication
-      );
+      const resetResponse = await api.post("/auth/forgotPassword", { email });
 
       setMessage(resetResponse.data.message);
 

@@ -1,24 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  GoogleMap,
-  MarkerF,
-  useLoadScript,
-} from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { useGoogleMaps } from "../../hooks/useGoogleMaps";
 import PlacesSearchBox from "../../components/PlacesSearchBox/PlacesSearchBox";
-import axios from "axios";
+import api from "../../api/axios";
 import { validateInputs } from "../Users/RequestUtils";
 import classes from "./UpdateRequest.module.css";
 import { createRequestIcon } from "../../components/map/mapIcons";
 import { toast } from "react-hot-toast";
 
-const libraries = [process.env.REACT_APP_GOOGLE_LIB];
-
 const UpdateRequest = () => {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: libraries,
-    loading: "async",
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const [requestData, setRequestData] = useState({});
   const [updatedData, setUpdatedData] = useState({});
@@ -85,11 +76,7 @@ const UpdateRequest = () => {
           }
 
           const requestId = getRequestIdFromURL();
-          await axios.put(
-            `${process.env.REACT_APP_URL}/requests/userUpdate/${requestId}`,
-            updatedData,
-            { withCredentials: true } // ✅ Ensures authentication
-          );
+          await api.put(`/requests/userUpdate/${requestId}`, updatedData);
 
           toast.success("Request updated successfully!");
           setShowSuccessMessage(true);
@@ -121,10 +108,7 @@ const UpdateRequest = () => {
     const fetchRequestData = async () => {
       try {
         const requestId = getRequestIdFromURL();
-        const response = await axios.get(
-          `${process.env.REACT_APP_URL}/requests/${requestId}`,
-          { withCredentials: true } // ✅ Ensures authentication
-        );
+        const response = await api.get(`/requests/${requestId}`);
 
         setRequestData(response.data);
         setUpdatedData(response.data);

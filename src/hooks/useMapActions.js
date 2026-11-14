@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import * as moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -72,8 +72,8 @@ export const useMapActions = (currentUser, refetchRequests, setMarkerWithIdA) =>
 
       if (validation.isValid) {
         try {
-          await axios.post(
-            `${process.env.REACT_APP_URL}/requests/add`,
+          await api.post(
+            "/requests/add",
             {
               fullName: submittedFullName,
               reqLat,
@@ -84,8 +84,7 @@ export const useMapActions = (currentUser, refetchRequests, setMarkerWithIdA) =>
               fromTime,
               toTime,
               reqDate: moment().format("YYYY-MM-DD HH:mm:ss"),
-            },
-            { withCredentials: true }
+            }
           );
 
           setShowAddWindow(false);

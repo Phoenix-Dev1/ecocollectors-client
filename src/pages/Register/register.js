@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "./formValidation"; // Import the validation functions
-import axios from "axios";
+import api from "../../api/axios";
 import smallLogo from "../../img/sm-logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -37,7 +37,7 @@ function SignupForm() {
       return;
     } else {
       try {
-        await axios.post(`${process.env.REACT_APP_URL}/auth/register`, inputs);
+        await api.post("/auth/register", inputs);
         navigate("/login");
       } catch (err) {
         setError(err.response.data);

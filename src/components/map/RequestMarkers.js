@@ -1,11 +1,32 @@
 import React from "react";
 import { MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import { FiNavigation } from "react-icons/fi";
 import { formatDateTime } from "./mapFunctions";
 import { createRequestIcon } from "./mapIcons";
+import { ROLE, COLLECTOR_ROLES } from "../../utils/roles";
+import { acceptRequest, declineRequest } from "../../pages/Users/UserFunctions";
 
-const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUser, handleShowAddress, handleOpenGoogleMaps }) => {
+// Request statuses shown on the public map (the server sends only these two)
+const AWAITS_RECYCLER = 1;
+const AWAITS_APPROVAL = 2;
+
+const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUser, handleShowAddress, handleOpenGoogleMaps, onRequestChanged }) => {
+  const queryClient = useQueryClient();
+
+  // The owner accepts or declines the recycler who claimed the request.
+  // Both helpers ask for confirmation and report errors; null = nothing changed.
+  const answerRecycler = async (action, requestId, successMessage) => {
+    const result = await action(requestId);
+    if (!result) return;
+    toast.success(successMessage);
+    setSelectedMarker(null);
+    onRequestChanged?.();
+    queryClient.invalidateQueries({ queryKey: ["pendingRequests"] });
+  };
+
   return (
     <>
       {Array.isArray(requests) &&
@@ -21,11 +42,22 @@ const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUs
             request_date,
             status,
             type,
-            user_id,
+            is_mine,
           } = request;
 
           const markerClicked = selectedMarker === req_address;
-          const isCurrentUser = currentUser?.ID === user_id || currentUser?.role === 1;
+          // is_mine comes from the server (the public list has no user ids).
+          // Requests can be edited only while no recycler has claimed them.
+          const canUpdate =
+            (Boolean(is_mine) || currentUser?.role === ROLE.ADMIN) &&
+            status === AWAITS_RECYCLER;
+          // A recycler claimed the owner's request: the owner accepts or declines
+          const canAnswer = Boolean(is_mine) && status === AWAITS_APPROVAL;
+          // The server refuses claims on your own or an already claimed request
+          const canCollect =
+            COLLECTOR_ROLES.includes(currentUser?.role) &&
+            !is_mine &&
+            status === AWAITS_RECYCLER;
 
           return (
             <MarkerF
@@ -49,9 +81,9 @@ const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUs
                         {req_address}
                       </h3>
                       <span className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
-                        status === 2 ? 'bg-green-100 text-green-700' : 'bg-eco-background text-eco-primary'
+                        status === AWAITS_APPROVAL ? 'bg-purple-100 text-purple-700' : 'bg-eco-background text-eco-primary'
                       }`}>
-                        {status === 2 ? 'Collected' : 'Pending'}
+                        {status === AWAITS_APPROVAL ? 'Awaits approval' : 'Pending'}
                       </span>
                     </div>
                     
@@ -79,8 +111,32 @@ const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUs
                       </div>
                     </div>
 
+                    {canAnswer && (
+                      <p className="mb-3 text-xs font-medium text-eco-muted">
+                        A recycler wants to collect this request. Accept to confirm the pickup.
+                      </p>
+                    )}
+
                     <div className="flex gap-2">
-                      {isCurrentUser && (
+                      {canAnswer && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => answerRecycler(acceptRequest, request_id, "Pickup accepted")}
+                            className="flex-1 py-3 bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-emerald-600 transition-all shadow-md text-center flex items-center justify-center active:scale-95"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => answerRecycler(declineRequest, request_id, "Pickup declined: the request is open again")}
+                            className="flex-1 py-3 bg-white border border-red-200 text-red-600 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-red-50 transition-all text-center flex items-center justify-center active:scale-95 shadow-sm"
+                          >
+                            Decline
+                          </button>
+                        </>
+                      )}
+                      {canUpdate && (
                         <Link
                           to={`/user/update-request?Id=${request_id}`}
                           className="flex-1 py-3 bg-white border border-slate-200 text-slate-700 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-slate-50 transition-all text-center flex items-center justify-center active:scale-95 shadow-sm"
@@ -88,22 +144,17 @@ const RequestMarkers = ({ requests, selectedMarker, setSelectedMarker, currentUs
                           Update
                         </Link>
                       )}
-                      {currentUser &&
-                        (currentUser.role === 1 ||
-                          (currentUser.ID !== user_id &&
-                            currentUser.role !== 2 &&
-                            currentUser.role !== 5 &&
-                            status !== 2)) && (
-                          <Link
-                            to={`/collect?Id=${request_id}`}
-                            className="flex-1 py-3 bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-emerald-600 transition-all shadow-md text-center flex items-center justify-center active:scale-95"
-                          >
-                            Collect
-                          </Link>
-                        )}
+                      {canCollect && (
+                        <Link
+                          to={`/collect?Id=${request_id}`}
+                          className="flex-1 py-3 bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-emerald-600 transition-all shadow-md text-center flex items-center justify-center active:scale-95"
+                        >
+                          Collect
+                        </Link>
+                      )}
                       {currentUser?.role !== 2 &&
                         currentUser?.role !== 5 &&
-                        status !== 2 &&
+                        status !== AWAITS_APPROVAL &&
                         currentUser && (
                           <button
                             className="w-12 h-12 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-indigo-600 transition-all flex items-center justify-center shadow-sm active:scale-95"

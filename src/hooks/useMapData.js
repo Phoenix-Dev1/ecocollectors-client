@@ -1,22 +1,25 @@
+import { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import api from "../api/axios";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 export const useMapData = () => {
   const type = useLocation().search;
+  const { currentUser } = useContext(AuthContext);
 
   // Fetch Requests
   const fetchRequests = async () => {
-    const res = await axios.get(`${process.env.REACT_APP_URL}/requests`, {
-      withCredentials: true,
-    });
+    const res = await api.get("/requests");
     return res.data;
   };
 
   const { data: requests = [], refetch: refetchRequests } = useQuery({
-    queryKey: ["requests"],
+    // The answer depends on who asks (is_mine), and statuses change as people
+    // claim and accept: cache per user and refetch on every visit to the map.
+    queryKey: ["requests", currentUser?.ID ?? "anonymous"],
     queryFn: fetchRequests,
-    staleTime: 60000,
+    staleTime: 0,
     refetchOnWindowFocus: false,
     refetchInterval: false,
   });
@@ -24,7 +27,7 @@ export const useMapData = () => {
   // Fetch Bins
   const fetchActiveMarkers = async ({ queryKey }) => {
     const [, type] = queryKey;
-    const res = await axios.get(`${process.env.REACT_APP_URL}/markers${type}`);
+    const res = await api.get(`/markers${type}`);
     return res.data;
   };
 

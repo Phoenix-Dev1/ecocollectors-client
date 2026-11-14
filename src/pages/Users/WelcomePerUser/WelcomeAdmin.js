@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../api/axios";
 import { Link } from "react-router-dom";
 import { FiUsers, FiUserPlus, FiLayers, FiTrash2, FiActivity, FiArrowRight, FiCheckCircle, FiCalendar, FiClock } from "react-icons/fi";
 
@@ -14,10 +14,7 @@ const WelcomeAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_URL}/user/welcomeAdmin`,
-          { withCredentials: true }
-        );
+        const res = await api.get("/user/welcomeAdmin");
         setTotalRequests(res.data.totalRequests);
         setTotalRecycledBottles(res.data.totalRecycledBottles);
         setAvgClosingTime(res.data.avgClosingTime);

@@ -1,41 +1,60 @@
-import React, { createContext, useEffect, useState } from "react";
-import api from "../api/axios";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import api, { getStoredUser } from "../api/axios";
+import { queryClient } from "../queryClient";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+  const [currentUser, setCurrentUser] = useState(getStoredUser);
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(currentUser));
+    if (currentUser) {
+      localStorage.setItem("user", JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem("user");
+    }
   }, [currentUser]);
 
-  const login = async (inputs) => {
-    try {
-      const res = await api.post("/auth/login", inputs);
-      setCurrentUser(res.data);
-      return res.data.role;
-    } catch (error) {
-      throw error;
-    }
-  };
+  const login = useCallback(async (inputs) => {
+    const res = await api.post("/auth/login", inputs);
+    // Save the token now: the next page's first API calls run in its effects,
+    // before this provider's effect would store it (no Bearer → 401 on Safari).
+    localStorage.setItem("user", JSON.stringify(res.data));
+    // Drop everything cached for the previous user (e.g. the map's is_mine flags)
+    queryClient.clear();
+    setCurrentUser(res.data);
+    return res.data.role;
+  }, []);
 
-  const logout = async () => {
+  // Ends the session here first, so the user is logged out even when the
+  // server can't be reached. The call only clears the old access_token cookie.
+  const logout = useCallback(async () => {
+    localStorage.removeItem("user");
+    setCurrentUser(null);
+    queryClient.clear();
     try {
-      await api.get("/auth/logout");
-      setCurrentUser(null);
-      localStorage.removeItem("user");
-      return true;
+      await api.post("/auth/logout");
     } catch (error) {
-      console.log(error);
+      console.error("Logout request failed:", error);
     }
-  };
+    return true;
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ currentUser, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+  // Merge profile changes (e.g. after "Personal Info" is saved).
+  const updateCurrentUser = useCallback((changes) => {
+    setCurrentUser((prev) => (prev ? { ...prev, ...changes } : prev));
+  }, []);
+
+  const value = useMemo(
+    () => ({ currentUser, login, logout, updateCurrentUser }),
+    [currentUser, login, logout, updateCurrentUser]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

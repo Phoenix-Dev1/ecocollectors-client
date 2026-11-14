@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { validateInfo } from "./ValidateInfo";
-import axios from "axios";
+import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/authContext";
+import { welcomePath } from "../../../utils/roles";
 
 export default function UpdateUserInformation() {
   const form = useRef();
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser, logout, updateCurrentUser } = useContext(AuthContext);
 
   // Initialize the texts state with empty values
   const [texts, setTexts] = useState({
@@ -25,10 +26,7 @@ export default function UpdateUserInformation() {
   useEffect(() => {
     const fetchUserInformation = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_URL}/user/info`,
-          { withCredentials: true } // Ensure cookies are included
-        );
+        const response = await api.get("/user/info");
         const userData = response.data;
         setTexts({
           first_name: userData.first_name,
@@ -59,29 +57,19 @@ export default function UpdateUserInformation() {
     if (!isValid) return;
 
     try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_URL}/user/update`,
-        texts,
-        { withCredentials: true } // Ensure credentials (cookies) are sent
-      );
+      await api.put("/user/update", texts);
 
-      console.log(response);
-
-      // Update currentUser state with the new user data
-      const updatedUser = {
-        ...currentUser,
+      // Keep the logged-in user (and its saved copy) in step with the profile
+      updateCurrentUser({
         first_name: texts.first_name,
         last_name: texts.last_name,
         email: texts.email,
         city: texts.city,
         address: texts.address,
         phone: texts.phone,
-      };
+      });
 
-      // Save updated user in localStorage
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-
-      navigate("/user/welcome");
+      navigate(welcomePath(currentUser.role));
     } catch (err) {
       setError(err.response?.data || "Error updating user information");
       console.error(err);
@@ -96,10 +84,9 @@ export default function UpdateUserInformation() {
     if (!confirmDeactivation) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_URL}/user/deactivate`,
-        {}, // Empty body
-        { withCredentials: true } // Ensure credentials (cookies) are sent
+      await api.post(
+        "/user/deactivate",
+        {} // Empty body
       );
 
       setDeactivated(true); // Update local state

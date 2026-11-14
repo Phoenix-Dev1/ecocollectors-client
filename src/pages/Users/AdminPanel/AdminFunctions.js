@@ -1,11 +1,9 @@
-import axios from "axios";
+import api from "../../../api/axios";
 
 // Users
 export async function fetchAllUsers() {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_URL}/admin/users`, {
-      withCredentials: true,
-    });
+    const res = await api.get("/admin/users");
     return res.data;
   } catch (err) {
     console.log(err);
@@ -15,11 +13,7 @@ export async function fetchAllUsers() {
 
 export const toggleUserActivation = async (userID, newStatus) => {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/admin/users/${userID}`,
-      { active: newStatus },
-      { withCredentials: true }
-    );
+    const res = await api.put(`/admin/users/${userID}`, { active: newStatus });
     return res.data;
   } catch (error) {
     console.error("Error toggling user activation:", error);
@@ -30,11 +24,10 @@ export const toggleUserActivation = async (userID, newStatus) => {
 // Recyclers Managers
 export async function fetchJoinRequests(statusFilter = null) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/admin/join-requests`,
+    const response = await api.get(
+      "/admin/join-requests",
       {
         params: { status: statusFilter },
-        withCredentials: true,
       }
     );
     return response.data;
@@ -46,13 +39,12 @@ export async function fetchJoinRequests(statusFilter = null) {
 
 export async function updateJoinRequestStatus(joinID, newStatus, userID) {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_URL}/admin/join-requests/${joinID}`,
+    const res = await api.put(
+      `/admin/join-requests/${joinID}`,
       {
         status: newStatus,
         userID: userID,
-      },
-      { withCredentials: true }
+      }
     );
     return res.data;
   } catch (err) {
@@ -64,11 +56,10 @@ export async function updateJoinRequestStatus(joinID, newStatus, userID) {
 // Recycle Requests
 export const fetchAllRequests = async (statusFilter) => {
   try {
-    const queryParam = statusFilter ? `?status=${statusFilter}` : "";
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/requests${queryParam}`,
-      { withCredentials: true }
-    );
+    // B2: the admin list, not the public map list (which has open requests only)
+    const response = await api.get("/admin/all-requests", {
+      params: { status: statusFilter || undefined },
+    });
 
     return response.data || []; // Ensure it never returns undefined
   } catch (error) {
@@ -79,12 +70,11 @@ export const fetchAllRequests = async (statusFilter) => {
 
 export async function updateRequestStatus(requestId, newStatus) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_URL}/admin/requests/${requestId}`,
+    const response = await api.put(
+      `/admin/requests/${requestId}`,
       {
         status: newStatus,
-      },
-      { withCredentials: true } // ✅ Ensure credentials are sent
+      }
     );
     return response.data;
   } catch (err) {
@@ -96,11 +86,10 @@ export async function updateRequestStatus(requestId, newStatus) {
 // Search requests By UserId
 export async function searchRequestsByUserId(searchTerm) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_URL}/admin/search-requests`,
+    const response = await api.get(
+      "/admin/search-requests",
       {
         params: { searchTerm },
-        withCredentials: true, // ✅ Add credentials
       }
     );
 
