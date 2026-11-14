@@ -23,6 +23,7 @@ import WelcomeManager from "./pages/Users/WelcomePerUser/WelcomeManager";
 import UpdateUserInformation from "./pages/Users/ManageAccount/UpdateUserInformation";
 import ChangePassword from "./pages/Users/ManageAccount/ChangePassword";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import UpdateRequest from "./pages/Users/UpdateRequest";
 import Cancelled from "./pages/Users/RequestsPerStatus/Cancelled";
 import Completed from "./pages/Users/RequestsPerStatus/completed";
@@ -62,6 +63,7 @@ export default function App() {
         />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/password-recovery" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/about" element={<About />} />
         <Route path="/manager-join" element={<RecyclersManagerRegister />} />
         <Route
